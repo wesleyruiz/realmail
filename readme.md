@@ -66,7 +66,7 @@ import { SimpleLayout } from 'realmail-extensions';
 
 import 'realmail-editor/lib/style.css';
 import 'realmail-extensions/lib/style.css';
-import '@arco-themes/react-realmail-theme/css/arco.css'; // theme, If you need to change the theme, you can make a duplicate in https://arco.design/themes/design/1799/setting/base/Color
+import '@arco-themes/react-easy-email-theme/css/arco.css'; // theme, If you need to change the theme, you can make a duplicate in https://arco.design/themes/design/1799/setting/base/Color
 
 const initialValues = {
   subject: 'Welcome to realmail',

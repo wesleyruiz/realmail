@@ -47,9 +47,9 @@ import './components/CustomBlocks';
 
 import 'realmail-editor/lib/style.css';
 import 'realmail-extensions/lib/style.css';
-import blueTheme from '@arco-themes/react-realmail-theme/css/arco.css?inline';
-import purpleTheme from '@arco-themes/react-realmail-theme-purple/css/arco.css?inline';
-import greenTheme from '@arco-themes/react-realmail-theme-green/css/arco.css?inline';
+import blueTheme from '@arco-themes/react-easy-email-theme/css/arco.css?inline';
+import purpleTheme from '@arco-themes/react-easy-email-theme-purple/css/arco.css?inline';
+import greenTheme from '@arco-themes/react-easy-email-theme-green/css/arco.css?inline';
 import { useState } from 'react';
 import { testMergeTags } from './testMergeTags';
 import { useMergeTagsModal } from './components/useMergeTagsModal';
