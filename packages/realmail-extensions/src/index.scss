@@ -1,0 +1,29 @@
+[arco-theme="dark"] {
+  .realmail-editor-tabWrapper {
+    background-color: var(--color-bg-3);
+  }
+  .arco-layout {
+    background-color: var(--color-bg-3);
+  }
+  .realmail-editor-button {
+    background-color: var(--color-secondary);
+    color: var(--color-text-2);
+    border: 1px solid transparent;
+  }
+  .realmail-editor-button:hover {
+    border-color: var(--color-neutral-4);
+    color: var(--color-text-2);
+    background-color: var(--color-fill-3);
+  }
+
+  .realmail-editor-button[disabled] {
+    background-color: var(--color-secondary);
+    color: var(--color-text-2);
+    border: 1px solid transparent;
+  }
+  .realmail-editor-button[disabled]:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-text-2);
+    border: 1px solid transparent;
+  }
+}
