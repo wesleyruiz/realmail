@@ -60,7 +60,7 @@ export function Tools(props: ToolsProps) {
       if (target) {
         link.setAttribute('target', target);
       }
-      link.style.color = 'inherit';
+
       link.style.textDecoration = linkData.underline ? 'underline' : 'none';
       link.setAttribute('href', linkData.link);
     } else if (cmd === 'insertHTML') {

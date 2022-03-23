@@ -133,8 +133,6 @@ export default App;
 - [realmail-editor](./packages/realmail-editor/readme.md)
 - [realmail-extensions](./packages/realmail-extensions/readme.md)
 
-   <img alt="" src="./layout.png">
-
 </br>
 
 ## How does it work?

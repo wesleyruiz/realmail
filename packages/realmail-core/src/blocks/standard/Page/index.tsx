@@ -3,6 +3,7 @@ import { BasicType } from '@core/constants';
 import { createBlock } from '@core/utils/createBlock';
 import { Wrapper } from '../Wrapper';
 import { merge } from 'lodash';
+import basicCss from './basic.css?inline';
 
 export type IPage = IBlockData<
   {
@@ -45,7 +46,11 @@ export const Page = createBlock<IPage>({
           'font-size': '14px',
           'font-weight': '400',
           'line-height': '1.7',
-          headStyles: [],
+          headStyles: [
+            {
+              content: basicCss,
+            }
+          ],
           fonts: [],
           responsive: true,
           'font-family': '-apple-system, BlinkMacSystemFont, \'Segoe UI\', \'Roboto\', \'Oxygen\', \'Ubuntu\', \'Cantarell\', \'Fira Sans\', \'Droid Sans\',\'Helvetica Neue\', sans-serif',
