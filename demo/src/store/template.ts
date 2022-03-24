@@ -57,6 +57,7 @@ export default createSliceState({
     create: async (
       state,
       payload: {
+        tag: number;
         template: IEmailTemplate;
         success: (id: number, data: IEmailTemplate) => void;
       }
@@ -64,6 +65,7 @@ export default createSliceState({
       const picture = await emailToImage(payload.template.content);
       const data = await article.addArticle({
         picture,
+        tag: payload.tag,
         summary: payload.template.subTitle,
         title: payload.template.subject,
         content: JSON.stringify(payload.template.content),
@@ -86,6 +88,7 @@ export default createSliceState({
         payload.article.user_id
       );
       const data = await article.addArticle({
+        tag: source.tags[0].tag_id,
         title: source.title,
         content: source.content.content,
         picture: source.picture,

@@ -6,6 +6,7 @@ import store from '@demo/store';
 import '@demo/styles/common.scss';
 import { history } from './utils/history';
 import Home from '@demo/pages/Home';
+import Login from '@demo/pages/Login';
 
 const EditorPromise = import('@demo/pages/Editor');
 

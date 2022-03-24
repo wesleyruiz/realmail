@@ -2,10 +2,11 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { UserStorage } from '@demo/utils/user-storage';
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://www.maocanhua.cn',
+  baseURL: 'https://www.maocanhua.cn/realmail-api',
 });
 
 axiosInstance.interceptors.request.use(async function (config) {
+  if (config.url?.endsWith('/login')) return config;
   try {
     const token = await UserStorage.getToken();
     if (!config.headers) {

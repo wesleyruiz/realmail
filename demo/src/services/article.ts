@@ -3,7 +3,7 @@ import { USER } from '@demo/constants';
 
 export const article = {
   async getArticle(id: number | string, userId: number): Promise<IArticle> {
-    return request.get<IArticle>('/article/visitor/detail', {
+    return request.get<IArticle>('/article/user/detail', {
       params: {
         article_id: id,
         user_id: userId,
@@ -14,33 +14,31 @@ export const article = {
     size,
     page,
     userId,
-    categoryId,
   }: {
     page: number;
     size: number;
-    categoryId: number;
     userId: number;
   }): Promise<ListResponse<IArticle>> {
-    return request.get<ListResponse<IArticle>>('/article/visitor/list', {
+    return request.get<ListResponse<IArticle>>('/article/user/list', {
       params: {
         page,
         size,
-        category_id: categoryId,
         user_id: userId,
       },
     });
   },
   async addArticle(data: {
     title: string;
+    tag: number;
     content: string;
     picture: string;
     summary: string;
   }): Promise<IArticle> {
     return request.post<IArticle>('/article/user/create-article', {
       ...data,
-      category_id: USER.categoryId,
-      tags: [74],
-      secret: 0,
+      category_id: 1,
+      tags: [data.tag],
+      secret: 1,
     });
   },
   async updateArticle(
