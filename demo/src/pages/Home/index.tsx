@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useLoading } from '@demo/hooks/useLoading';
 import Frame from '@demo/components/Frame';
 import templateList from '@demo/store/templateList';
-import { Button } from '@arco-design/web-react';
+import { Button, Empty, Space, Typography } from '@arco-design/web-react';
 import { CardItem } from './components/CardItem';
 import { Stack } from '@demo/components/Stack';
 import { Loading } from '@demo/components/loading';
@@ -26,6 +26,7 @@ export default function Home() {
       title='Templates'
       primaryAction={
         <Button
+          type='primary'
           onClick={() => {
             pushEvent({ name: 'Create' });
             history.push('/editor');
@@ -36,14 +37,55 @@ export default function Home() {
       }
     >
       <>
-        <Stack>
-          {[...templates, ...list].map((item) => (
-            <CardItem data={item} key={item.article_id} />
-          ))}
-        </Stack>
-        <Loading loading={loading}>
-          Load user template
-        </Loading>
+
+        <div>
+          <Typography.Title heading={3}>
+            User template
+          </Typography.Title>
+          {
+            <Loading loading={loading}>
+              <Stack>
+                {list.map((item) => (
+                  <CardItem data={item} key={item.article_id} />
+                ))}
+              </Stack>
+              {
+                list.length === 0 && (
+                  <div>
+                    <Empty description={
+                      <Space direction='vertical' size='large'>
+                        <Typography.Text style={{ fontSize: 20 }}>No data</Typography.Text>
+                        <Button
+                          type='primary'
+                          onClick={() => {
+                            pushEvent({ name: 'Create' });
+                            history.push('/editor');
+                          }}
+                        >
+                          Edit your first email
+                        </Button>
+                      </Space>
+                    } />
+                  </div>
+                )
+              }
+            </Loading>
+          }
+
+        </div>
+        <div>
+          <Typography.Title heading={3}>
+            Default template
+          </Typography.Title>
+          <Stack>
+            {templates.map((item) => (
+              <CardItem data={item} key={item.article_id} />
+            ))}
+          </Stack>
+
+        </div>
+
+
       </>
     </Frame>
   );

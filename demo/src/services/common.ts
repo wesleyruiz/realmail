@@ -26,9 +26,10 @@ export const common = {
     data.append('token', token);
     data.append('key', uuidv4() + `-${(file as any)?.name || ''}`);
     const res = await request.post<{ key: string; }>(
-      'https://up.qiniu.com',
+      'https://up-z1.qiniup.com',
       data
     );
+
     return origin + '/' + res.key;
   },
   uploadByUrl(url: string) {
