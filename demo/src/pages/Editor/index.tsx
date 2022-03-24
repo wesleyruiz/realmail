@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import template from '@demo/store/template';
+import tagList from '@demo/store/tagList';
 import { useAppSelector } from '@demo/hooks/useAppSelector';
 import { useLoading } from '@demo/hooks/useLoading';
 import { Button, Message, PageHeader, Select } from '@arco-design/web-react';
@@ -82,6 +83,7 @@ export default function Editor() {
   const dispatch = useDispatch();
   const history = useHistory();
   const templateData = useAppSelector('template');
+  const tagListData = useAppSelector('tagList');
   const { addCollection, removeCollection, collectionCategory } =
     useCollection();
   const { openModal, modal } = useEmailModal();
@@ -104,11 +106,15 @@ export default function Editor() {
   }, [collectionCategory]);
 
   useEffect(() => {
+    dispatch(tagList.actions.fetch(undefined));
+  }, []);
+
+  useEffect(() => {
     if (id) {
       if (!userId) {
         UserStorage.getAccount().then((account) => {
           dispatch(
-            template.actions.fetchById({ id: +id, userId: account.user_id })
+            template.actions.fetchById({ id: +id, userId: account!.user_id })
           );
         });
       } else {
@@ -220,8 +226,10 @@ export default function Editor() {
           })
         );
       } else {
+        const tag = tagListData[0];
         dispatch(
           template.actions.create({
+            tag: tag.tag_id,
             template: values,
             success(id, newTemplate) {
               Message.success('Saved success!');
@@ -232,7 +240,7 @@ export default function Editor() {
         );
       }
     },
-    [dispatch, history, id, initialValues]
+    [dispatch, history, id, initialValues, tagListData]
   );
 
   const onBeforePreview: EmailEditorProviderProps['onBeforePreview'] =

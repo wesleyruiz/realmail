@@ -7,6 +7,7 @@ import extraBlocks from './extraBlocks';
 import toast from './common/toast';
 import loading from './common/loading';
 import email from './email';
+import tagList from './tagList';
 
 const rootReducer = combineReducers({
   user: user.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   extraBlocks: extraBlocks.reducer,
   toast: toast.reducer,
   email: email.reducer,
+  tagList: tagList.reducer,
   loading: loading.reducer,
 });
 

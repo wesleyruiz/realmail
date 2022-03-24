@@ -47,7 +47,7 @@ export default function Frame({
             <Stack alignment='center'>
               <a
                 className='github-button'
-                href='https://github.com/arco-design/realmail'
+                href='https://github.com/realmail-editor/realmail'
                 data-size='large'
                 data-icon='octicon-star'
                 data-show-count='true'
@@ -60,7 +60,7 @@ export default function Frame({
 
               <a
                 className='github-button'
-                href='https://github.com/arco-design/realmail/fork'
+                href='https://github.com/realmail-editor/realmail/fork'
                 data-size='large'
                 data-show-count='true'
                 aria-label='Fork m-Ryan/realmail on GitHub'
@@ -72,7 +72,7 @@ export default function Frame({
 
               <a
                 className='github-button'
-                href='https://github.com/arco-design/realmail/issues'
+                href='https://github.com/realmail-editor/realmail/issues'
                 data-size='large'
                 data-show-count='true'
                 aria-label='Issue m-Ryan/realmail on GitHub'
