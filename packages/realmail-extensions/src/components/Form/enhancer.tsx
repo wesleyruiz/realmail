@@ -149,12 +149,13 @@ export default function enhancer<P, C extends (...rest: any[]) => any = any>(
               validateStatus={touched && error ? 'error' : undefined}
               help={touched && error}
             >
-              <Space direction='vertical' style={{ width: '100%' }}>
+              <Space direction='vertical' size="medium" style={{ width: '100%' }}>
                 <Grid.Row align='center'>
                   <Grid.Col
                     span={wrapperStyle.label.span}
                     offset={wrapperStyle.label.offset}
-                    style={{ textAlign: wrapperStyle.textAlign }}
+                    style={{ textAlign: wrapperStyle.textAlign, }}
+                    className='easy-email-extensions-enhancer-label'
                   >
                     <label
                       className={
