@@ -26,7 +26,7 @@
 
 ## Introduction
 
-Realmail is developed based on the [MJML](https://mjml.io/) and has very good compatibility. At the same time, it can generate code through drag-and-drop editing.
+Realmail is developed based on the [MJML](https://mjml.io/) and has very good compatibility. At the same time, it can generate code through drag-and-drop editing. This project is forked from [Easy email](https://github.com/arco-design/easy-email).
 
 ## Features:
 

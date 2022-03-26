@@ -23,3 +23,29 @@
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
   }
 }
+
+.email-bg {
+  background-position: 0px 0px, 0px 10px, 10px -10px, -10px 0px;
+  background-size: 20px 20px;
+  background-image: linear-gradient(
+      45deg,
+      rgb(247, 247, 247) 25%,
+      transparent 25%
+    ),
+    linear-gradient(-45deg, rgb(247, 247, 247) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgb(247, 247, 247) 75%),
+    linear-gradient(-45deg, transparent 75%, rgb(247, 247, 247) 75%);
+}
+
+::part(email-bg) {
+  background-position: 0px 0px, 0px 10px, 10px -10px, -10px 0px;
+  background-size: 20px 20px;
+  background-image: linear-gradient(
+      45deg,
+      rgb(247, 247, 247) 25%,
+      transparent 25%
+    ),
+    linear-gradient(-45deg, rgb(247, 247, 247) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgb(247, 247, 247) 75%),
+    linear-gradient(-45deg, transparent 75%, rgb(247, 247, 247) 75%);
+}

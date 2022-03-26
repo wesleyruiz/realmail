@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { TextField } from '../../../components/Form';
 import { useFocusIdx, Stack } from 'realmail-editor';
 
-export function Height({ inline }: { inline?: boolean; }) {
+export function Height({ inline, name }: { inline?: boolean; name: string; }) {
   const { focusIdx } = useFocusIdx();
 
   return useMemo(() => {
@@ -11,12 +11,12 @@ export function Height({ inline }: { inline?: boolean; }) {
         <Stack.Item fill>
           <TextField
             label='Height'
-            name={`${focusIdx}.attributes.height`}
+            name={name || `${focusIdx}.attributes.height`}
             quickchange
             inline={inline}
           />
         </Stack.Item>
       </Stack>
     );
-  }, [focusIdx, inline]);
+  }, [focusIdx, inline, name]);
 }

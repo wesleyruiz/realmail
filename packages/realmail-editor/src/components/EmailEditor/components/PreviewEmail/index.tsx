@@ -52,6 +52,7 @@ export function PreviewEmail(props: PreviewEmailProps) {
         `}
         </style>
         <div
+          part="email-bg"
           className={classnames('preview-container', SYNC_SCROLL_ELEMENT_CLASS_NAME)}
           style={{
             height: '100%',
@@ -93,6 +94,7 @@ export function PreviewEmail(props: PreviewEmailProps) {
             `}
       </style>
       <div
+        part="email-bg"
         className={classnames('preview-container', SYNC_SCROLL_ELEMENT_CLASS_NAME)}
         style={{
           height: '100%',

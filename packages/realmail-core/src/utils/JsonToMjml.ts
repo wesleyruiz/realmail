@@ -3,7 +3,7 @@ import { isValidElement } from 'react';
 
 import { BasicType, AdvancedType, MERGE_TAG_CLASS_NAME } from '@core/constants';
 import { IBlockData } from '@core/typings';
-import { pickBy, identity, isObject, isBoolean, isString } from 'lodash';
+import { pickBy, identity, isObject, isBoolean, isString, cloneDeep } from 'lodash';
 import {
   getChildIdx,
   getNodeIdxClassName,
@@ -11,7 +11,7 @@ import {
 } from './block';
 import { classnames } from './classnames';
 import { BlockManager } from '@core/utils';
-import { ICarousel, INavbar, ISocial, IPage } from '@core/blocks';
+import { ICarousel, INavbar, ISocial, IPage, ITemplate } from '@core/blocks';
 import { getPreviewClassName } from './getPreviewClassName';
 import { getImg } from './getImg';
 
@@ -145,6 +145,11 @@ export function JsonToMjml(options: JsonToMjmlOption): string {
     .map((child, index) => {
       let childIdx = idx ? getChildIdx(idx, index) : null;
       if (data.type === BasicType.TEMPLATE) {
+        const templateValue = data.data.value as ITemplate['data']['value'];
+        if (templateValue.className) {
+          child = cloneDeep(child);
+          child.attributes['css-class'] = classnames(child.attributes['css-class'], templateValue.className);
+        }
         childIdx = getChildIdx(data.data.value.idx, index);
         if (!data.data.value.idx) {
           childIdx = null;

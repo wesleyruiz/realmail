@@ -1,3 +1,25 @@
 a {
   color: inherit;
 }
+
+@media (max-width: 480px) {
+  .hide-mobile-block {
+    max-height: 0px;
+    overflow: hidden;
+    display: none !important;
+  }
+
+  .hide-desktop-block {
+    display: block !important;
+  }
+
+  .hide-mobile-inline-block {
+    max-height: 0px;
+    overflow: hidden;
+    display: none !important;
+  }
+
+  .hide-desktop-inline-block {
+    display: inline-block !important;
+  }
+}

@@ -6,6 +6,8 @@ import MjmlBlock from '@core/components/MjmlBlock';
 import { AdvancedBlock, generateAdvancedBlock } from './generateAdvancedBlock';
 import { getPreviewClassName } from '@core/utils/getPreviewClassName';
 import { classnames } from '@core/utils/classnames';
+import { getParentByIdx } from '@core/utils';
+import { isUndefined } from 'lodash';
 
 export function generateAdvancedLayoutBlock<T extends AdvancedBlock>(option: {
   type: string;
@@ -16,18 +18,11 @@ export function generateAdvancedLayoutBlock<T extends AdvancedBlock>(option: {
     ...option,
     getContent: (params) => {
       const { data, idx, mode, context, dataSource, index } = params;
-      const { iteration } = data.data.value;
 
       const blockData = {
         ...data,
         type: option.baseType,
       };
-
-      // Column 必须设置宽度
-      if (data.type === AdvancedType.COLUMN && iteration?.enabled) {
-        data.attributes.width = data.attributes.width || '100%';
-      }
-
       const previewClassName =
         mode === 'testing'
           ? classnames(index === 0 && getPreviewClassName(idx, data.type))

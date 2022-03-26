@@ -4,16 +4,18 @@ import { useFocusIdx } from 'realmail-editor';
 
 export function Color({
   title = 'Color',
+  name
 }: {
   title?: string;
   inline?: boolean;
+  name?: string;
 }) {
   const { focusIdx } = useFocusIdx();
 
   return (
     <ColorPickerField
       label={title}
-      name={`${focusIdx}.attributes.color`}
+      name={name || `${focusIdx}.attributes.color`}
       alignment='center'
     />
   );

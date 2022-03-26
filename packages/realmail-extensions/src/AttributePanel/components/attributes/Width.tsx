@@ -7,9 +7,11 @@ import { InputWithUnitProps } from '@extensions/components/Form/InputWithUnit';
 export function Width({
   inline = false,
   unitOptions,
+  name
 }: {
   inline?: boolean;
   unitOptions?: InputWithUnitProps['unitOptions'];
+  name?: string;
 }) {
   const { focusIdx } = useFocusIdx();
   const { focusBlock, values } = useBlock();
@@ -35,7 +37,7 @@ export function Width({
       validate={validate}
       label='Width'
       inline={inline}
-      name={`${focusIdx}.attributes.width`}
+      name={name || `${focusIdx}.attributes.width`}
       unitOptions={unitOptions}
     />
   );
