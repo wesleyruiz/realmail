@@ -11,7 +11,7 @@ export type TemplateProps = RecursivePartial<ITemplate['data']> &
     | string
     | React.ReactElement
     | IBlockData
-    | Array<React.ReactElement | IBlockData>;
+    | Array<React.ReactElement | IBlockData | null>;
     idx?: string | null;
     className?: string;
   };

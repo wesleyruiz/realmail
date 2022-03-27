@@ -10,6 +10,7 @@ import { Border } from '@extensions/AttributePanel/components/attributes/Border'
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { useFocusIdx, IconFont } from 'realmail-editor';
+import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 
 export function Column() {
   return (
@@ -53,6 +54,9 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         <Border prefixName={mode === 'desktop' ? `${focusIdx}.attributes` : `${focusIdx}.mobileAttributes`} />
       </Collapse.Item>
       <Collapse.Item name='4' header='Extra'>
+        <Grid.Col span={24}>
+          <ResponsiveDesign mode={mode} />
+        </Grid.Col>
         <Grid.Col span={24}>
           <ClassName name={mode === 'desktop' ? `${focusIdx}.attributes.css-class` : `${focusIdx}.mobileAttributes.css-class`} />
         </Grid.Col>

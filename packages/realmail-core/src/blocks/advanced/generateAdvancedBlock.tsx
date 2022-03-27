@@ -78,6 +78,7 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
             attributes: {
               ...data.attributes,
               ...pickBy(data.mobileAttributes, (v) => !Boolean(isUndefined(v) || (isString(v) && v.trim() === ''))),
+              'css-class': data.mobileAttributes?.['css-class'] || '',
               width
             }
           },
@@ -90,7 +91,7 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
 
       const getBaseContent = (bIdx: string | null, index: number) => {
         if (!data.mobileAttributes || Object.keys(data.mobileAttributes).length === 0) return getDesktopBaseContent(bIdx, index);
-        return <ResponsiveBlock desktop={getDesktopBaseContent(bIdx, index)} mobile={getMobileBaseContent(bIdx, index)} display={inlineBlockTypes.includes(data.type) ? 'inline-block' : undefined} />;
+        return <ResponsiveBlock mode={mode} desktop={getDesktopBaseContent(bIdx, index)} mobile={getMobileBaseContent(bIdx, index)} blockData={data} />;
       };
 
       let children = getBaseContent(idx, 0);

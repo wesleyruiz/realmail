@@ -48,3 +48,9 @@ export enum AdvancedType {
 
 export const MERGE_TAG_CLASS_NAME = 'realmail-merge-tag-container';
 export const EMAIL_BLOCK_CLASS_NAME = 'email-block';
+
+// responsive block class name
+export const HIDE_DESKTOP_BLOCK_CLASS_NAME = 'hide-desktop-block';
+export const HIDE_MOBILE_BLOCK_CLASS_NAME = 'hide-mobile-block';
+export const HIDE_DESKTOP_INLINE_BLOCK_CLASS_NAME = 'hide-desktop-inline-block';
+export const HIDE_MOBILE_INLINE_BLOCK_CLASS_NAME = 'hide-mobile-inline-block';
