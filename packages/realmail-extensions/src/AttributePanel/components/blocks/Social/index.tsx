@@ -18,10 +18,10 @@ import { FontStyle } from '@extensions/AttributePanel/components/attributes/Font
 import { FontWeight } from '@extensions/AttributePanel/components/attributes/FontWeight';
 
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Button, Card, Collapse, Grid, Space, Typography } from '@arco-design/web-react';
+import { Button, Card, Collapse, Grid, Space, Tabs, Typography } from '@arco-design/web-react';
 import { TextDecoration } from '@extensions/AttributePanel/components/attributes/TextDecoration';
 import { LineHeight } from '@extensions/AttributePanel/components/attributes/LineHeight';
-import { Stack, useBlock, useEditorProps, useFocusIdx } from 'realmail-editor';
+import { IconFont, Stack, useBlock, useEditorProps, useFocusIdx } from 'realmail-editor';
 import { ISocial } from 'realmail-core';
 import { getImg } from '@extensions/AttributePanel/utils/getImg';
 import { ClassName } from '../../attributes/ClassName';
@@ -39,115 +39,133 @@ const options = [
 ];
 
 export function Social() {
-  const { focusIdx } = useFocusIdx();
   const { focusBlock } = useBlock();
   const value = focusBlock?.data.value as ISocial['data']['value'];
   if (!value) return null;
 
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2', '3']}>
-        <Collapse.Item name='1' header='Setting'>
-          <Space direction='vertical'>
-            <RadioGroupField
-              label='Mode'
-              name={`${focusIdx}.attributes.mode`}
-              options={options}
-            />
+      <Tabs type='card-gutter'>
+        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+          <AttributesContainer mode="desktop" />
+        </Tabs.TabPane>
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
+          <AttributesContainer mode='mobile' />
+        </Tabs.TabPane>
+      </Tabs>
 
-            <Align />
-
-          </Space>
-        </Collapse.Item>
-
-        <Collapse.Item name='3' header='Typography'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <FontFamily />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
-                <FontSize />
-              </Grid.Col>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <FontWeight />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
-                <LineHeight />
-              </Grid.Col>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <Color />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
-
-                <ContainerBackgroundColor title='Background color' />
-              </Grid.Col>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <TextDecoration />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
-                <FontStyle />
-              </Grid.Col>
-            </Grid.Row>
-
-          </Space>
-        </Collapse.Item>
-
-        <Collapse.Item
-          name='2'
-          header='Social item'
-          contentStyle={{ padding: 10 }}
-        >
-
-          <EditGridTabField
-            tabPosition='top'
-            name={`${focusIdx}.data.value.elements`}
-            label=''
-            labelHidden
-            renderItem={(item, index) => (
-              <SocialElement item={item} index={index} />
-            )}
-          />
-        </Collapse.Item>
-
-        <Collapse.Item name='0' header='Dimension'>
-
-          <Space direction="vertical" size="large">
-
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <InputWithUnitField
-                  label='Icon width'
-                  name={`${focusIdx}.attributes.icon-size`}
-                />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
-                <TextField
-                  label='Border radius'
-                  name={`${focusIdx}.attributes.border-radius`}
-                />
-              </Grid.Col>
-            </Grid.Row>
-
-            <Padding />
-            <Padding attributeName='inner-padding' title='Icon padding' />
-            <Padding attributeName='text-padding' title='Text padding' />
-          </Space>
-
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
-            <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
-      </CollapseWrapper>
     </AttributesPanelWrapper>
+  );
+}
+
+function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
+  const { focusIdx } = useFocusIdx();
+  return (
+    <CollapseWrapper defaultActiveKey={['0', '1', '2', '3']}>
+      <Collapse.Item name='1' header='Setting'>
+        <Space direction='vertical'>
+          <RadioGroupField
+            label='Mode'
+            name={mode === 'desktop' ? `${focusIdx}.attributes.mode` : `${focusIdx}.mobileAttributes.mode`}
+            options={options}
+          />
+
+          <Align />
+
+        </Space>
+      </Collapse.Item>
+
+      <Collapse.Item name='3' header='Typography'>
+        <Space direction='vertical'>
+          <Grid.Row>
+            <Grid.Col span={11}>
+              <FontFamily name={mode === 'desktop' ? `${focusIdx}.attributes.font-family` : `${focusIdx}.mobileAttributes.font-family`} />
+            </Grid.Col>
+            <Grid.Col offset={1} span={11}>
+              <FontSize name={mode === 'desktop' ? `${focusIdx}.attributes.font-size` : `${focusIdx}.mobileAttributes.font-size`} />
+            </Grid.Col>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Col span={11}>
+              <FontWeight name={mode === 'desktop' ? `${focusIdx}.attributes.font-weight` : `${focusIdx}.mobileAttributes.font-weight`} />
+            </Grid.Col>
+            <Grid.Col offset={1} span={11}>
+              <LineHeight name={mode === 'desktop' ? `${focusIdx}.attributes.line-height` : `${focusIdx}.mobileAttributes.line-height`} />
+            </Grid.Col>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Col span={11}>
+              <Color name={mode === 'desktop' ? `${focusIdx}.attributes.color` : `${focusIdx}.mobileAttributes.color`} />
+            </Grid.Col>
+            <Grid.Col offset={1} span={11}>
+
+              <ContainerBackgroundColor title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
+            </Grid.Col>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Col span={11}>
+              <TextDecoration name={mode === 'desktop' ? `${focusIdx}.attributes.text-decoration` : `${focusIdx}.mobileAttributes.text-decoration`} />
+            </Grid.Col>
+            <Grid.Col offset={1} span={11}>
+              <FontStyle name={mode === 'desktop' ? `${focusIdx}.attributes.font-style` : `${focusIdx}.mobileAttributes.font-style`} />
+            </Grid.Col>
+          </Grid.Row>
+
+        </Space>
+      </Collapse.Item>
+
+      {
+        mode === 'desktop' && (
+          <Collapse.Item
+            name='2'
+            header='Social item'
+            contentStyle={{ padding: 10 }}
+          >
+
+            <EditGridTabField
+              tabPosition='top'
+              name={`${focusIdx}.data.value.elements`}
+              label=''
+              labelHidden
+              renderItem={(item, index) => (
+                <SocialElement item={item} index={index} />
+              )}
+            />
+          </Collapse.Item>
+        )
+      }
+
+      <Collapse.Item name='0' header='Dimension'>
+
+        <Space direction="vertical" size="large">
+
+          <Grid.Row>
+            <Grid.Col span={11}>
+              <InputWithUnitField
+                label='Icon width'
+                name={mode === 'desktop' ? `${focusIdx}.attributes.icon-size` : `${focusIdx}.mobileAttributes.icon-size`}
+              />
+            </Grid.Col>
+            <Grid.Col offset={1} span={11}>
+              <TextField
+                label='Border radius'
+                name={mode === 'desktop' ? `${focusIdx}.attributes.border-radius` : `${focusIdx}.mobileAttributes.border-radius`}
+              />
+            </Grid.Col>
+          </Grid.Row>
+
+          <Padding />
+          <Padding name={mode === 'desktop' ? `${focusIdx}.attributes.inner-padding` : `${focusIdx}.mobileAttributes.inner-padding`} title='Icon padding' />
+          <Padding name={mode === 'desktop' ? `${focusIdx}.attributes.text-padding` : `${focusIdx}.mobileAttributes.text-padding`} title='Text padding' />
+        </Space>
+
+      </Collapse.Item>
+      <Collapse.Item name='4' header='Extra'>
+        <Grid.Col span={24}>
+          <ClassName name={mode === 'desktop' ? `${focusIdx}.attributes.css-class` : `${focusIdx}.mobileAttributes.css-class`} />
+        </Grid.Col>
+      </Collapse.Item>
+    </CollapseWrapper>
   );
 }
 
@@ -204,3 +222,4 @@ function SocialElement({
     </Space>
   );
 }
+

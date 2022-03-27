@@ -7,58 +7,75 @@ import {
 } from '@extensions/components/Form';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
+import { Collapse, Grid, Space, Tabs } from '@arco-design/web-react';
 import { IconLink } from '@arco-design/web-react/icon';
 import { NavbarLinkPadding } from '@extensions/AttributePanel/components/attributes/NavbarLinkPadding';
-import { useFocusIdx, Stack } from 'realmail-editor';
+import { useFocusIdx, Stack, IconFont } from 'realmail-editor';
 import { INavbar } from 'realmail-core';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { FontFamily, FontStyle, FontWeight, LetterSpacing, LineHeight, TextAlign, TextDecoration, TextTransform } from '../../attributes';
 
 export function Navbar() {
-  const { focusIdx } = useFocusIdx();
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Layout'>
-          <Stack vertical spacing='tight'>
-            <Align />
-          </Stack>
-        </Collapse.Item>
-
-        <Collapse.Item
-          contentStyle={{ padding: 0 }}
-          name='1'
-          header='Navbar links'
-        >
-          <Space direction='vertical' style={{ width: '100%' }}>
-            <EditTabField
-              tabPosition='top'
-              name={`${focusIdx}.data.value.links`}
-              label='Links'
-              labelHidden
-              renderItem={(item, index) => (
-                <NavbarLink item={item} index={index} />
-              )}
-              additionItem={{
-                src: 'https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg',
-                target: '_blank',
-                content: 'New link',
-                color: '#1890ff',
-                'font-size': '13px',
-              }}
-            />
-            <div />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
-            <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
-      </CollapseWrapper>
+      <Tabs type='card-gutter'>
+        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+          <AttributesContainer mode="desktop" />
+        </Tabs.TabPane>
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
+          <AttributesContainer mode='mobile' />
+        </Tabs.TabPane>
+      </Tabs>
     </AttributesPanelWrapper>
+  );
+}
+
+function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
+  const { focusIdx } = useFocusIdx();
+  return (
+    <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
+      <Collapse.Item name='0' header='Layout'>
+        <Stack vertical spacing='tight'>
+          <Align name={mode === 'desktop' ? `${focusIdx}.attributes.align` : `${focusIdx}.mobileAttributes.align`} />
+        </Stack>
+      </Collapse.Item>
+
+      {
+        mode === 'desktop' && (
+          <Collapse.Item
+            contentStyle={{ padding: 0 }}
+            name='1'
+            header='Navbar links'
+          >
+            <Space direction='vertical' style={{ width: '100%' }}>
+              <EditTabField
+                tabPosition='top'
+                name={`${focusIdx}.data.value.links`}
+                label='Links'
+                labelHidden
+                renderItem={(item, index) => (
+                  <NavbarLink item={item} index={index} />
+                )}
+                additionItem={{
+                  src: 'https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg',
+                  target: '_blank',
+                  content: 'New link',
+                  color: '#1890ff',
+                  'font-size': '13px',
+                }}
+              />
+              <div />
+            </Space>
+          </Collapse.Item>
+        )
+      }
+      <Collapse.Item name='4' header='Extra'>
+        <Grid.Col span={24}>
+          <ClassName name={mode === 'desktop' ? `${focusIdx}.attributes.css-class` : `${focusIdx}.mobileAttributes.css-class`} />
+        </Grid.Col>
+      </Collapse.Item>
+    </CollapseWrapper>
   );
 }
 
