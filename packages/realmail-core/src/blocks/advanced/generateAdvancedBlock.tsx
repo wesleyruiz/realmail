@@ -3,9 +3,11 @@ import { AdvancedType, BasicType } from '@core/constants';
 import { IBlock, IBlockData } from '@core/typings';
 import { createCustomBlock } from '@core/utils/createCustomBlock';
 import { getParentByIdx, TemplateEngineManager } from '@core/utils';
-import { isUndefined, merge } from 'lodash';
+import { isString, isUndefined, merge, pickBy } from 'lodash';
 import React from 'react';
 import { IPage, standardBlocks } from '../standard';
+
+const inlineBlockTypes = ([AdvancedType.GROUP, AdvancedType.COLUMN] as string[]);
 
 export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
   type: string;
@@ -45,7 +47,7 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
 
       const getDesktopBaseContent = (bIdx: string | null, index: number) => {
         let width = data.attributes.width;
-        if (isUndefined(width) && parentBlockData) {
+        if (inlineBlockTypes.includes(data.type) && isUndefined(width) && parentBlockData) {
           width = (100 / parentBlockData.children.length).toFixed(2) + '%';
         }
         return option.getContent({
@@ -66,7 +68,7 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
 
       const getMobileBaseContent = (bIdx: string | null, index: number) => {
         let width = data.mobileAttributes?.width || data.attributes.width;
-        if (isUndefined(width) && parentBlockData) {
+        if (inlineBlockTypes.includes(data.type) && isUndefined(width) && parentBlockData) {
           width = '100%';
         }
         return option.getContent({
@@ -75,7 +77,7 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
             ...data,
             attributes: {
               ...data.attributes,
-              ...data.mobileAttributes,
+              ...pickBy(data.mobileAttributes, (v) => !Boolean(isUndefined(v) || (isString(v) && v.trim() === ''))),
               width
             }
           },
@@ -86,7 +88,10 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
         }) as any;
       };
 
-      const getBaseContent = (bIdx: string | null, index: number) => <ResponsiveBlock desktop={getDesktopBaseContent(bIdx, index)} mobile={getMobileBaseContent(bIdx, index)} display={([AdvancedType.GROUP, AdvancedType.COLUMN] as string[]).includes(data.type) ? 'inline-block' : undefined} />;
+      const getBaseContent = (bIdx: string | null, index: number) => {
+        if (!data.mobileAttributes || Object.keys(data.mobileAttributes).length === 0) return getDesktopBaseContent(bIdx, index);
+        return <ResponsiveBlock desktop={getDesktopBaseContent(bIdx, index)} mobile={getMobileBaseContent(bIdx, index)} display={inlineBlockTypes.includes(data.type) ? 'inline-block' : undefined} />;
+      };
 
       let children = getBaseContent(idx, 0);
 

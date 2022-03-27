@@ -3,8 +3,9 @@ import { InputWithUnitField, TextField } from '../../../components/Form';
 import { Stack, useFocusIdx } from 'realmail-editor';
 import { Grid, Space } from '@arco-design/web-react';
 
-export function Border({ prefixName }: { prefixName: string; }) {
-
+export function Border({ prefixName }: { prefixName?: string; }) {
+  const { focusIdx } = useFocusIdx();
+  prefixName = prefixName || `${focusIdx}.attributes`;
   return useMemo(() => {
     return (
       <Grid.Row>

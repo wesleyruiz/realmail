@@ -17,7 +17,7 @@ const options = [
   },
 ];
 
-export function Align({ name }: { name: string; }) {
+export function Align({ name }: { name?: string; }) {
   const { focusIdx } = useFocusIdx();
 
   return (

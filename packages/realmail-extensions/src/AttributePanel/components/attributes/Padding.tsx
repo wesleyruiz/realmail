@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { InputWithUnitField, TextField } from '../../../components/Form';
 import { useFocusIdx, Stack, useBlock, TextStyle } from 'realmail-editor';
 import { createBlockDataByType } from 'realmail-core';
@@ -11,10 +11,13 @@ export interface PaddingProps {
   attributeName?: 'padding' | 'inner-padding' | 'text-padding';
   name?: string;
 }
+
 export function Padding(props: PaddingProps = {}) {
   const { title = 'Padding', attributeName = 'padding', name } = props;
   const { focusBlock, change, values } = useBlock();
   const { focusIdx } = useFocusIdx();
+  const divRef = useRef(document.createElement('div'));
+  const divModifyRef = useRef(document.createElement('div'));
 
   const type = focusBlock && focusBlock.type;
 
@@ -31,20 +34,17 @@ export function Padding(props: PaddingProps = {}) {
   }, [attributeName, focusBlock?.attributes, name, values]);
 
   const defaultPaddingValue: string | undefined = useMemo(() => {
-    if (name) {
-      return null;
-    }
     return defaultConfig?.attributes[attributeName];
-  }, [attributeName, defaultConfig?.attributes, name]);
+  }, [attributeName, defaultConfig?.attributes]);
 
   const paddingFormValues = useMemo(() => {
-    const paddingList = paddingValue?.split(' ');
-    const defaultPaddingList = defaultPaddingValue?.split(' ');
-
-    const top = paddingList ? paddingList[0] : defaultPaddingList?.[0] || '';
-    const right = paddingList ? paddingList[1] : defaultPaddingList?.[1] || '';
-    const bottom = paddingList ? paddingList[2] : defaultPaddingList?.[2] || '';
-    const left = paddingList ? paddingList[3] : defaultPaddingList?.[3] || '';
+    if (paddingValue) {
+      divRef.current.style.padding = paddingValue;
+    }
+    const top = divRef.current.style.paddingTop;
+    const right = divRef.current.style.paddingRight;
+    const bottom = divRef.current.style.paddingBottom;
+    const left = divRef.current.style.paddingLeft;
 
     return {
       top,
@@ -52,10 +52,18 @@ export function Padding(props: PaddingProps = {}) {
       bottom,
       right,
     };
-  }, [defaultPaddingValue, paddingValue]);
+  }, [paddingValue]);
 
   const onChancePadding = useCallback(
     (val: string) => {
+      divModifyRef.current.style.padding = val;
+      if (
+        divModifyRef.current.style.paddingTop === divRef.current.style.paddingTop
+        && divModifyRef.current.style.paddingRight === divRef.current.style.paddingRight
+        && divModifyRef.current.style.paddingBottom === divRef.current.style.paddingBottom
+        && divModifyRef.current.style.paddingLeft === divRef.current.style.paddingLeft) {
+        return;
+      }
       if (name) {
         change(name, val);
       } else {

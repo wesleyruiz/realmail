@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { TextField } from '../../../components/Form';
 import { useFocusIdx, Stack } from 'realmail-editor';
 
-export function Height({ inline, name }: { inline?: boolean; name: string; }) {
+export function Height({ inline, name }: { inline?: boolean; name?: string; }) {
   const { focusIdx } = useFocusIdx();
 
   return useMemo(() => {

@@ -4,9 +4,9 @@ import { IconLink } from '@arco-design/web-react/icon';
 import { SelectField, TextField } from '../../../components/Form';
 import { Grid } from '@arco-design/web-react';
 
-export function Link() {
+export function Link({ prefixName }: { prefixName?: string; }) {
   const { focusIdx } = useFocusIdx();
-
+  prefixName = `${focusIdx}.attributes`;
   return useMemo(() => {
     return (
       <Grid.Row>
@@ -14,13 +14,13 @@ export function Link() {
           <TextField
             prefix={<IconLink />}
             label={<span>Href&nbsp;&nbsp;&nbsp;</span>}
-            name={`${focusIdx}.attributes.href`}
+            name={`${prefixName}.href`}
           />
         </Grid.Col>
         <Grid.Col offset={1} span={11}>
           <SelectField
             label='Target'
-            name={`${focusIdx}.attributes.target`}
+            name={`${prefixName}.target`}
             options={[
               {
                 value: '',
@@ -35,5 +35,5 @@ export function Link() {
         </Grid.Col>
       </Grid.Row>
     );
-  }, [focusIdx]);
+  }, [prefixName]);
 }

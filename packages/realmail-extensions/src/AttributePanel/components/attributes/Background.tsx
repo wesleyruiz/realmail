@@ -28,9 +28,10 @@ const backgroundRepeatOptions = [
   },
 ];
 
-export function Background({ prefixName }: { prefixName: string; }) {
+export function Background({ prefixName }: { prefixName?: string; }) {
   const { focusIdx } = useFocusIdx();
   const { onUploadImage } = useEditorProps();
+  prefixName = prefixName || `${focusIdx}.attributes`;
   return useMemo(() => {
     return (
       <Space key={focusIdx} direction='vertical'>

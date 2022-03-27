@@ -51,7 +51,11 @@ export function EditEmailPreview() {
           }}
         />
         <div
-          part="email-bg"
+          {
+          ...{
+            part: 'email-bg',
+          }
+          }
           className={classnames('shadow-container', SYNC_SCROLL_ELEMENT_CLASS_NAME)}
           style={{
             height: '100%',

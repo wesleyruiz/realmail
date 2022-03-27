@@ -48,7 +48,7 @@ export function Carousel() {
               options={options}
               inline
             />
-            <Align inline />
+            <Align />
           </Space>
         </Collapse.Item>
         <Collapse.Item name='4' contentStyle={{ padding: 0 }} header='Images'>
