@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useFocusIdx } from 'realmail-editor';
 import { TextField } from '../../../components/Form';
 
-export function BorderWidth() {
+export function BorderWidth({ name }: { name: string; }) {
   const { focusIdx } = useFocusIdx();
 
   return useMemo(() => {
@@ -10,8 +10,8 @@ export function BorderWidth() {
       <TextField
         label='Width'
         quickchange
-        name={`${focusIdx}.attributes.border-width`}
+        name={name || `${focusIdx}.attributes.border-width`}
       />
     );
-  }, [focusIdx]);
+  }, [focusIdx, name]);
 }

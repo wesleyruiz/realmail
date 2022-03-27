@@ -2,15 +2,15 @@ import React, { useMemo } from 'react';
 import { ColorPickerField } from '../../../components/Form';
 import { useFocusIdx } from 'realmail-editor';
 
-export function BorderColor() {
+export function BorderColor({ name }: { name: string; }) {
   const { focusIdx } = useFocusIdx();
 
   return useMemo(() => {
     return (
       <ColorPickerField
         label='Color'
-        name={`${focusIdx}.attributes.border-color`}
+        name={name || `${focusIdx}.attributes.border-color`}
       />
     );
-  }, [focusIdx]);
+  }, [focusIdx, name]);
 }
