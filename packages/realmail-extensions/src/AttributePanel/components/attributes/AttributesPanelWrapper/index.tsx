@@ -31,7 +31,7 @@ export const AttributesPanelWrapper: React.FC<AttributesPanelWrapper> = (
         style={{
           border: '1px solid var(--color-neutral-3, rgb(229, 230, 235))',
           borderBottom: 'none',
-          padding: '12px 24px',
+          padding: '10px 24px',
         }}
       >
         <Stack vertical>
@@ -40,7 +40,7 @@ export const AttributesPanelWrapper: React.FC<AttributesPanelWrapper> = (
               <Stack spacing='extraTight' alignment='center'>
                 <EyeIcon />
                 <TextStyle variation='strong' size='large'>
-                  {`${block.name} attributes`}
+                  {block.name}
                 </TextStyle>
               </Stack>
               <Stack.Item>{props.extra}</Stack.Item>

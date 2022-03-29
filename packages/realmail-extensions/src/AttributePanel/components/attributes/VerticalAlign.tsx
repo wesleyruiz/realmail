@@ -18,9 +18,11 @@ const options = [
 ];
 
 export function VerticalAlign({
+  name,
   attributeName = 'vertical-align',
 }: {
   attributeName?: string;
+  name?: string;
 }) {
   const { focusIdx } = useFocusIdx();
 
@@ -30,10 +32,10 @@ export function VerticalAlign({
         <SelectField
           style={{ width: 120 }}
           label='Vertical align'
-          name={`${focusIdx}.attributes.${attributeName}`}
+          name={name || `${focusIdx}.attributes.${attributeName}`}
           options={options}
         />
       </Stack>
     );
-  }, [attributeName, focusIdx]);
+  }, [attributeName, focusIdx, name]);
 }

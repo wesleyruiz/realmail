@@ -17,13 +17,13 @@ const options = [
   },
 ];
 
-export function Align({ inline }: { inline?: boolean; }) {
+export function Align({ name }: { name?: string; }) {
   const { focusIdx } = useFocusIdx();
 
   return (
     <RadioGroupField
       label='Align'
-      name={`${focusIdx}.attributes.align`}
+      name={name || `${focusIdx}.attributes.align`}
       options={options}
     />
   );

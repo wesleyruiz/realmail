@@ -36,6 +36,7 @@ export function EditEmailPreview() {
         {...{
           [DATA_ATTRIBUTE_DROP_CONTAINER]: 'true',
         }}
+
         style={{
           height: '100%',
           zIndex: 10,
@@ -50,6 +51,11 @@ export function EditEmailPreview() {
           }}
         />
         <div
+          {
+          ...{
+            part: 'email-bg',
+          }
+          }
           className={classnames('shadow-container', SYNC_SCROLL_ELEMENT_CLASS_NAME)}
           style={{
             height: '100%',

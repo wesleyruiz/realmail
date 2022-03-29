@@ -4,8 +4,10 @@ import { useFocusIdx } from 'realmail-editor';
 
 export function ContainerBackgroundColor({
   title = 'Container background color',
+  name
 }: {
   title?: string;
+  name?: string;
 }) {
   const { focusIdx } = useFocusIdx();
 
@@ -13,9 +15,9 @@ export function ContainerBackgroundColor({
     return (
       <ColorPickerField
         label={title}
-        name={`${focusIdx}.attributes.container-background-color`}
+        name={name || `${focusIdx}.attributes.container-background-color`}
         alignment='center'
       />
     );
-  }, [focusIdx, title]);
+  }, [focusIdx, name, title]);
 }

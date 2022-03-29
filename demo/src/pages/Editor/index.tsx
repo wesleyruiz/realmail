@@ -193,7 +193,7 @@ export default function Editor() {
 
   const initialValues: IEmailTemplate | null = useMemo(() => {
     if (!templateData) return null;
-    const sourceData = cloneDeep(templateData.content) as IBlockData;
+    const sourceData = replaceStandardBlockToAdvancedBlock(cloneDeep(templateData.content)) as IBlockData;
     return {
       ...templateData,
       content: sourceData, // replace standard block

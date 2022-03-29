@@ -95,16 +95,22 @@ export const SimpleLayout: React.FC<
             bodyStyle={{ padding: 0 }}
             className={styles.customScrollBarV2}
           >
-            <Tabs className={styles.layoutTabs}>
-              <Tabs.TabPane title={<div style={{ height: 31, lineHeight: '31px' }}>Configuration</div>}>
+            {
+              showSourceCode ? (
+                <Tabs className={styles.layoutTabs}>
+                  <Tabs.TabPane title={<div style={{ height: 31, lineHeight: '31px' }}>Configuration</div>}>
+                    <AttributePanel />
+                  </Tabs.TabPane>
+
+                  <Tabs.TabPane destroyOnHide key='Source code' title={<div style={{ height: 31, lineHeight: '31px' }}>Source code</div>}>
+                    <SourceCodePanel />
+                  </Tabs.TabPane>
+
+                </Tabs>
+              ) : (
                 <AttributePanel />
-              </Tabs.TabPane>
-              {showSourceCode && (
-                <Tabs.TabPane destroyOnHide key='Source code' title={<div style={{ height: 31, lineHeight: '31px' }}>Source code</div>}>
-                  <SourceCodePanel />
-                </Tabs.TabPane>
               )}
-            </Tabs>
+
           </Card>
         </Layout.Sider>
 

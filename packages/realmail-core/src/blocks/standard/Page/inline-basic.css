@@ -1,0 +1,8 @@
+.hide-desktop-block {
+  display: none !important;
+  mso-hide: all !important;
+}
+.hide-desktop-inline-block {
+  display: none !important;
+  mso-hide: all !important;
+}

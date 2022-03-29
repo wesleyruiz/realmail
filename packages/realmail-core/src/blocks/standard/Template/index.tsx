@@ -7,6 +7,7 @@ export type ITemplate = IBlockData<
   {},
   {
     idx?: string | null;
+    className?: string;
   }
 >;
 
@@ -19,6 +20,7 @@ export const Template = createBlock<ITemplate>({
       data: {
         value: {
           idx: '',
+          className: '',
         },
       },
       attributes: {},

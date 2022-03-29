@@ -1,11 +1,13 @@
-import { Template } from '@core/components';
-import { BasicType } from '@core/constants';
+import { Template, ResponsiveBlock } from '@core/components';
+import { AdvancedType, BasicType } from '@core/constants';
 import { IBlock, IBlockData } from '@core/typings';
 import { createCustomBlock } from '@core/utils/createCustomBlock';
-import { TemplateEngineManager } from '@core/utils';
-import { merge } from 'lodash';
+import { getParentByIdx, TemplateEngineManager } from '@core/utils';
+import { isString, isUndefined, merge, pickBy } from 'lodash';
 import React from 'react';
 import { IPage, standardBlocks } from '../standard';
+
+const inlineBlockTypes = ([AdvancedType.GROUP, AdvancedType.COLUMN] as string[]);
 
 export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
   type: string;
@@ -41,15 +43,56 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
     render: (data, idx, mode, context, dataSource) => {
       const { iteration, condition } = data.data.value;
 
-      const getBaseContent = (bIdx: string | null, index: number) =>
-        option.getContent({
+      const parentBlockData = getParentByIdx({ content: context! }, idx!);
+
+      const getDesktopBaseContent = (bIdx: string | null, index: number) => {
+        let width = data.attributes.width;
+        if (inlineBlockTypes.includes(data.type) && isUndefined(width) && parentBlockData) {
+          width = (100 / parentBlockData.children.length).toFixed(2) + '%';
+        }
+        return option.getContent({
           index,
-          data,
+          data: {
+            ...data,
+            attributes: {
+              ...data.attributes,
+              width
+            }
+          },
           idx: bIdx,
           mode,
           context,
           dataSource,
         }) as any;
+      };
+
+      const getMobileBaseContent = (bIdx: string | null, index: number) => {
+        let width = data.mobileAttributes?.width || data.attributes.width;
+        if (inlineBlockTypes.includes(data.type) && isUndefined(width) && parentBlockData) {
+          width = '100%';
+        }
+        return option.getContent({
+          index,
+          data: {
+            ...data,
+            attributes: {
+              ...data.attributes,
+              ...pickBy(data.mobileAttributes, (v) => !Boolean(isUndefined(v) || (isString(v) && v.trim() === ''))),
+              'css-class': data.mobileAttributes?.['css-class'] || '',
+              width
+            }
+          },
+          idx: bIdx,
+          mode,
+          context,
+          dataSource,
+        }) as any;
+      };
+
+      const getBaseContent = (bIdx: string | null, index: number) => {
+        if (!data.mobileAttributes || Object.keys(data.mobileAttributes).length === 0) return getDesktopBaseContent(bIdx, index);
+        return <ResponsiveBlock mode={mode} desktop={getDesktopBaseContent(bIdx, index)} mobile={getMobileBaseContent(bIdx, index)} blockData={data} />;
+      };
 
       let children = getBaseContent(idx, 0);
 
@@ -93,7 +136,8 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
 //   {{ product.title }}
 // {% endfor %}
 
-export interface AdvancedBlock extends IBlockData {
+export interface AdvancedBlock<T extends IBlockData = IBlockData> extends IBlockData {
+  mobileAttributes?: T['attributes'];
   data: {
     value: {
       condition?: ICondition;
