@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ToolItem } from '../ToolItem';
 import { Link, LinkParams } from '../Link';
 import {
@@ -14,13 +14,13 @@ import { useSelectionRange } from '@extensions/AttributePanel/hooks/useSelection
 import { IconBgColor } from './IconBgColor';
 import { IconFontColor } from './IconFontColor';
 import { MergeTagBadge } from 'realmail-editor';
-import { BasicTools } from '../BasicTools';
 import { Unlink } from '../Unlink';
 import { StrikeThrough } from '../StrikeThrough';
 import { Underline } from '../Underline';
 import { Italic } from '../Italic';
 import { Bold } from '../Bold';
 import { FontSize } from '../FontSize';
+import { RICH_TEXT_TOOL_BAR } from '@extensions/constants';
 
 export interface ToolsProps {
   onChange: (content: string) => any;
@@ -28,79 +28,101 @@ export interface ToolsProps {
 
 export function Tools(props: ToolsProps) {
   const { mergeTags, enabledMergeTagsBadge } = useEditorProps();
+
   const { focusBlockNode } = useFocusBlockLayout();
   const { selectionRange, restoreRange, setRangeByElement } =
     useSelectionRange();
 
-  const execCommand = useCallback((cmd: string, val?: any) => {
-    if (!selectionRange) {
-      console.error('No selectionRange');
-      return;
-    }
-    if (
-      !focusBlockNode?.contains(selectionRange?.commonAncestorContainer)) {
-      console.error('Not commonAncestorContainer');
-      return;
-    }
+  const execCommand = useCallback(
+    (cmd: string, val?: any) => {
+      if (!selectionRange) {
+        console.error('No selectionRange');
+        return;
+      }
+      if (!focusBlockNode?.contains(selectionRange?.commonAncestorContainer)) {
+        console.error('Not commonAncestorContainer');
+        return;
+      }
 
-    restoreRange(selectionRange);
-    const uuid = (+new Date()).toString();
-    if (cmd === 'createLink') {
-      const linkData = val as LinkParams;
-      const target = linkData.blank ? '_blank' : '';
-      let link: HTMLAnchorElement;
-      if (linkData.linkNode) {
-        link = linkData.linkNode;
+      restoreRange(selectionRange);
+      const uuid = (+new Date()).toString();
+      if (cmd === 'createLink') {
+        const linkData = val as LinkParams;
+        const target = linkData.blank ? '_blank' : '';
+        let link: HTMLAnchorElement;
+        if (linkData.linkNode) {
+          link = linkData.linkNode;
+        } else {
+          document.execCommand(cmd, false, uuid);
+
+          link = getShadowRoot().querySelector(`a[href="${uuid}"`)!;
+        }
+
+        if (target) {
+          link.setAttribute('target', target);
+        }
+
+        link.style.textDecoration = linkData.underline ? 'underline' : 'none';
+        link.setAttribute('href', linkData.link);
+      } else if (cmd === 'insertHTML') {
+        let newContent = val;
+        if (enabledMergeTagsBadge) {
+          newContent = MergeTagBadge.transform(val, uuid);
+        }
+
+        document.execCommand(cmd, false, newContent);
+        const insertMergeTagEle = getShadowRoot().getElementById(uuid);
+        if (insertMergeTagEle) {
+          insertMergeTagEle.focus();
+          setRangeByElement(insertMergeTagEle);
+        }
       } else {
-        document.execCommand(cmd, false, uuid);
-
-        link = getShadowRoot().querySelector(`a[href="${uuid}"`)!;
+        document.execCommand(cmd, false, val);
       }
 
-      if (target) {
-        link.setAttribute('target', target);
+      const contenteditableElement = getShadowRoot().activeElement;
+      if (contenteditableElement?.getAttribute('contenteditable') === 'true') {
+        const html = getShadowRoot().activeElement?.innerHTML || '';
+        props.onChange(html);
       }
+    },
+    [
+      enabledMergeTagsBadge,
+      focusBlockNode,
+      props,
+      restoreRange,
+      selectionRange,
+      setRangeByElement,
+    ]
+  );
 
-      link.style.textDecoration = linkData.underline ? 'underline' : 'none';
-      link.setAttribute('href', linkData.link);
-    } else if (cmd === 'insertHTML') {
-      let newContent = val;
-      if (enabledMergeTagsBadge) {
-        newContent = MergeTagBadge.transform(val, uuid);
-      }
-
-      document.execCommand(cmd, false, newContent);
-      const insertMergeTagEle = getShadowRoot().getElementById(uuid);
-      if (insertMergeTagEle) {
-        insertMergeTagEle.focus();
-        setRangeByElement(insertMergeTagEle);
-      }
-    } else {
+  const execCommandWithRange = useCallback(
+    (cmd: string, val?: any) => {
       document.execCommand(cmd, false, val);
-    }
-
-    const html = getShadowRoot().activeElement?.innerHTML || '';
-    props.onChange(html);
-  }, [enabledMergeTagsBadge, focusBlockNode, props, restoreRange, selectionRange, setRangeByElement]);
-
-  const execCommandWithRange = useCallback((cmd: string, val?: any) => {
-    document.execCommand(cmd, false, val);
-    const html = getShadowRoot().activeElement?.innerHTML || '';
-    props.onChange(html);
-  }, [props.onChange]);
+      const contenteditableElement = getShadowRoot().activeElement;
+      if (contenteditableElement?.getAttribute('contenteditable') === 'true') {
+        const html = getShadowRoot().activeElement?.innerHTML || '';
+        props.onChange(html);
+      }
+    },
+    [props.onChange]
+  );
 
   const getPopoverMountNode = () =>
     document.getElementById(FIXED_CONTAINER_ID)!;
 
   return (
-    <div id='Tools' style={{ display: 'flex', flexWrap: 'nowrap' }}>
+    <div
+      id={RICH_TEXT_TOOL_BAR}
+      style={{ display: 'flex', flexWrap: 'nowrap', width: '100%' }}
+    >
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
         }}
       >
-        <BasicTools />
+        {/* <BasicTools /> */}
 
         {mergeTags && (
           <MergeTags
@@ -108,7 +130,6 @@ export function Tools(props: ToolsProps) {
             getPopupContainer={getPopoverMountNode}
           />
         )}
-        <div className='realmail-extensions-divider' />
         <div className='realmail-extensions-divider' />
         <FontFamily
           execCommand={execCommand}
