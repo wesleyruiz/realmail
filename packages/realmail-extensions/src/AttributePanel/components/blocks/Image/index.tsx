@@ -15,6 +15,7 @@ import { Collapse, Grid, Space, Tabs } from '@arco-design/web-react';
 import { Border } from '@extensions/AttributePanel/components/attributes/Border';
 import { IconFont, Stack, useEditorProps, useFocusIdx } from 'realmail-editor';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 
 export function Image() {
 
@@ -95,6 +96,9 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
           </Grid.Col>
         </Grid.Row>
         <Grid.Col span={24}>
+          <Grid.Col span={24}>
+            <ResponsiveDesign mode={mode} />
+          </Grid.Col>
           <TextField
             label='class name'
             name={mode === 'desktop' ? `${focusIdx}.attributes.css-class` : `${focusIdx}.mobileAttributes.css-class`}

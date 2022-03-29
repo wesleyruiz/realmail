@@ -7,6 +7,7 @@ import { Collapse, Grid, Space, Tabs } from '@arco-design/web-react';
 import { IconFont, Stack, useFocusIdx } from 'realmail-editor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 
 export function Wrapper() {
 
@@ -53,6 +54,9 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         </Stack>
       </Collapse.Item>
       <Collapse.Item name='4' header='Extra'>
+        <Grid.Col span={24}>
+          <ResponsiveDesign mode={mode} />
+        </Grid.Col>
         <Grid.Col span={24}>
           <ClassName name={mode === 'desktop' ? `${focusIdx}.attributes.css-class` : `${focusIdx}.mobileAttributes.css-class`} />
         </Grid.Col>

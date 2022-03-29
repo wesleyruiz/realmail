@@ -7,6 +7,7 @@ import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/at
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { useFocusIdx, IconFont } from 'realmail-editor';
+import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 
 export function Group() {
   return (
@@ -46,6 +47,9 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         </Grid.Row>
       </Collapse.Item>
       <Collapse.Item name='4' header='Extra'>
+        <Grid.Col span={24}>
+          <ResponsiveDesign mode={mode} />
+        </Grid.Col>
         <Grid.Col span={24}>
           <ClassName name={mode === 'desktop' ? `${focusIdx}.attributes.css-class` : `${focusIdx}.mobileAttributes.css-class`} />
         </Grid.Col>

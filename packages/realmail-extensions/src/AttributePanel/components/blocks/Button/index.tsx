@@ -23,6 +23,7 @@ import { useField } from 'react-final-form';
 import { Button as ArcoButton } from '@arco-design/web-react';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 
 export function Button() {
 
@@ -153,6 +154,9 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         <Border prefixName={mode === 'desktop' ? `${focusIdx}.attributes` : `${focusIdx}.mobileAttributes`} />
       </Collapse.Item>
       <Collapse.Item name='4' header='Extra'>
+        <Grid.Col span={24}>
+          <ResponsiveDesign mode={mode} />
+        </Grid.Col>
         <Grid.Col span={24}>
           <ClassName name={mode === 'desktop' ? `${focusIdx}.attributes.css-class` : `${focusIdx}.mobileAttributes.css-class`} />
         </Grid.Col>
