@@ -25,7 +25,7 @@ export const ToolItem: React.FC<{
     );
   }
   return (
-    <Tooltip mini position='bottom' content={props.title}>
+    <Tooltip mini position='top' content={props.title}>
       <button
         tabIndex={-1}
         className={classnames('realmail-extensions-emailToolItem', props.isActive && 'realmail-extensions-emailToolItem-active')}

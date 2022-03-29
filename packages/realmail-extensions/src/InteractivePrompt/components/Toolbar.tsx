@@ -17,7 +17,7 @@ export function Toolbar() {
   const props = useEditorProps();
 
   const isPage = focusBlock?.type === BasicType.PAGE;
-  const isText = isTextBlock(focusBlock?.type);
+  // const isText = isTextBlock(focusBlock?.type);
 
   const handleMoveUp = () => {
     moveBlock(focusIdx, getSiblingIdx(focusIdx, -1));
@@ -55,7 +55,7 @@ export function Toolbar() {
     setFocusIdx(getParentIdx(focusIdx)!);
   };
 
-  if (isText) return null;
+  // if (isText) return null;
   return (
     <>
       <div
@@ -72,12 +72,16 @@ export function Toolbar() {
             lineHeight: '22px',
             pointerEvents: 'auto',
             color: '#ffffff',
-            transform: 'translateY(-100%)',
-            display: 'inline-flex',
+            width: 25,
+            transform: 'translate(calc(-100% - 1px), 0px)',
+            borderRadius: 3,
+            marginRight: 2,
+            overflow: 'hidden',
+
             // justifyContent: 'space-between',
           }}
         >
-          <div
+          {/* <div
             style={{
               color: '#ffffff',
               backgroundColor: 'var(--selected-color)',
@@ -92,7 +96,7 @@ export function Toolbar() {
             }}
           >
             {focusBlock && getBlockTitle(focusBlock, false)}
-          </div>
+          </div> */}
           <div
             onClick={(e) => {
               e.stopPropagation();
@@ -102,16 +106,17 @@ export function Toolbar() {
             }}
             style={{
               display: isPage ? 'none' : 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               pointerEvents: 'auto',
             }}
           >
-            <ToolItem
+            {/* <ToolItem
               width={12}
               iconName='icon-back-parent'
               onClick={handleSelectParent}
-            />
+            /> */}
             <ToolItem iconName='icon-copy' onClick={handleCopy} />
             {props.onAddCollection && (
               <ToolItem
@@ -139,10 +144,10 @@ function ToolItem(props: {
       style={{
         color: '#ffffff',
         backgroundColor: 'var(--selected-color)',
-        height: 22,
+        height: 30,
         fontSize: props.width || 14,
-        lineHeight: '22px',
-        width: 22,
+        lineHeight: '30px',
+        width: 25,
         display: 'flex',
         pointerEvents: 'auto',
         cursor: 'pointer',

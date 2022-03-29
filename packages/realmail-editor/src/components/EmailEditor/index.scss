@@ -49,3 +49,7 @@
     linear-gradient(45deg, transparent 75%, rgb(247, 247, 247) 75%),
     linear-gradient(-45deg, transparent 75%, rgb(247, 247, 247) 75%);
 }
+
+.hover-underline:hover {
+  text-decoration: underline;
+}

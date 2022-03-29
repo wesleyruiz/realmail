@@ -9,6 +9,7 @@ export * from './SimpleLayout';
 export * from './MergeTagBadgePrompt';
 
 export * from './components/Form';
+export * from './constants';
 
 export { getContextMergeTags } from './utils/getContextMergeTags';
 export { getIconNameByBlockType } from './utils/getIconNameByBlockType';
