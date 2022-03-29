@@ -2,7 +2,7 @@
   "name": "realmail-editor",
   "license": "MIT",
   "description": "Email editor",
-  "version": "0.0.8",
+  "version": "0.1.1",
   "author": "m-Ryan",
   "repository": {
     "type": "git",
@@ -74,5 +74,5 @@
     "react-final-form": "^6.5.7",
     "realmail-core": "^3.1.16"
   },
-  "gitHead": "b931d7f7a65a9d48beec672f09e3e7d569b38f1d"
+  "gitHead": "5f82151544723cefd9906fae7f57a7bdc2d5cb9f"
 }
