@@ -21,7 +21,7 @@ export interface EnhancerProps {
 const parse = (v: any) => v;
 export function enhancer<P extends { onChange?: (...rest: any) => any; }>(
   Component: React.FC<any>,
-  changeAdapter: (...args: Parameters<NonNullable<P['onChange']>>) => any
+  changeAdapter: (args: Parameters<NonNullable<P['onChange']>>) => any
 ) {
   return (
     props: EnhancerProps & Omit<P, 'value' | 'onChange' | 'mutators'>
@@ -90,7 +90,7 @@ export function enhancer<P extends { onChange?: (...rest: any) => any; }>(
 
       return (
         <Field name={name} {...config}>
-          {({ input: { onBlur, onChange }, meta }) => {
+          {({ input: { onBlur, onChange, value }, meta }) => {
 
             // eslint-disable-next-line react-hooks/exhaustive-deps
             const debounceCallbackChange = useCallback(
@@ -107,10 +107,12 @@ export function enhancer<P extends { onChange?: (...rest: any) => any; }>(
             );
 
             const onFieldChange: P['onChange'] = useCallback(
-              (e) => {
+              (e: any) => {
+                console.log();
+
                 const newVal = onChangeBefore
-                  ? onChangeBefore(changeAdapter(...e))
-                  : changeAdapter(...e);
+                  ? onChangeBefore(changeAdapter(e))
+                  : changeAdapter(e);
                 setCurrentValue(newVal);
                 if (!changeOnBlur) {
                   debounceCallbackChange(newVal);
@@ -127,6 +129,12 @@ export function enhancer<P extends { onChange?: (...rest: any) => any; }>(
                 onBlur();
               }
             }, [onBlur, onChange]);
+
+            useEffect(() => {
+              if (!currentValue) {
+                setCurrentValue(value);
+              }
+            }, [value]);
 
             useEffect(() => {
               addValidationField(name, config);

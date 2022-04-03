@@ -104,9 +104,9 @@ export function useBlock() {
       console.timeLog();
       change(parentIdx, parent); // listeners not notified
       setFocusIdx(nextFocusIdx);
-      scrollBlockEleIntoView({
-        idx: nextFocusIdx,
-      });
+      // scrollBlockEleIntoView({
+      //   idx: nextFocusIdx,
+      // });
       console.timeEnd();
     },
     [autoComplete, change, getState, setFocusIdx]
