@@ -12,6 +12,7 @@ import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { Stack, TextStyle, useFocusIdx } from 'realmail-editor';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { FontFamily } from '../../attributes/FontFamily';
+import { FontSize } from '../../attributes';
 
 export function Page() {
   const { focusIdx } = useFocusIdx();
@@ -45,10 +46,7 @@ export function Page() {
                   <FontFamily name={`${focusIdx}.data.value.font-family`} />
                 </Grid.Col>
                 <Grid.Col offset={1} span={11}>
-                  <InputWithUnitField
-                    label='Font size'
-                    name={`${focusIdx}.data.value.font-size`}
-                  />
+                  <FontSize name={`${focusIdx}.data.value.font-size`} />
                 </Grid.Col>
               </Grid.Row>
 

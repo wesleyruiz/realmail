@@ -8,6 +8,7 @@ export function ShadowStyle() {
     interactiveStyle: {
       hoverColor = 'rgb(var(--primary-4, #1890ff))',
       selectedColor = 'rgb(var(--primary-6, #1890ff))',
+      errorColor = 'transparent',
     } = {},
   } = useEditorProps();
 
@@ -21,6 +22,7 @@ export function ShadowStyle() {
             * {
               --hover-color: ${hoverColor};
               --selected-color: ${selectedColor};
+              --error-color: ${errorColor};
             }
 
             :host(*){

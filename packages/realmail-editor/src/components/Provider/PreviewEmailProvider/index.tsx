@@ -101,6 +101,9 @@ export const PreviewEmailProvider: React.FC<{}> = (props) => {
     };
 
     document.body.appendChild(iframe);
+    return () => {
+      document.body.removeChild(iframe);
+    };
   }, [errMsg, html, iframe]);
 
   useEffect(() => {

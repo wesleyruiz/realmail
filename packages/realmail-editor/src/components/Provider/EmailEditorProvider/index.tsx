@@ -1,7 +1,7 @@
 import { IEmailTemplate } from '@/typings';
 import { Form, useForm, useFormState, useField } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
-import React, { useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { BlocksProvider } from '..//BlocksProvider';
 import { HoverIdxProvider } from '../HoverIdxProvider';
 import { PropsProvider, PropsProviderProps } from '../PropsProvider';
@@ -12,6 +12,9 @@ import { useEffect, useState } from 'react';
 import setFieldTouched from 'final-form-set-field-touched';
 import { FocusBlockLayoutProvider } from '../FocusBlockLayoutProvider';
 import { PreviewEmailProvider } from '../PreviewEmailProvider';
+import { get, isEqual, isObject } from 'lodash';
+import { useEmailForm } from '@/hooks/useEmailForm';
+import { useRef } from 'react';
 
 export interface EmailEditorProviderProps<T extends IEmailTemplate = any>
   extends PropsProviderProps {
@@ -83,7 +86,7 @@ function FormWrapper({
 }) {
   const data = useFormState<IEmailTemplate>();
   const helper = useForm<IEmailTemplate>();
-  return <>{children(data, helper)}</>;
+  return <ValidationProvider>{children(data, helper)}</ValidationProvider>;
 }
 
 // final-form bug https://github.com/final-form/final-form/issues/169
@@ -114,7 +117,123 @@ const RegisterFields = React.memo(() => {
   );
 });
 
-function RegisterField({ name }: { name: string; }) {
-  useField(name);
+function RegisterField({ name, config }: { name: string; config?: any; }) {
+  useField(name, config);
   return <></>;
+}
+
+const ValidationProvider: React.FC<{}> = (props) => {
+  const [validationObj, setValidationObj] = useState<Record<string, any>>({});
+  const { formState: { values, errors } } = useEmailForm();
+  const lastErrorsMap = useRef<Record<string, string>>({});
+
+  const errorsMap = useMemo(() => {
+
+    const map: Record<string, string> = {};
+
+    const loop = (key: string) => {
+      const current = key ? get(errors, key) : errors;
+      if (isObject(current)) {
+        Object.keys(current).forEach(childKey => loop(key
+          ?
+          Array.isArray(current) ? `${key}.[${childKey}]` : `${key}.${childKey}`
+          : childKey));
+      } else {
+        map[key] = current;
+      }
+    };
+
+    if (errors) {
+      loop('');
+    }
+    if (isEqual(lastErrorsMap.current, map)) return lastErrorsMap.current;
+    lastErrorsMap.current = map;
+    return map;
+  }, [errors]);
+
+  const addValidationField = useCallback((name: string, validation?: any) => {
+    setValidationObj((old) => {
+      if (old[name] === validation) {
+        return old;
+      }
+      old[name] = validation;
+      return {
+        ...old
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    setValidationObj((old) => {
+      let isModify = false;
+      Object.keys(old).forEach(key => {
+        // 代表已经移除
+        if (get(values, key) === undefined) {
+          isModify = true;
+          delete old[key];
+        }
+      });
+
+      if (isModify) {
+        return { ...old };
+      }
+      return old;
+
+    });
+
+  }, [values]);
+
+  const errorBlocksMap = useMemo(() => {
+    const map: Record<string, boolean> = {};
+
+    Object.keys(errorsMap).forEach((key) => {
+      let formatKey = key;
+
+      if (/(.*\.children\.\[\d+\])\.(.*)$/.test(key)) {
+        formatKey = key.replace(/(.*\.children\.\[\d+\])\.(.*)$/, '$1');
+      } else if (/(content)\.(.*)$/.test(key)) {
+        formatKey = key.replace(/(content)\.(.*)$/, '$1');
+      }
+
+      if (formatKey !== key) {
+        map[formatKey] = true;
+      }
+    });
+
+    return map;
+  }, [errorsMap]);
+
+  const value = useMemo(() => {
+    return {
+      value: validationObj,
+      addValidationField,
+      errorBlocksMap
+    };
+  }, [addValidationField, errorBlocksMap, validationObj]);
+
+  return useMemo(() => {
+
+    return (
+      <ValidationContext.Provider value={value}>
+        {props.children}
+        {Object.keys(errorsMap).filter(Boolean).map(key => {
+          return <RegisterField key={key} name={key} config={errorsMap[key]} />;
+        })}
+      </ValidationContext.Provider>
+    );
+  }, [errorsMap, props.children, value]);
+};
+
+const ValidationContext = React.createContext<{
+  value: Record<string, any>;
+  addValidationField: (name: string, validation?: Record<string, any>) => void;
+  errorBlocksMap: Record<string, boolean>;
+}>({
+  value: {},
+  addValidationField: () => { },
+  errorBlocksMap: {}
+});
+
+export function useValidationContext() {
+  return useContext(ValidationContext);
 }

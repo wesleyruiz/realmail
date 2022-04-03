@@ -22,6 +22,7 @@ export interface PropsProviderProps {
   interactiveStyle?: {
     hoverColor?: string;
     selectedColor?: string;
+    errorColor?: string;
     dragoverColor?: string;
     tangentColor?: string;
   };

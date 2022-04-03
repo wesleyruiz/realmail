@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useMemo } from 'react';
 
 export interface HoverIdxState {
   hoverIdx: string;
@@ -16,14 +17,16 @@ export const ScrollProvider: React.FC<{}> = (props) => {
   const scrollHeight = useRef(0);
   const viewElementRef = useRef<null | { selector: string, top: number; }>(null);
 
-  return (
-    <ScrollContext.Provider
-      value={{
-        scrollHeight,
-        viewElementRef
-      }}
-    >
-      {props.children}
-    </ScrollContext.Provider>
-  );
+  return useMemo(() => {
+    return (
+      <ScrollContext.Provider
+        value={{
+          scrollHeight,
+          viewElementRef
+        }}
+      >
+        {props.children}
+      </ScrollContext.Provider>
+    );
+  }, [props.children]);
 };
