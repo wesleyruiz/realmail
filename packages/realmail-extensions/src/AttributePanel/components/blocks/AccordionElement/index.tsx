@@ -2,7 +2,6 @@ import React from 'react';
 import { Padding } from '../../attributes/Padding';
 import { TextAlign } from '../../attributes/TextAlign';
 import { Border } from '../../attributes/Border';
-import { BackgroundColor } from '../../attributes/BackgroundColor';
 import { Color } from '../../attributes/Color';
 import { Link } from '../../attributes/Link';
 import { TextAreaField } from '../../../../components/Form';
@@ -88,7 +87,7 @@ export function AccordionElement() {
                 <TextTransform />
               </Grid.Col>
               <Grid.Col offset={1} span={11}>
-                <BackgroundColor />
+                <Color title="Background color" name={`${focusIdx}.attributes.background-color`} />
               </Grid.Col>
             </Grid.Row>
             <FontStyle />

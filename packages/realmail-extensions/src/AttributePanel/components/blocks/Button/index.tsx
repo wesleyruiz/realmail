@@ -1,11 +1,9 @@
 import React from 'react';
 import { Padding } from '../../attributes/Padding';
 import { Border } from '../../attributes/Border';
-import { BackgroundColor } from '../../attributes/BackgroundColor';
 import { Color } from '../../attributes/Color';
 import { Link } from '../../attributes/Link';
 import { Width } from '../../attributes/Width';
-import { ContainerBackgroundColor } from '../../attributes/ContainerBackgroundColor';
 import { Align } from '../../attributes/Align';
 import { FontSize } from '../../attributes/FontSize';
 import { FontStyle } from '../../attributes/FontStyle';
@@ -30,7 +28,7 @@ export function Button() {
   return (
     <AttributesPanelWrapper>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -107,10 +105,10 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
               <Color title='Text color' name={mode === 'desktop' ? `${focusIdx}.attributes.color` : `${focusIdx}.mobileAttributes.color`} />
             </Grid.Col>
             <Grid.Col offset={1} span={11}>
-              <BackgroundColor title='Button color' name={mode === 'desktop' ? `${focusIdx}.attributes.background-color` : `${focusIdx}.mobileAttributes.background-color`} />
+              <Color title='Button color' name={mode === 'desktop' ? `${focusIdx}.attributes.background-color` : `${focusIdx}.mobileAttributes.background-color`} />
             </Grid.Col>
             <Grid.Col span={11}>
-              <ContainerBackgroundColor title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
+              <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
             </Grid.Col>
           </Grid.Row>
         </Space>

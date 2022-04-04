@@ -59,13 +59,30 @@ export const BlocksProvider: React.FC<{}> = (props) => {
     });
   }, []);
 
+  const setFocusIdxEnhance: React.Dispatch<React.SetStateAction<string>> = useCallback((handler) => {
+    if (isFunction(handler)) {
+      setFocusIdx((currentIdx) => {
+        const nextIdx = handler(currentIdx);
+        const next = EventManager.exec(EventType.FOCUS_IDX_CHANGE, { currentIdx, nextIdx });
+        if (next) return nextIdx;
+        return currentIdx;
+      });
+    }
+    setFocusIdx((currentIdx) => {
+      let nextIdx = handler as string;
+      const next = EventManager.exec(EventType.FOCUS_IDX_CHANGE, { currentIdx, nextIdx });
+      if (next) return nextIdx;
+      return currentIdx;
+    });
+  }, []);
+
   return (
     <BlocksContext.Provider
       value={{
         initialized,
         setInitialized,
         focusIdx,
-        setFocusIdx,
+        setFocusIdx: setFocusIdxEnhance,
         dragEnabled,
         setDragEnabled,
         collapsed,

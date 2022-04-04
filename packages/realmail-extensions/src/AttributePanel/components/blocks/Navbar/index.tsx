@@ -14,14 +14,14 @@ import { useFocusIdx, Stack, IconFont } from 'realmail-editor';
 import { INavbar } from 'realmail-core';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
-import { FontFamily, FontStyle, FontWeight, LetterSpacing, LineHeight, TextAlign, TextDecoration, TextTransform } from '../../attributes';
+import { Color, FontFamily, FontSize, FontStyle, FontWeight, LetterSpacing, LineHeight, TextAlign, TextDecoration, TextTransform } from '../../attributes';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 
 export function Navbar() {
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -53,8 +53,7 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
               <EditTabField
                 tabPosition='top'
                 name={`${focusIdx}.data.value.links`}
-                label='Links'
-                labelHidden
+                label=''
                 renderItem={(item, index) => (
                   <NavbarLink item={item} index={index} />
                 )}
@@ -103,10 +102,9 @@ function NavbarLink({
             />
           </Grid.Col>
           <Grid.Col offset={1} span={11}>
-            <ColorPickerField
-              label='Color'
+            <Color
+              title='Color'
               name={`${focusIdx}.data.value.links.[${index}].color`}
-              alignment='center'
             />
           </Grid.Col>
         </Grid.Row>
@@ -117,11 +115,7 @@ function NavbarLink({
             <FontFamily name={`${focusIdx}.data.value.links.[${index}].font-family`} />
           </Grid.Col>
           <Grid.Col offset={1} span={11}>
-            <TextField
-              label='Font size'
-              quickchange
-              name={`${focusIdx}.data.value.links.[${index}].font-size`}
-            />
+            <FontSize name={`${focusIdx}.data.value.links.[${index}].font-size`} />
           </Grid.Col>
         </Grid.Row>
 

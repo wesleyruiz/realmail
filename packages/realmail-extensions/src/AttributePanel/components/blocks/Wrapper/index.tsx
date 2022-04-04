@@ -8,13 +8,14 @@ import { IconFont, Stack, useFocusIdx } from 'realmail-editor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Border } from '../../attributes';
 
 export function Wrapper() {
 
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -40,18 +41,8 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         </Stack>
       </Collapse.Item>
       <Collapse.Item name='2' header='Border'>
-        <Stack vertical spacing='tight'>
-          <TextField
-            label='Border'
-            name={mode === 'desktop' ? `${focusIdx}.attributes.border` : `${focusIdx}.mobileAttributes.border`}
-            inline
-          />
-          <TextField
-            label='Background border radius'
-            name={mode === 'desktop' ? `${focusIdx}.attributes.border-radius` : `${focusIdx}.mobileAttributes.border-radius`}
-            inline
-          />
-        </Stack>
+        <Border prefixName={mode === 'desktop' ? `${focusIdx}.attributes` : `${focusIdx}.mobileAttributes`} />
+
       </Collapse.Item>
       <Collapse.Item name='4' header='Extra'>
         <Grid.Col span={24}>

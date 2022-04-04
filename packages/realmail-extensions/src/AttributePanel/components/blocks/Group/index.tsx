@@ -1,6 +1,5 @@
 import React from 'react';
 import { Width } from '@extensions/AttributePanel/components/attributes/Width';
-import { BackgroundColor } from '@extensions/AttributePanel/components/attributes/BackgroundColor';
 import { VerticalAlign } from '@extensions/AttributePanel/components/attributes/VerticalAlign';
 import { Collapse, Grid, Space, Tabs } from '@arco-design/web-react';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
@@ -8,12 +7,13 @@ import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { useFocusIdx, IconFont } from 'realmail-editor';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Color } from '../../attributes';
 
 export function Group() {
   return (
     <AttributesPanelWrapper>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -41,7 +41,7 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
       <Collapse.Item name='1' header='Background'>
         <Grid.Row>
           <Grid.Col span={11}>
-            <BackgroundColor name={mode === 'desktop' ? `${focusIdx}.attributes.background-color` : `${focusIdx}.mobileAttributes.background-color`} />
+            <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.background-color` : `${focusIdx}.mobileAttributes.background-color`} />
           </Grid.Col>
           <Grid.Col offset={1} span={11} />
         </Grid.Row>

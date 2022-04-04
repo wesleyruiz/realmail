@@ -1,19 +1,19 @@
 import React from 'react';
 import { Height } from '@extensions/AttributePanel/components/attributes/Height';
-import { ContainerBackgroundColor } from '@extensions/AttributePanel/components/attributes/ContainerBackgroundColor';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { Collapse, Grid, Space, Tabs } from '@arco-design/web-react';
-import { IconFont, Stack, useFocusIdx } from 'realmail-editor';
+import { IconFont, useFocusIdx } from 'realmail-editor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Color } from '../../attributes';
 
 export function Spacer() {
   return (
     <AttributesPanelWrapper>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -36,7 +36,7 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
       </Collapse.Item>
 
       <Collapse.Item name='2' header='Background'>
-        <ContainerBackgroundColor title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
+        <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
       </Collapse.Item>
 
       <Collapse.Item name='4' header='Extra'>

@@ -106,6 +106,7 @@ const RenderReactNode = React.memo(function ({
 
     if (blockType) {
       if (idx) {
+        attributes['data-idx'] = idx;
         makeStandardContentEditable(node, blockType, idx);
       }
       makeBlockNodeContentEditable(node);

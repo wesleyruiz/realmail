@@ -1,17 +1,20 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import React from 'react';
 import Login from './pages/Login';
 import { UserStorage } from './utils/user-storage';
 import App from './App';
 
+const root = document.getElementById('root')!;
 UserStorage.getAccount()
   .then(user => {
+
     if (user) {
-      render(<App />, document.getElementById('root'));
+
+      createRoot(root).render(<App />,);
     } else {
-      render(<Login />, document.getElementById('root'));
+      createRoot(root).render(<Login />,);
     }
   })
   .catch(() => {
-    render(<Login />, document.getElementById('root'));
+    createRoot(root).render(<Login />,);
   });

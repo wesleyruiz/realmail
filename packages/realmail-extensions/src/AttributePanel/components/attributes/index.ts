@@ -10,7 +10,6 @@ export { Background } from './Background';
 export { Decoration } from './Decoration';
 export { LineHeight } from './LineHeight';
 export { TextTransform } from './TextTransform';
-export { BackgroundColor } from './BackgroundColor';
 export { Direction } from './Direction';
 export { Link } from './Link';
 export { VerticalAlign } from './VerticalAlign';

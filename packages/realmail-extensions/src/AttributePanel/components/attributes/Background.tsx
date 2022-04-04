@@ -1,13 +1,12 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
-  ImageUploaderField,
-  InputWithUnitField,
   SelectField,
   TextField,
 } from '../../../components/Form';
-import { Stack, useFocusIdx, useEditorProps } from 'realmail-editor';
-import { BackgroundColor } from './BackgroundColor';
+import { useFocusIdx } from 'realmail-editor';
 import { Grid, Space } from '@arco-design/web-react';
+import { ImageUrl } from './ImageUrl';
+import { Color } from './Color';
 
 const backgroundRepeatOptions = [
   {
@@ -30,21 +29,15 @@ const backgroundRepeatOptions = [
 
 export function Background({ prefixName }: { prefixName?: string; }) {
   const { focusIdx } = useFocusIdx();
-  const { onUploadImage } = useEditorProps();
   prefixName = prefixName || `${focusIdx}.attributes`;
   return useMemo(() => {
     return (
       <Space key={focusIdx} direction='vertical'>
-        <ImageUploaderField
-          label='Background image'
-          name={`${prefixName}.background-url`}
-          helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
-          uploadHandler={onUploadImage}
-        />
+        <ImageUrl name={`${prefixName}.background-url`} />
 
         <Grid.Row>
           <Grid.Col span={11}>
-            <BackgroundColor name={`${prefixName}.background-color`} />
+            <Color title='Background color' name={`${prefixName}.background-color`} />
           </Grid.Col>
           <Grid.Col offset={1} span={11}>
             <SelectField
@@ -60,5 +53,5 @@ export function Background({ prefixName }: { prefixName?: string; }) {
         />
       </Space>
     );
-  }, [focusIdx, onUploadImage, prefixName]);
+  }, [focusIdx, prefixName]);
 }

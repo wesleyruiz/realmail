@@ -20,7 +20,6 @@ export function Decoration() {
           label='Border'
           name={`${focusIdx}.attributes.border`}
           inline
-          alignment='center'
         />
         <NumberField
           label='Opacity'
@@ -29,7 +28,6 @@ export function Decoration() {
           step={0.1}
           name={`${focusIdx}.attributes.opacity`}
           inline
-          alignment='center'
         />
       </Stack>
     );

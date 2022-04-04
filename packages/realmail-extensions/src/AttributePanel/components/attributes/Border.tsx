@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
-import { InputWithUnitField, TextField } from '../../../components/Form';
-import { Stack, useFocusIdx } from 'realmail-editor';
-import { Grid, Space } from '@arco-design/web-react';
+import { TextField } from '../../../components/Form';
+import { useFocusIdx } from 'realmail-editor';
+import { Grid } from '@arco-design/web-react';
+import { BorderRadius } from './BorderRadius';
 
 export function Border({ prefixName }: { prefixName?: string; }) {
   const { focusIdx } = useFocusIdx();
@@ -13,11 +14,7 @@ export function Border({ prefixName }: { prefixName?: string; }) {
           <TextField label='Border' name={`${prefixName}.border`} />
         </Grid.Col>
         <Grid.Col offset={1} span={11}>
-          <InputWithUnitField
-            label='Border radius'
-            name={`${prefixName}.border-radius`}
-            unitOptions='percent'
-          />
+          <BorderRadius name={`${prefixName}.border-radius`} />
         </Grid.Col>
       </Grid.Row>
     );

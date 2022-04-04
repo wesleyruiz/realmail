@@ -8,6 +8,7 @@ import { createPortal } from 'react-dom';
 import { useEditorProps } from '@/hooks/useEditorProps';
 import { getEditorRoot, getShadowRoot } from '@/utils';
 import { DATA_RENDER_COUNT, FIXED_CONTAINER_ID } from '@/constants';
+import { useValidationContext } from '@/components/Provider/EmailEditorProvider';
 
 let count = 0;
 export function MjmlDomRender() {
@@ -16,6 +17,7 @@ export function MjmlDomRender() {
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
   const { dashed, mergeTags, enabledMergeTagsBadge } = useEditorProps();
   const [isTextFocus, setIsTextFocus] = useState(false);
+  const { errorBlocksMap } = useValidationContext();
 
   const isTextFocusing =
     document.activeElement === getEditorRoot() &&
@@ -106,7 +108,19 @@ export function MjmlDomRender() {
             }),
             ref
           )}
+        <style>
+          {
+            Object.keys(errorBlocksMap).map(idx => {
+              return `
+                [data-idx="${idx}"] {
+                  outline: 2px solid var(--error-color);
+                }
+            `;
+            }).join('\n')
+
+          }
+        </style>
       </div>
     );
-  }, [dashed, ref, html, enabledMergeTagsBadge]);
-}
+  }, [dashed, ref, html, enabledMergeTagsBadge, errorBlocksMap]);
+};

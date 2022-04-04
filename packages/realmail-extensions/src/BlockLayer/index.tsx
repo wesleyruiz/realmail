@@ -1,6 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   DATA_ATTRIBUTE_DROP_CONTAINER,
+  EventManager,
+  EventType,
   IconFont,
   scrollBlockEleIntoView,
   TextStyle,
@@ -64,6 +66,24 @@ export function BlockLayer(props: BlockLayerProps) {
     left: number;
     top: number;
   } | null>(null);
+
+  useEffect(() => {
+    const handler = (payload: { nextIdx: string; }) => {
+
+      setTimeout(() => {
+        const ele = document.querySelector(`[data-tree-idx="${payload.nextIdx}"]`);
+        if (!ele) return;
+        ele.scrollIntoView({
+          block: 'center',
+        });
+      }, 500);
+      return true;
+    };
+    EventManager.on(EventType.FOCUS_IDX_CHANGE_BY_EDITOR, handler);
+    return () => {
+      EventManager.off(EventType.FOCUS_IDX_CHANGE_BY_EDITOR, handler);
+    };
+  }, []);
 
   const onToggleVisible = useCallback(
     ({ id }: IBlockDataWithId, e: React.MouseEvent) => {
@@ -141,9 +161,7 @@ export function BlockLayer(props: BlockLayerProps) {
   const onSelect = useCallback(
     (selectedId: string) => {
       setFocusIdx(selectedId);
-      setTimeout(() => {
-        scrollBlockEleIntoView({ idx: selectedId });
-      }, 50);
+      EventManager.exec(EventType.FOCUS_IDX_CHANGE_BY_LAYER, { nextIdx: selectedId });
     },
     [setFocusIdx]
   );

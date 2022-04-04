@@ -8,7 +8,6 @@ import {
   SliderProps,
   InputNumberProps,
   SwitchProps,
-  DatePickerProps,
   TextAreaProps,
   CheckboxGroupProps,
   TreeSelect,
@@ -19,64 +18,57 @@ import { UploadField as Uploader, UploadFieldProps } from './UploadField';
 import { ColorPicker, ColorPickerProps } from './ColorPicker';
 import { Select, SelectProps } from './Select';
 import { RadioGroup, RadioGroupProps } from './RadioGroup';
-import enhancer from './enhancer';
+import { enhancer } from './enhancer';
 import { Input, InputProps } from './Input';
 import { InputWithUnit, InputWithUnitProps } from './InputWithUnit';
 import { CheckBoxGroup } from './CheckBoxGroup';
 import { EditTab, EditTabProps } from './EditTab';
 import { EditGridTab, EditGridTabProps } from './EditGridTab';
-import { Dayjs } from 'dayjs';
 import { InlineText, InlineTextProps } from './InlineTextField';
 import { AutoCompleteProps, AutoComplete } from './AutoComplete';
 import { InputSearchProps } from '@arco-design/web-react/es/Input';
 export { RichTextField } from './RichTextField';
 
 export const TextField = enhancer<
-  InputProps,
-  Required<ArcoInputProps>['onChange']
+  InputProps
 >(Input, (value) => value);
 
 export const InputWithUnitField = enhancer<
-  InputWithUnitProps,
-  Required<InputWithUnitProps>['onChange']
+  InputWithUnitProps
 >(InputWithUnit, (value) => value);
 
 export const SearchField = enhancer<
-  InputProps,
-  Required<InputSearchProps>['onChange']
+  InputSearchProps
 >(ArcoInput.Search, (val) => val);
 
 export const TextAreaField = enhancer<
-  TextAreaProps,
-  Required<ArcoInputProps>['onChange']
+  TextAreaProps
 >(ArcoInput.TextArea, (val) => val);
 
 export const NumberField = enhancer<
-  InputNumberProps,
-  Required<InputNumberProps>['onChange']
+  InputNumberProps
 >(InputNumber, (e) => e);
 
 export const SliderField = enhancer<
-  SliderProps,
-  Required<SliderProps>['onChange']
+  SliderProps
 >(Slider, (e) => e);
 
 export const ColorPickerField = enhancer<ColorPickerProps>(
   ColorPicker,
-  (e: string) => e
+  (e) => e
 );
 
 export const UploadField = enhancer<UploadFieldProps>(
   Uploader,
-  (val: string) => val
+  (val) => val
 );
 
 export const ImageUploaderField = enhancer<ImageUploaderProps>(
   ImageUploader,
-  (url: string) => url
+  (url) => url
 );
 
-export const SelectField = enhancer<SelectProps>(Select, (e: string) => e);
+export const SelectField = enhancer<SelectProps>(Select, (e) => e);
 
 export const TreeSelectField = enhancer<TreeSelectProps>(
   TreeSelect,
@@ -85,35 +77,26 @@ export const TreeSelectField = enhancer<TreeSelectProps>(
 
 export const AutoCompleteField = enhancer<AutoCompleteProps>(
   AutoComplete,
-  (e: string) => e
+  (e) => e
 );
 
 export const RadioGroupField = enhancer<
-  RadioGroupProps,
-  Required<RadioGroupProps>['onChange']
+  RadioGroupProps
 >(RadioGroup, (value) => value);
 
 export const SwitchField = enhancer<
-  SwitchProps,
-  Required<SwitchProps>['onChange']
+  SwitchProps
 >(Switch, (e) => e);
 
-export const DatePickerField = enhancer<DatePickerProps>(
-  DatePicker,
-  (date: Dayjs) => date
-);
-
 export const CheckboxField = enhancer<
-  CheckboxGroupProps<any>,
-  Required<CheckboxGroupProps<any>>['onChange']
+  CheckboxGroupProps<any>
 >(CheckBoxGroup, (e) => e);
 
 export const EditTabField = enhancer<EditTabProps>(EditTab, (e: any[]) => e);
 export const EditGridTabField = enhancer<EditGridTabProps>(EditGridTab, (e: any[]) => e);
 
 export const InlineTextField = enhancer<
-  InlineTextProps,
-  Required<InlineTextProps>['onChange']
+  InlineTextProps
 >(InlineText, (value) => value);
 
 export { enhancer };

@@ -2,7 +2,7 @@ import { useBlock, useFocusIdx } from 'realmail-editor';
 import { Collapse, Grid, Switch } from '@arco-design/web-react';
 import { AdvancedBlock, AdvancedType } from 'realmail-core';
 import { TextField } from '@extensions/components/Form';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 export function Iteration() {
   const { focusIdx } = useFocusIdx();
@@ -30,6 +30,14 @@ export function Iteration() {
     },
     [change, focusIdx, iteration]
   );
+
+  const format = useCallback((value: string | number) => {
+    return +value;
+  }, []);
+
+  const config = useMemo(() => {
+    return { format: format };
+  }, [format]);
 
   if (
     !focusBlock?.type ||
@@ -74,7 +82,7 @@ export function Iteration() {
                   name={`${focusIdx}.data.value.iteration.limit`}
                   quickchange
                   type='number'
-                  onChangeAdapter={(v) => Number(v)}
+                  config={config}
                 />
               </Grid.Col>
               <Grid.Col offset={1} span={11}>
@@ -83,7 +91,7 @@ export function Iteration() {
                   max={iteration?.limit}
                   name={`${focusIdx}.data.value.iteration.mockQuantity`}
                   type='number'
-                  onChangeAdapter={(v) => Number(v)}
+                  config={config}
                   quickchange
                 />
               </Grid.Col>

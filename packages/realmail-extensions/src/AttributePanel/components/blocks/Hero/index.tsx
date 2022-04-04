@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { BackgroundColor } from '@extensions/AttributePanel/components/attributes/BackgroundColor';
+import React from 'react';
 import {
   ImageUploaderField,
   InputWithUnitField,
@@ -16,6 +15,7 @@ import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/at
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Color } from '../../attributes';
 
 const options = [
   {
@@ -33,7 +33,7 @@ export function Hero() {
   return (
     <AttributesPanelWrapper>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -108,7 +108,8 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
               />
             </Grid.Col>
             <Grid.Col span={11}>
-              <BackgroundColor name={mode === 'desktop' ? `${focusIdx}.attributes.background-color` : `${focusIdx}.mobileAttributes.background-color`} />
+              <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.background-color` : `${focusIdx}.mobileAttributes.background-color`} />
+
             </Grid.Col>
           </Grid.Row>
         </Space>

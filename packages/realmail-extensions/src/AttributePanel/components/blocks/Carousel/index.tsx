@@ -16,6 +16,7 @@ import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 import { ICarousel } from 'realmail-core';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { ImageUrl } from '../../attributes/ImageUrl';
 
 const options = [
   {
@@ -38,7 +39,6 @@ export function Carousel() {
             <InputWithUnitField
               label='Thumbnail width'
               name={`${focusIdx}.attributes.tb-width`}
-              quickchange
               inline
             />
 
@@ -57,7 +57,6 @@ export function Carousel() {
               tabPosition='top'
               name={`${focusIdx}.data.value.images`}
               label=''
-              labelHidden
               renderItem={(item, index) => (
                 <CarouselImage item={item} index={index} />
               )}
@@ -101,14 +100,12 @@ export function Carousel() {
               <ColorPickerField
                 label='Hovered border'
                 name={`${focusIdx}.attributes.tb-hover-border-color`}
-                alignment='center'
               />
             </Grid.Col>
             <Grid.Col offset={1} span={11}>
               <ColorPickerField
                 label='Selected Border'
                 name={`${focusIdx}.attributes.tb-selected-border-color`}
-                alignment='center'
               />
             </Grid.Col>
           </Grid.Row>
@@ -145,16 +142,9 @@ function CarouselImage({
   index: number;
 }) {
   const { focusIdx } = useFocusIdx();
-  const { onUploadImage } = useEditorProps();
   return (
     <Space direction='vertical'>
-      <ImageUploaderField
-        label='Image'
-        labelHidden
-        name={`${focusIdx}.data.value.images.[${index}].src`}
-        helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
-        uploadHandler={onUploadImage}
-      />
+      <ImageUrl name={`${focusIdx}.data.value.images.[${index}].src`} />
       <Grid.Row>
         <Grid.Col span={11}>
           <TextField

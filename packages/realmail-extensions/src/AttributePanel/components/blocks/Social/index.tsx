@@ -27,6 +27,8 @@ import { getImg } from '@extensions/AttributePanel/utils/getImg';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Width } from '../../attributes';
+import { BorderRadius } from '../../attributes/BorderRadius';
 
 const options = [
   {
@@ -47,7 +49,7 @@ export function Social() {
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -100,7 +102,7 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
             </Grid.Col>
             <Grid.Col offset={1} span={11}>
 
-              <ContainerBackgroundColor title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
+              <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
@@ -127,7 +129,6 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
               tabPosition='top'
               name={`${focusIdx}.data.value.elements`}
               label=''
-              labelHidden
               renderItem={(item, index) => (
                 <SocialElement item={item} index={index} />
               )}
@@ -142,16 +143,13 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
 
           <Grid.Row>
             <Grid.Col span={11}>
-              <InputWithUnitField
-                label='Icon width'
+              <Width
+                title='Icon width'
                 name={mode === 'desktop' ? `${focusIdx}.attributes.icon-size` : `${focusIdx}.mobileAttributes.icon-size`}
               />
             </Grid.Col>
             <Grid.Col offset={1} span={11}>
-              <TextField
-                label='Border radius'
-                name={mode === 'desktop' ? `${focusIdx}.attributes.border-radius` : `${focusIdx}.mobileAttributes.border-radius`}
-              />
+              <BorderRadius name={mode === 'desktop' ? `${focusIdx}.attributes.border-radius` : `${focusIdx}.mobileAttributes.border-radius`} />
             </Grid.Col>
           </Grid.Row>
 
@@ -185,8 +183,7 @@ function SocialElement({
   return (
     <Space direction='vertical'>
       <ImageUploaderField
-        label='Image'
-        labelHidden
+        label=''
         name={`${focusIdx}.data.value.elements.[${index}].src`}
         // helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
         uploadHandler={onUploadImage}

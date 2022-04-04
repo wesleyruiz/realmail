@@ -1,9 +1,7 @@
 import React from 'react';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
-import { ContainerBackgroundColor } from '@extensions/AttributePanel/components/attributes/ContainerBackgroundColor';
 import { BorderWidth } from '@extensions/AttributePanel/components/attributes/BorderWidth';
 import { BorderStyle } from '@extensions/AttributePanel/components/attributes/BorderStyle';
-import { BorderColor } from '@extensions/AttributePanel/components/attributes/BorderColor';
 import { Width } from '@extensions/AttributePanel/components/attributes/Width';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 
@@ -13,12 +11,13 @@ import { IconFont, Stack, useFocusIdx } from 'realmail-editor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Color } from '../../attributes';
 
 export function Divider() {
   return (
     <AttributesPanelWrapper>
       <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont size={12} iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
+        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
           <AttributesContainer mode="desktop" />
         </Tabs.TabPane>
         <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
@@ -48,23 +47,24 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
       </Collapse.Item>
 
       <Collapse.Item name='2' header='Border'>
-        <Stack wrap={false} spacing='tight'>
-          <div style={{ width: 50 }}>
+        <Grid.Row>
+          <Grid.Col span={6}>
             <BorderWidth name={mode === 'desktop' ? `${focusIdx}.attributes.border-width` : `${focusIdx}.mobileAttributes.border-width`} />
-          </div>
-          <div style={{ width: 100 }}>
+          </Grid.Col>
+          <Grid.Col span={8}>
             <BorderStyle name={mode === 'desktop' ? `${focusIdx}.attributes.border-style` : `${focusIdx}.mobileAttributes.border-style`} />
-          </div>
-          <div style={{ width: 100 }}>
-            <BorderColor name={mode === 'desktop' ? `${focusIdx}.attributes.border-color` : `${focusIdx}.mobileAttributes.border-color`} />
-          </div>
-        </Stack>
+          </Grid.Col>
+          <Grid.Col span={10}>
+            <Color title='Border color' name={mode === 'desktop' ? `${focusIdx}.attributes.border-color` : `${focusIdx}.mobileAttributes.border-color`} />
+          </Grid.Col>
+        </Grid.Row>
+
       </Collapse.Item>
 
       <Collapse.Item name='3' header='Background'>
         <Grid.Row>
           <Grid.Col span={11}>
-            <ContainerBackgroundColor title='Background' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
+            <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
           </Grid.Col>
           <Grid.Col offset={1} span={11} />
         </Grid.Row>

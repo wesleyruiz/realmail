@@ -1,8 +1,8 @@
 import { IconEye, IconEyeInvisible } from '@arco-design/web-react/icon';
-import React, { useCallback } from 'react';
-import { Stack, TextStyle, useBlock, useEditorProps } from 'realmail-editor';
-import { MergeTags } from '../MergeTags';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { EventManager, Stack, TextStyle, useBlock, EventType, useFocusIdx, useValidationContext } from 'realmail-editor';
 import { BasicType, BlockManager } from 'realmail-core';
+import { Message } from '@arco-design/web-react';
 
 export interface AttributesPanelWrapper {
   style?: React.CSSProperties;
@@ -11,19 +11,31 @@ export interface AttributesPanelWrapper {
 export const AttributesPanelWrapper: React.FC<AttributesPanelWrapper> = (
   props
 ) => {
-  const { focusBlock, setFocusBlock } = useBlock();
+  const { focusIdx } = useFocusIdx();
+  const { focusBlock } = useBlock();
+  const { errorBlocksMap, errorsMap } = useValidationContext();
   const block = focusBlock && BlockManager.getBlockByType(focusBlock.type);
 
-  const onChangeHidden = useCallback(
-    (val: string | boolean) => {
-      if (!focusBlock) return;
-      focusBlock.data.hidden = val as any;
-      setFocusBlock({ ...focusBlock });
-    },
-    [focusBlock, setFocusBlock]
-  );
+  const hasError = useMemo(() => {
+    return !!errorBlocksMap[focusIdx];
+  }, [errorBlocksMap, focusIdx]);
 
-  if (!focusBlock || !block) return null;
+  useEffect(() => {
+    const handler = (payload: { currentIdx: string; nextIdx: string; }) => {
+      if (hasError) {
+        Message.warning('Please fix the error first');
+        return false;
+      }
+      return true;
+    };
+    EventManager.on(EventType.FOCUS_IDX_CHANGE, handler);
+    return () => {
+      EventManager.off(EventType.FOCUS_IDX_CHANGE, handler);
+
+    };
+  }, [hasError]);
+
+  if (!block) return null;
 
   return (
     <div>

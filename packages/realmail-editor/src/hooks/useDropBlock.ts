@@ -12,6 +12,7 @@ import { useHoverIdx } from './useHoverIdx';
 import { getInsertPosition } from '@/utils/getInsertPosition';
 import { useEditorProps } from './useEditorProps';
 import { DATA_ATTRIBUTE_DROP_CONTAINER } from '@/constants';
+import { EventManager, EventType, scrollBlockEleIntoView } from '@/utils';
 
 export function useDropBlock() {
   const [ref, setRef] = useState<HTMLElement | null>(null);
@@ -47,7 +48,7 @@ export function useDropBlock() {
           if (!target) return;
           const idx = getNodeIdxFromClassName(target.classList)!;
           setFocusIdx(idx);
-          // scrollBlockEleIntoView({ idx });
+          EventManager.exec(EventType.FOCUS_IDX_CHANGE_BY_EDITOR, { nextIdx: idx });
         }
       };
 
@@ -59,6 +60,19 @@ export function useDropBlock() {
       };
     }
   }, [ref, setFocusIdx]);
+
+  useEffect(() => {
+    const handler = (payload: { nextIdx: string; }) => {
+      setTimeout(() => {
+        scrollBlockEleIntoView({ idx: payload.nextIdx });
+      }, 500);
+      return true;
+    };
+    EventManager.on(EventType.FOCUS_IDX_CHANGE_BY_LAYER, handler);
+    return () => {
+      EventManager.off(EventType.FOCUS_IDX_CHANGE_BY_LAYER, handler);
+    };
+  }, []);
 
   useEffect(() => {
     if (ref) {

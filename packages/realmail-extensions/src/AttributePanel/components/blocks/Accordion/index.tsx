@@ -1,7 +1,6 @@
 import React from 'react';
 import { Stack, useEditorProps, useFocusIdx } from 'realmail-editor';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { BackgroundColor } from '@extensions/AttributePanel/components/attributes/BackgroundColor';
 import { FontFamily } from '@extensions/AttributePanel/components/attributes/FontFamily';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
 import {
@@ -14,6 +13,8 @@ import {
 import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Color, Height, Width } from '../../attributes';
+import { ImageUrl } from '../../attributes/ImageUrl';
 
 const positionOptions = [
   {
@@ -52,7 +53,7 @@ export function Accordion() {
           <Space direction='vertical'>
             <Grid.Row>
               <Grid.Col span={11}>
-                <BackgroundColor />
+                <Color name={`${focusIdx}.attributes.background-color`} />
               </Grid.Col>
               <Grid.Col offset={1} span={11}>
                 <FontFamily />
@@ -63,14 +64,14 @@ export function Accordion() {
 
             <Grid.Row>
               <Grid.Col span={11}>
-                <InputWithUnitField
-                  label='Icon width'
+                <Width
+                  title='Icon width'
                   name={`${focusIdx}.attributes.icon-width`}
                 />
               </Grid.Col>
               <Grid.Col offset={1} span={11}>
-                <InputWithUnitField
-                  label='Icon height'
+                <Height
+                  title='Icon height'
                   name={`${focusIdx}.attributes.icon-height`}
                 />
               </Grid.Col>
@@ -78,19 +79,10 @@ export function Accordion() {
 
             <Grid.Row>
               <Grid.Col span={11}>
-                <ImageUploaderField
-                  label='Unwrapped icon'
-                  name={`${focusIdx}.attributes.icon-unwrapped-url`}
-                  // helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
-                  uploadHandler={onUploadImage}
-                />
+                <ImageUrl title={'Unwrapped icon'} name={`${focusIdx}.attributes.icon-unwrapped-url`} />
               </Grid.Col>
               <Grid.Col offset={1} span={11}>
-                <ImageUploaderField
-                  label='Wrapped icon'
-                  name={`${focusIdx}.attributes.icon-wrapped-url`}
-                  uploadHandler={onUploadImage}
-                />
+                <ImageUrl title={'Wrapped icon'} name={`${focusIdx}.attributes.icon-wrapped-url`} />
               </Grid.Col>
             </Grid.Row>
 

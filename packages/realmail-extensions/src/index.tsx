@@ -7,6 +7,7 @@ export * from './SourceCodePanel';
 export * from './InteractivePrompt';
 export * from './SimpleLayout';
 export * from './MergeTagBadgePrompt';
+export * from './validation';
 
 export * from './components/Form';
 export * from './constants';
