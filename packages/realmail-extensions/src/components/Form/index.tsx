@@ -26,6 +26,7 @@ import { EditTab, EditTabProps } from './EditTab';
 import { EditGridTab, EditGridTabProps } from './EditGridTab';
 import { InlineText, InlineTextProps } from './InlineTextField';
 import { AutoCompleteProps, AutoComplete } from './AutoComplete';
+import { InputSearchProps } from '@arco-design/web-react/es/Input';
 export { RichTextField } from './RichTextField';
 
 export const TextField = enhancer<
@@ -37,7 +38,7 @@ export const InputWithUnitField = enhancer<
 >(InputWithUnit, (value) => value);
 
 export const SearchField = enhancer<
-  InputProps
+  InputSearchProps
 >(ArcoInput.Search, (val) => val);
 
 export const TextAreaField = enhancer<
@@ -54,20 +55,20 @@ export const SliderField = enhancer<
 
 export const ColorPickerField = enhancer<ColorPickerProps>(
   ColorPicker,
-  (e: string) => e
+  (e) => e
 );
 
 export const UploadField = enhancer<UploadFieldProps>(
   Uploader,
-  (val: string) => val
+  (val) => val
 );
 
 export const ImageUploaderField = enhancer<ImageUploaderProps>(
   ImageUploader,
-  (url: string) => url
+  (url) => url
 );
 
-export const SelectField = enhancer<SelectProps>(Select, (e: string) => e);
+export const SelectField = enhancer<SelectProps>(Select, (e) => e);
 
 export const TreeSelectField = enhancer<TreeSelectProps>(
   TreeSelect,
@@ -76,7 +77,7 @@ export const TreeSelectField = enhancer<TreeSelectProps>(
 
 export const AutoCompleteField = enhancer<AutoCompleteProps>(
   AutoComplete,
-  (e: string) => e
+  (e) => e
 );
 
 export const RadioGroupField = enhancer<

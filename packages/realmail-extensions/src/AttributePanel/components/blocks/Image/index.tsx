@@ -16,6 +16,8 @@ import { Border } from '@extensions/AttributePanel/components/attributes/Border'
 import { IconFont, Stack, useEditorProps, useFocusIdx } from 'realmail-editor';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { ImageUrl } from '../../attributes/ImageUrl';
+import { Color } from '../../attributes';
 
 export function Image() {
 
@@ -35,23 +37,14 @@ export function Image() {
 
 function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
   const { focusIdx } = useFocusIdx();
-  const { onUploadImage } = useEditorProps();
   return (
     <CollapseWrapper defaultActiveKey={['0', '1', '2', '3', '4']}>
       <Collapse.Item name='1' header='Setting'>
         <Stack vertical spacing='tight'>
-          <ImageUploaderField
-            label='src'
-            labelHidden
-            name={mode === 'desktop' ? `${focusIdx}.attributes.src` : `${focusIdx}.mobileAttributes.src`}
-            helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
-            uploadHandler={onUploadImage}
-          />
-          <ColorPickerField
-            label='Background color'
+          <ImageUrl name={mode === 'desktop' ? `${focusIdx}.attributes.src` : `${focusIdx}.mobileAttributes.src`} />
+          <Color
+            title='Background color'
             name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`}
-            inline
-            alignment='center'
           />
         </Stack>
       </Collapse.Item>
@@ -87,14 +80,6 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
       </Collapse.Item>
 
       <Collapse.Item name='4' header='Extra'>
-        <Grid.Row>
-          <Grid.Col span={11}>
-            <TextField label='title' name={mode === 'desktop' ? `${focusIdx}.attributes.title` : `${focusIdx}.mobileAttributes.title`} />
-          </Grid.Col>
-          <Grid.Col offset={1} span={11}>
-            <TextField label='alt' name={mode === 'desktop' ? `${focusIdx}.attributes.alt` : `${focusIdx}.mobileAttributes.alt`} />
-          </Grid.Col>
-        </Grid.Row>
         <Grid.Col span={24}>
           <Grid.Col span={24}>
             <ResponsiveDesign mode={mode} />

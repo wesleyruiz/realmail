@@ -1,44 +1,44 @@
 import React, { useCallback, useMemo } from 'react';
 import { InputWithUnitField } from '../../../components/Form';
-import { useFocusIdx, useBlock } from 'realmail-editor';
-import { BasicType, getParentByIdx } from 'realmail-core';
+import { useFocusIdx } from 'realmail-editor';
 import { InputWithUnitProps } from '@extensions/components/Form/InputWithUnit';
+import { validation } from '@extensions/validation';
 
 export function Width({
   inline = false,
+  title = 'Width',
   unitOptions,
-  name
+  name,
+  validate: propsValidate,
 }: {
   inline?: boolean;
   unitOptions?: InputWithUnitProps['unitOptions'];
   name?: string;
+  title?: string;
+  validate?: (val: string) => string | undefined;
 }) {
   const { focusIdx } = useFocusIdx();
-  const { focusBlock, values } = useBlock();
-  const parentType = getParentByIdx(values, focusIdx)?.type;
 
-  const validate = useCallback(
-    (val: string): string | undefined => {
-      if (
-        focusBlock?.type === BasicType.COLUMN &&
-        parentType === BasicType.GROUP
-      ) {
-        return /(\d)*%/.test(val)
-          ? undefined
-          : 'Column inside a group must have a width in percentage, not in pixel';
-      }
-      return undefined;
-    },
-    [focusBlock?.type, parentType]
-  );
+  const validate = useCallback((val: string) => {
+    if (propsValidate) return propsValidate(val);
+    if (!val) return;
+    const Validate = validation.unit.typeConstructor('unit(px,%)');
+    const errMsg = new Validate(val || '').getErrorMessage();
+    return errMsg ? `Attribute ${title.toLowerCase()} ${errMsg}` : undefined;
+  }, [propsValidate, title]);
 
-  return (
-    <InputWithUnitField
-      validate={validate}
-      label='Width'
-      inline={inline}
-      name={name || `${focusIdx}.attributes.width`}
-      unitOptions={unitOptions}
-    />
-  );
+  return useMemo(() => {
+    return (
+      (
+        <InputWithUnitField
+          validate={validate}
+          label={title}
+          inline={inline}
+          name={name || `${focusIdx}.attributes.width`}
+          unitOptions={unitOptions}
+
+        />
+      )
+    );
+  }, [focusIdx, inline, name, unitOptions, validate]);
 }

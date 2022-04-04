@@ -63,6 +63,7 @@ export function enhancer<P extends { onChange?: (...rest: any) => any; }>(
           },
           wrapperCol: {
             span: 16,
+            offset: 1,
             style: {
 
             }

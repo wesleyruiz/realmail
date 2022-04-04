@@ -1,7 +1,6 @@
 import React from 'react';
 import { Padding } from '../../attributes/Padding';
 
-import { BackgroundColor } from '../../attributes/BackgroundColor';
 import { Color } from '../../attributes/Color';
 import { TextAreaField } from '../../../../components/Form';
 import { FontSize } from '../../attributes/FontSize';
@@ -28,7 +27,7 @@ export function AccordionTitle() {
                 <Color />
               </Grid.Col>
               <Grid.Col offset={1} span={11}>
-                <BackgroundColor />
+                <Color title='Background color' name={`${focusIdx}.attributes.background-color`} />
               </Grid.Col>
             </Grid.Row>
 

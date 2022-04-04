@@ -86,8 +86,7 @@ export function Link(props: LinkProps) {
                   <SearchField
                     size='small'
                     name='link'
-                    label='Link'
-                    labelHidden
+                    label=''
                     searchButton='Apply'
                     placeholder='https://www.example.com'
                     onSearch={() => handleSubmit()}
@@ -100,7 +99,6 @@ export function Link(props: LinkProps) {
                       <SwitchField
                         size='small'
                         label='Target'
-                        labelHidden
                         name='blank'
                         checkedText='blank'
                         uncheckedText='self'
@@ -114,7 +112,6 @@ export function Link(props: LinkProps) {
                       <SwitchField
                         size='small'
                         label='Underline'
-                        labelHidden
                         name='underline'
                         checkedText='off'
                         uncheckedText='on'

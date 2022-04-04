@@ -5,6 +5,7 @@ import { createBlockDataByType } from 'realmail-core';
 import { Form, useFormState } from 'react-final-form';
 import { Grid } from '@arco-design/web-react';
 import { get } from 'lodash';
+import { validation } from '@extensions/validation';
 
 export interface PaddingProps {
   title?: string;
@@ -74,43 +75,52 @@ export function Padding(props: PaddingProps = {}) {
     [name, change, focusIdx, attributeName]
   );
 
-  return (
-    <Form<{ top: string; right: string; left: string; bottom: string; }>
-      initialValues={paddingFormValues}
-      subscription={{ submitting: true, pristine: true }}
-      enableReinitialize
-      onSubmit={() => { }}
-    >
-      {() => {
-        return (
-          <>
-            <Stack vertical spacing='extraTight'>
-              <TextStyle variation='strong'>{title}</TextStyle>
+  const validate = useCallback((val: string) => {
+    if (!val) return;
+    const Validate = validation.unit.typeConstructor('unit(px,%)');
+    const errMsg = new Validate(val || '').getErrorMessage();
+    return errMsg ? `Attribute padding ${errMsg}` : undefined;
+  }, []);
 
-              <Grid.Row>
-                <Grid.Col span={11}>
-                  <InputWithUnitField label='Top' name='top' />
-                </Grid.Col>
-                <Grid.Col offset={1} span={11}>
-                  <InputWithUnitField label='Left' name='left' />
-                </Grid.Col>
-              </Grid.Row>
+  return useMemo(() => {
+    return (
+      <Form<{ top: string; right: string; left: string; bottom: string; }>
+        initialValues={paddingFormValues}
+        subscription={{ submitting: true, pristine: true }}
+        enableReinitialize
+        onSubmit={() => { }}
+      >
+        {() => {
+          return (
+            <>
+              <Stack vertical spacing='extraTight'>
+                <TextStyle variation='strong'>{title}</TextStyle>
 
-              <Grid.Row>
-                <Grid.Col span={11}>
-                  <InputWithUnitField label='Bottom' name='bottom' />
-                </Grid.Col>
-                <Grid.Col offset={1} span={11}>
-                  <InputWithUnitField label='Right' name='right' />
-                </Grid.Col>
-              </Grid.Row>
-            </Stack>
-            <PaddingChangeWrapper onChange={onChancePadding} />
-          </>
-        );
-      }}
-    </Form>
-  );
+                <Grid.Row>
+                  <Grid.Col span={11}>
+                    <InputWithUnitField validate={validate} label='Top' name='top' />
+                  </Grid.Col>
+                  <Grid.Col offset={1} span={11}>
+                    <InputWithUnitField validate={validate} label='Left' name='left' />
+                  </Grid.Col>
+                </Grid.Row>
+
+                <Grid.Row>
+                  <Grid.Col span={11}>
+                    <InputWithUnitField validate={validate} label='Bottom' name='bottom' />
+                  </Grid.Col>
+                  <Grid.Col offset={1} span={11}>
+                    <InputWithUnitField validate={validate} label='Right' name='right' />
+                  </Grid.Col>
+                </Grid.Row>
+              </Stack>
+              <PaddingChangeWrapper onChange={onChancePadding} />
+            </>
+          );
+        }}
+      </Form>
+    );
+  }, [onChancePadding, paddingFormValues, title, validate]);
 }
 
 const PaddingChangeWrapper: React.FC<{ onChange: (val: string) => void; }> = (
@@ -122,7 +132,7 @@ const PaddingChangeWrapper: React.FC<{ onChange: (val: string) => void; }> = (
   const { onChange } = props;
 
   useEffect(() => {
-    onChange([top, right, bottom, left].join(' '));
+    onChange([top, right, bottom, left].map(item => item || '0px').join(' '));
   }, [top, right, bottom, left, onChange]);
 
   return <></>;

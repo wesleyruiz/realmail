@@ -14,7 +14,7 @@ import { useFocusIdx, Stack, IconFont } from 'realmail-editor';
 import { INavbar } from 'realmail-core';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
-import { FontFamily, FontStyle, FontWeight, LetterSpacing, LineHeight, TextAlign, TextDecoration, TextTransform } from '../../attributes';
+import { Color, FontFamily, FontSize, FontStyle, FontWeight, LetterSpacing, LineHeight, TextAlign, TextDecoration, TextTransform } from '../../attributes';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 
 export function Navbar() {
@@ -53,8 +53,7 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
               <EditTabField
                 tabPosition='top'
                 name={`${focusIdx}.data.value.links`}
-                label='Links'
-                labelHidden
+                label=''
                 renderItem={(item, index) => (
                   <NavbarLink item={item} index={index} />
                 )}
@@ -103,10 +102,9 @@ function NavbarLink({
             />
           </Grid.Col>
           <Grid.Col offset={1} span={11}>
-            <ColorPickerField
-              label='Color'
+            <Color
+              title='Color'
               name={`${focusIdx}.data.value.links.[${index}].color`}
-              alignment='center'
             />
           </Grid.Col>
         </Grid.Row>
@@ -117,11 +115,7 @@ function NavbarLink({
             <FontFamily name={`${focusIdx}.data.value.links.[${index}].font-family`} />
           </Grid.Col>
           <Grid.Col offset={1} span={11}>
-            <TextField
-              label='Font size'
-              quickchange
-              name={`${focusIdx}.data.value.links.[${index}].font-size`}
-            />
+            <FontSize name={`${focusIdx}.data.value.links.[${index}].font-size`} />
           </Grid.Col>
         </Grid.Row>
 

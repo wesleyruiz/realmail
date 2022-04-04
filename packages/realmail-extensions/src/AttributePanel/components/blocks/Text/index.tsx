@@ -5,7 +5,6 @@ import { FontWeight } from '@extensions/AttributePanel/components/attributes/Fon
 import { FontStyle } from '@extensions/AttributePanel/components/attributes/FontStyle';
 import { FontFamily } from '@extensions/AttributePanel/components/attributes/FontFamily';
 import { Height } from '@extensions/AttributePanel/components/attributes/Height';
-import { ContainerBackgroundColor } from '@extensions/AttributePanel/components/attributes/ContainerBackgroundColor';
 import { FontSize } from '@extensions/AttributePanel/components/attributes/FontSize';
 import { Color } from '@extensions/AttributePanel/components/attributes/Color';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
@@ -67,7 +66,7 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
             <Color name={mode === 'desktop' ? `${focusIdx}.attributes.color` : `${focusIdx}.mobileAttributes.color`} />
           </Grid.Col>
           <Grid.Col offset={1} span={11}>
-            <ContainerBackgroundColor title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
+            <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.container-background-color` : `${focusIdx}.mobileAttributes.container-background-color`} />
           </Grid.Col>
         </Grid.Row>
       </Collapse.Item>

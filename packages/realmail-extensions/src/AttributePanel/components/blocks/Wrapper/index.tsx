@@ -8,6 +8,7 @@ import { IconFont, Stack, useFocusIdx } from 'realmail-editor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Border } from '../../attributes';
 
 export function Wrapper() {
 
@@ -40,18 +41,8 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         </Stack>
       </Collapse.Item>
       <Collapse.Item name='2' header='Border'>
-        <Stack vertical spacing='tight'>
-          <TextField
-            label='Border'
-            name={mode === 'desktop' ? `${focusIdx}.attributes.border` : `${focusIdx}.mobileAttributes.border`}
-            inline
-          />
-          <TextField
-            label='Background border radius'
-            name={mode === 'desktop' ? `${focusIdx}.attributes.border-radius` : `${focusIdx}.mobileAttributes.border-radius`}
-            inline
-          />
-        </Stack>
+        <Border prefixName={mode === 'desktop' ? `${focusIdx}.attributes` : `${focusIdx}.mobileAttributes`} />
+
       </Collapse.Item>
       <Collapse.Item name='4' header='Extra'>
         <Grid.Col span={24}>

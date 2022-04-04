@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   ColorPickerField,
   InputWithUnitField,
@@ -12,10 +12,18 @@ import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { Stack, TextStyle, useFocusIdx } from 'realmail-editor';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { FontFamily } from '../../attributes/FontFamily';
-import { FontSize } from '../../attributes';
+import { Color, FontSize, FontWeight, LineHeight, Width } from '../../attributes';
+import { validation } from '@extensions/validation';
 
 export function Page() {
   const { focusIdx } = useFocusIdx();
+
+  const validate = useCallback((val: string) => {
+    if (!val) return;
+    const Validate = validation.unit.typeConstructor('unit(px)');
+    const errMsg = new Validate(val || '').getErrorMessage();
+    return errMsg ? `Attribute width ${errMsg}` : undefined;
+  }, []);
 
   if (!focusIdx) return null;
   return (
@@ -23,20 +31,16 @@ export function Page() {
       <Stack.Item fill>
         <Collapse defaultActiveKey={['0', '1']}>
           <Collapse.Item name='0' header='Email Setting'>
-            <Space direction='vertical'>
+            <Space style={{ width: '100%' }} direction='vertical'>
               <TextField label='Subject' name={'subject'} inline />
-              <TextField label='SubTitle' name={'subTitle'} inline />
-              <InputWithUnitField
-                label='Width'
-                name={`${focusIdx}.attributes.width`}
-                inline
-              />
-              <InputWithUnitField
+              {/* <TextField label='SubTitle' name={'subTitle'} inline /> */}
+              <Width validate={validate} inline name={`${focusIdx}.attributes.width`} />
+              {/* <InputWithUnitField
                 label='Breakpoint'
                 helpText='Allows you to control on which breakpoint the layout should go desktop/mobile.'
                 name={`${focusIdx}.data.value.breakpoint`}
                 inline
-              />
+              /> */}
             </Space>
           </Collapse.Item>
           <Collapse.Item name='1' header='Theme Setting'>
@@ -52,42 +56,24 @@ export function Page() {
 
               <Grid.Row>
                 <Grid.Col span={11}>
-                  <InputWithUnitField
-                    label='Line height'
-                    unitOptions='percent'
-                    name={`${focusIdx}.data.value.line-height`}
-                  />
+                  <LineHeight name={`${focusIdx}.data.value.line-height`} />
                 </Grid.Col>
                 <Grid.Col offset={1} span={11}>
-                  <InputWithUnitField
-                    label='Font weight'
-                    unitOptions='percent'
-                    name={`${focusIdx}.data.value.font-weight`}
-                  />
+                  <FontWeight name={`${focusIdx}.data.value.font-weight`} />
                 </Grid.Col>
               </Grid.Row>
 
               <Grid.Row>
                 <Grid.Col span={11}>
-                  <ColorPickerField
-                    label='Text color'
-                    name={`${focusIdx}.data.value.text-color`}
-                  />
+                  <Color title='Text color' name={`${focusIdx}.data.value.text-color`} />
                 </Grid.Col>
                 <Grid.Col offset={1} span={11}>
-                  <ColorPickerField
-                    label='Background'
-                    name={`${focusIdx}.attributes.background-color`}
-                  />
+                  <Color title='Background' name={`${focusIdx}.attributes.background-color`} />
                 </Grid.Col>
               </Grid.Row>
 
               <Grid.Row>
-                <ColorPickerField
-                  label='Content background'
-                  name={`${focusIdx}.data.value.content-background-color`}
-                />
-
+                <Color title='Content background' name={`${focusIdx}.data.value.content-background-color`} />
               </Grid.Row>
 
               <TextAreaField
