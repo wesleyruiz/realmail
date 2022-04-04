@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ImageUploaderField,
   InputWithUnitField,
   RadioGroupField,
   TextField,
@@ -16,6 +15,7 @@ import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 import { Color } from '../../attributes';
+import { ImageUrl } from '../../attributes/ImageUrl';
 
 const options = [
   {
@@ -71,11 +71,8 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
       </Collapse.Item>
       <Collapse.Item name='1' header='Background'>
         <Space direction='vertical'>
-          <ImageUploaderField
-            label='src'
+          <ImageUrl
             name={mode === 'desktop' ? `${focusIdx}.attributes.background-url` : `${focusIdx}.mobileAttributes.background-url`}
-            helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
-            uploadHandler={onUploadImage}
           />
 
           <Grid.Row>

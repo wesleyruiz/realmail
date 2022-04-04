@@ -29,6 +29,7 @@ import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 import { Width } from '../../attributes';
 import { BorderRadius } from '../../attributes/BorderRadius';
+import { ImageUrl } from '../../attributes/ImageUrl';
 
 const options = [
   {
@@ -182,11 +183,8 @@ function SocialElement({
 
   return (
     <Space direction='vertical'>
-      <ImageUploaderField
-        label=''
+      <ImageUrl
         name={`${focusIdx}.data.value.elements.[${index}].src`}
-        // helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
-        uploadHandler={onUploadImage}
       />
 
       <Grid.Row>
