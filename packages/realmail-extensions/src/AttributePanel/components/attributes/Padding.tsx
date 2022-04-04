@@ -132,7 +132,7 @@ const PaddingChangeWrapper: React.FC<{ onChange: (val: string) => void; }> = (
   const { onChange } = props;
 
   useEffect(() => {
-    onChange([top, right, bottom, left].map(item => item || '0px').join(' '));
+    onChange([top, right, bottom, left].join(' '));
   }, [top, right, bottom, left, onChange]);
 
   return <></>;

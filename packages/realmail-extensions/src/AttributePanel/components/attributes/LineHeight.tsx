@@ -8,7 +8,7 @@ export function LineHeight({ name }: { name?: string; }) {
 
   const validate = useCallback((val: string) => {
     if (!val) return;
-    const Validate = validation.unit.typeConstructor('unit(px,%)');
+    const Validate = validation.unit.typeConstructor('unit(px,%,)');
     const errMsg = new Validate(val || '').getErrorMessage();
     return errMsg ? `Attribute line-height ${errMsg}` : undefined;
   }, []);

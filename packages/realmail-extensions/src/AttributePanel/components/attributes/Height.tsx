@@ -3,15 +3,16 @@ import { TextField } from '../../../components/Form';
 import { useFocusIdx, Stack } from 'realmail-editor';
 import { validation } from '@extensions/validation';
 
-export function Height({ inline, name, title = 'height' }: { inline?: boolean; name?: string; title?: string; }) {
+export function Height({ inline, name, title = 'height', validate: propsValidate }: { inline?: boolean; name?: string; title?: string; validate?: (val: string) => string | undefined; }) {
   const { focusIdx } = useFocusIdx();
 
   const validate = useCallback((val: string) => {
+    if (propsValidate) return propsValidate(val);
     if (!val) return;
     const Validate = validation.unit.typeConstructor('unit(px,%)');
     const errMsg = new Validate(val || '').getErrorMessage();
     return errMsg ? `Attribute ${title.toLowerCase()} ${errMsg}` : undefined;
-  }, [title]);
+  }, [propsValidate, title]);
 
   return useMemo(() => {
     return (

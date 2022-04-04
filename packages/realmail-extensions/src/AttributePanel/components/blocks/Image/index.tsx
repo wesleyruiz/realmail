@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useCallback } from 'react';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
 import {
-  ColorPickerField,
-  ImageUploaderField,
   TextField,
 } from '@extensions/components/Form';
 import { Width } from '@extensions/AttributePanel/components/attributes/Width';
@@ -13,11 +11,12 @@ import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { Collapse, Grid, Space, Tabs } from '@arco-design/web-react';
 import { Border } from '@extensions/AttributePanel/components/attributes/Border';
-import { IconFont, Stack, useEditorProps, useFocusIdx } from 'realmail-editor';
+import { IconFont, Stack, useFocusIdx } from 'realmail-editor';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 import { ImageUrl } from '../../attributes/ImageUrl';
 import { Color } from '../../attributes';
+import { validation } from '@extensions/validation';
 
 export function Image() {
 
@@ -37,6 +36,21 @@ export function Image() {
 
 function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
   const { focusIdx } = useFocusIdx();
+
+  const heightValidate = useCallback((val: string) => {
+    if (!val) return;
+    const Validate = validation.unit.typeConstructor('unit(px,auto)');
+    const errMsg = new Validate(val || '').getErrorMessage();
+    return errMsg ? `Attribute height ${errMsg}` : undefined;
+  }, []);
+
+  const widthValidate = useCallback((val: string) => {
+    if (!val) return;
+    const Validate = validation.unit.typeConstructor('unit(px)');
+    const errMsg = new Validate(val || '').getErrorMessage();
+    return errMsg ? `Attribute width ${errMsg}` : undefined;
+  }, []);
+
   return (
     <CollapseWrapper defaultActiveKey={['0', '1', '2', '3', '4']}>
       <Collapse.Item name='1' header='Setting'>
@@ -53,10 +67,10 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         <Space direction='vertical'>
           <Grid.Row>
             <Grid.Col span={11}>
-              <Width name={mode === 'desktop' ? `${focusIdx}.attributes.width` : `${focusIdx}.mobileAttributes.width`} />
+              <Width validate={widthValidate} name={mode === 'desktop' ? `${focusIdx}.attributes.width` : `${focusIdx}.mobileAttributes.width`} />
             </Grid.Col>
             <Grid.Col offset={1} span={11}>
-              <Height name={mode === 'desktop' ? `${focusIdx}.attributes.height` : `${focusIdx}.mobileAttributes.height`} />
+              <Height validate={heightValidate} name={mode === 'desktop' ? `${focusIdx}.attributes.height` : `${focusIdx}.mobileAttributes.height`} />
             </Grid.Col>
           </Grid.Row>
 

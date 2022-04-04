@@ -207,9 +207,10 @@ const ValidationProvider: React.FC<{}> = (props) => {
     return {
       value: validationObj,
       addValidationField,
-      errorBlocksMap
+      errorBlocksMap,
+      errorsMap
     };
-  }, [addValidationField, errorBlocksMap, validationObj]);
+  }, [addValidationField, errorBlocksMap, errorsMap, validationObj]);
 
   return useMemo(() => {
 
@@ -228,10 +229,12 @@ const ValidationContext = React.createContext<{
   value: Record<string, any>;
   addValidationField: (name: string, validation?: Record<string, any>) => void;
   errorBlocksMap: Record<string, boolean>;
+  errorsMap: Record<string, string>;
 }>({
   value: {},
   addValidationField: () => { },
-  errorBlocksMap: {}
+  errorBlocksMap: {},
+  errorsMap: {}
 });
 
 export function useValidationContext() {
