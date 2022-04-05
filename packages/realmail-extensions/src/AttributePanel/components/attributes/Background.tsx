@@ -46,6 +46,9 @@ export function Background({ prefixName }: { prefixName?: string; }) {
               options={backgroundRepeatOptions}
             />
           </Grid.Col>
+          <Grid.Col span={11}>
+            <TextField label="background-position" name={`${prefixName}.background-position`} />
+          </Grid.Col>
         </Grid.Row>
         <TextField
           label='Background size'

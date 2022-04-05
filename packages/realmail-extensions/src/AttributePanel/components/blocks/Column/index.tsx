@@ -11,6 +11,7 @@ import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { useFocusIdx, IconFont } from 'realmail-editor';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
+import { Color } from '../../attributes';
 
 export function Column() {
   return (
@@ -48,7 +49,7 @@ function AttributesContainer({ mode }: { mode: 'desktop' | 'mobile'; }) {
         </Space>
       </Collapse.Item>
       <Collapse.Item name='1' header='Background'>
-        <Background prefixName={mode === 'desktop' ? `${focusIdx}.attributes` : `${focusIdx}.mobileAttributes`} />
+        <Color title='Background color' name={mode === 'desktop' ? `${focusIdx}.attributes.background-color` : `${focusIdx}.mobileAttributes.background-color`} />
       </Collapse.Item>
       <Collapse.Item name='2' header='Border'>
         <Border prefixName={mode === 'desktop' ? `${focusIdx}.attributes` : `${focusIdx}.mobileAttributes`} />
