@@ -7,6 +7,7 @@ export { createBlockDataByType } from './createBlockDataByType';
 export { ancestorOf } from './ancestorOf';
 export { BlockManager } from './BlockManager';
 export { ImageManager } from './ImageManager';
+export { mergeBlock } from './mergeBlock';
 export { TemplateEngineManager } from './TemplateEngineManager';
 export { isAdvancedBlock } from './isAdvancedBlock';
 export * from './block';
