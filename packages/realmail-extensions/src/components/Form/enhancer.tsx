@@ -132,9 +132,7 @@ export function enhancer<P extends { onChange?: (...rest: any) => any; }>(
             }, [onBlur, onChange]);
 
             useEffect(() => {
-              if (!currentValue) {
-                setCurrentValue(value);
-              }
+              setCurrentValue(value);
             }, [value]);
 
             useEffect(() => {
