@@ -1,9 +1,10 @@
 import { Input, Popover, PopoverProps, Space } from '@arco-design/web-react';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ColorResult, SketchPicker } from 'react-color';
 import { PresetColorsContext } from '../../AttributePanel/components/provider/PresetColorsProvider';
 import { getImg } from '@extensions/AttributePanel/utils/getImg';
 import styles from './index.module.scss';
+import { debounce } from 'lodash';
 export interface ColorPickerProps extends PopoverProps {
   onChange?: (val: string) => void;
   value?: string;
@@ -22,16 +23,19 @@ export function ColorPicker(props: ColorPickerProps) {
     setColor(value);
   }, [value]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const callbackChange = useCallback(debounce((newColor: string) => {
+    onChange?.(newColor);
+  }, 1000), [onChange]);
+
   const onChangeComplete = useCallback(
     (color: ColorResult, event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.value && event.target.value.replace('#', '').length < 6)
-        return;
       const newColor = color.hex;
       setColor(newColor);
-      onChange?.(newColor);
       addCurrentColor(newColor);
+      callbackChange(newColor);
     },
-    [addCurrentColor, onChange]
+    [addCurrentColor, callbackChange]
   );
 
   const onInputChange = useCallback(
