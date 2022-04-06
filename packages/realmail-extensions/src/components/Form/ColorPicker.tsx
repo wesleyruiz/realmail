@@ -26,7 +26,7 @@ export function ColorPicker(props: ColorPickerProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callbackChange = useCallback(debounce((newColor: string) => {
     onChange?.(newColor);
-  }, 1000), [onChange]);
+  }, 500), [onChange]);
 
   const onChangeComplete = useCallback(
     (color: ColorResult, event: React.ChangeEvent<HTMLInputElement>) => {
