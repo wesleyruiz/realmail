@@ -1,3 +1,8 @@
+import {
+  BasicType,
+  AdvancedType,
+} from 'realmail-core';
+
 // spacial dom id
 export const FIXED_CONTAINER_ID = 'FIXED_CONTAINER_ID';
 export const EASY_EMAIL_EDITOR_ID = 'realmail-editor';
@@ -22,3 +27,5 @@ export enum ContentEditableType {
   RichText = 'rich_text',
   Text = 'text',
 }
+
+export const verticalBlocks: string[] = [BasicType.SECTION, BasicType.GROUP, AdvancedType.SECTION, AdvancedType.GROUP];
