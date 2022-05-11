@@ -2,13 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { MjmlDomRender } from '../EditEmailPreview/components/MjmlDomRender';
 import { useDropBlock } from '@/hooks/useDropBlock';
 import { useHotKeys } from '@/hooks/useHotKeys';
-import { SyncScrollShadowDom } from '@/components/UI/SyncScrollShadowDom';
 import { ShadowStyle } from './components/ShadowStyle';
 import { useEditorContext } from '@/hooks/useEditorContext';
 import { DATA_ATTRIBUTE_DROP_CONTAINER, SYNC_SCROLL_ELEMENT_CLASS_NAME } from '@/constants';
 import { classnames } from '@/utils/classnames';
-import { ActiveTabKeys } from '@/components/Provider/BlocksProvider';
 import { useActiveTab } from '@/hooks/useActiveTab';
+import { SyncScrollIframeComponent } from '@/components/UI/SyncScrollIframeComponent';
 
 export function EditEmailPreview() {
   useHotKeys();
@@ -30,18 +29,21 @@ export function EditEmailPreview() {
 
   return useMemo(
     () => (
-      <SyncScrollShadowDom
-        isActive={activeTab === ActiveTabKeys.EDIT}
+      <SyncScrollIframeComponent
+        // isActive={activeTab === ActiveTabKeys.EDIT}
         id='VisualEditorEditMode'
         {...{
           [DATA_ATTRIBUTE_DROP_CONTAINER]: 'true',
         }}
 
         style={{
+          border: 'none',
           height: '100%',
+          width: '100%',
           zIndex: 10,
           position: 'relative',
           outline: 'none',
+
         }}
       >
         <div
@@ -73,8 +75,8 @@ export function EditEmailPreview() {
           <MjmlDomRender />
         </div>
         <ShadowStyle />
-      </SyncScrollShadowDom>
+      </SyncScrollIframeComponent>
     ),
-    [activeTab]
+    []
   );
 }

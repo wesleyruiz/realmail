@@ -13,6 +13,7 @@ import { getInsertPosition } from '@/utils/getInsertPosition';
 import { useEditorProps } from './useEditorProps';
 import { DATA_ATTRIBUTE_DROP_CONTAINER } from '@/constants';
 import { EventManager, EventType, scrollBlockEleIntoView } from '@/utils';
+import { isIFrameChildElement } from '@/utils/isIFrameChildElement';
 
 export function useDropBlock() {
   const [ref, setRef] = useState<HTMLElement | null>(null);
@@ -34,6 +35,7 @@ export function useDropBlock() {
     useHoverIdx();
 
   useEffect(() => {
+
     if (ref) {
       let target: EventTarget | null = null;
       const onMouseDown = (ev: MouseEvent) => {
@@ -42,8 +44,9 @@ export function useDropBlock() {
 
       const onClick = (ev: MouseEvent) => {
         ev.preventDefault(); // prevent link
-        if (target !== ev.target) return;
-        if (ev.target instanceof Element) {
+
+        if (isIFrameChildElement(ev.target)) {
+
           const target = getBlockNodeByChildEle(ev.target);
           if (!target) return;
           const idx = getNodeIdxFromClassName(target.classList)!;

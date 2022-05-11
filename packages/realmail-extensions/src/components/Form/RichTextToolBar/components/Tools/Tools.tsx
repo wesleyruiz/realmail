@@ -3,8 +3,10 @@ import { ToolItem } from '../ToolItem';
 import { Link, LinkParams } from '../Link';
 import {
   FIXED_CONTAINER_ID,
+  getBlockNodeByChildEle,
   getShadowRoot,
   IconFont,
+  isIFrameChildElement,
   useEditorProps,
   useFocusBlockLayout,
 } from 'realmail-editor';
@@ -44,7 +46,20 @@ export function Tools(props: ToolsProps) {
         return;
       }
 
+      const blockNode = getBlockNodeByChildEle(selectionRange.commonAncestorContainer as Element);
+
+      if (blockNode) {
+
+        if (blockNode.getAttribute('contenteditable') === 'true') {
+          blockNode.focus();
+        } else {
+          (blockNode.querySelector('[contenteditable=true]') as HTMLDivElement)?.focus();
+        }
+
+      }
+
       restoreRange(selectionRange);
+
       const uuid = (+new Date()).toString();
       if (cmd === 'createLink') {
         const linkData = val as LinkParams;
@@ -53,7 +68,7 @@ export function Tools(props: ToolsProps) {
         if (linkData.linkNode) {
           link = linkData.linkNode;
         } else {
-          document.execCommand(cmd, false, uuid);
+          getShadowRoot().execCommand(cmd, false, uuid);
 
           link = getShadowRoot().querySelector(`a[href="${uuid}"`)!;
         }
@@ -70,14 +85,15 @@ export function Tools(props: ToolsProps) {
           newContent = MergeTagBadge.transform(val, uuid);
         }
 
-        document.execCommand(cmd, false, newContent);
+        getShadowRoot().execCommand(cmd, false, newContent);
         const insertMergeTagEle = getShadowRoot().getElementById(uuid);
         if (insertMergeTagEle) {
           insertMergeTagEle.focus();
           setRangeByElement(insertMergeTagEle);
         }
       } else {
-        document.execCommand(cmd, false, val);
+        getShadowRoot().execCommand(cmd, false, val);
+
       }
 
       const contenteditableElement = getShadowRoot().activeElement;
@@ -98,7 +114,7 @@ export function Tools(props: ToolsProps) {
 
   const execCommandWithRange = useCallback(
     (cmd: string, val?: any) => {
-      document.execCommand(cmd, false, val);
+      getShadowRoot().execCommand(cmd, false, val);
       const contenteditableElement = getShadowRoot().activeElement;
       if (contenteditableElement?.getAttribute('contenteditable') === 'true') {
         const html = getShadowRoot().activeElement?.innerHTML || '';
@@ -107,9 +123,6 @@ export function Tools(props: ToolsProps) {
     },
     [props.onChange]
   );
-
-  const getPopoverMountNode = () =>
-    document.getElementById(FIXED_CONTAINER_ID)!;
 
   return (
     <div
@@ -127,18 +140,15 @@ export function Tools(props: ToolsProps) {
         {mergeTags && (
           <MergeTags
             execCommand={execCommand}
-            getPopupContainer={getPopoverMountNode}
           />
         )}
         <div className='realmail-extensions-divider' />
         <FontFamily
           execCommand={execCommand}
-          getPopupContainer={getPopoverMountNode}
         />
         <div className='realmail-extensions-divider' />
         <FontSize
           execCommand={execCommand}
-          getPopupContainer={getPopoverMountNode}
         />
         <div className='realmail-extensions-divider' />
         <Bold currentRange={selectionRange} onChange={() => execCommandWithRange('bold')} />
@@ -152,20 +162,17 @@ export function Tools(props: ToolsProps) {
         <IconFontColor
           selectionRange={selectionRange}
           execCommand={execCommand}
-          getPopoverMountNode={getPopoverMountNode}
         />
         <div className='realmail-extensions-divider' />
         <IconBgColor
           selectionRange={selectionRange}
           execCommand={execCommand}
-          getPopoverMountNode={getPopoverMountNode}
         />
 
         <div className='realmail-extensions-divider' />
         <Link
           currentRange={selectionRange}
           onChange={(values) => execCommand('createLink', values)}
-          getPopupContainer={getPopoverMountNode}
         />
         <div className='realmail-extensions-divider' />
         <Unlink currentRange={selectionRange}

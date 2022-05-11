@@ -1,6 +1,6 @@
-import { PopoverProps, Tooltip } from '@arco-design/web-react';
+import { PopoverProps } from '@arco-design/web-react';
 import React, { useCallback, useMemo } from 'react';
-import { IconFont } from 'realmail-editor';
+import { IconFont, isIFrameChildElement } from 'realmail-editor';
 import { ToolItem } from '../ToolItem';
 import { EMAIL_BLOCK_CLASS_NAME } from 'realmail-core';
 import { useSelectionRange } from '@extensions/AttributePanel/hooks/useSelectionRange';
@@ -14,8 +14,8 @@ function getStrikeThroughNode(
   node: Node | null | undefined,
 ): Element | null {
   if (!node) return null;
-  if (node instanceof Element && node.classList.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
-  if (node instanceof Element && node.tagName.toLocaleLowerCase() === 'strike') return node;
+  if (isIFrameChildElement(node) && node.classList.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
+  if (isIFrameChildElement(node) && node.tagName.toLocaleLowerCase() === 'strike') return node;
   return getStrikeThroughNode(node.parentNode);
 }
 
@@ -35,12 +35,6 @@ export function StrikeThrough(props: LinkProps) {
   }, [node, onChange, setRangeByElement]);
 
   return (
-    <Tooltip
-      color='#fff'
-      position='tl'
-      content="Strikethrough"
-    >
-      <ToolItem title='Strikethrough' isActive={Boolean(node)} icon={<IconFont iconName='icon-strikethrough' />} onClick={onClick} />
-    </Tooltip>
+    <ToolItem title='Strikethrough' isActive={Boolean(node)} icon={<IconFont iconName='icon-strikethrough' />} onClick={onClick} />
   );
 }

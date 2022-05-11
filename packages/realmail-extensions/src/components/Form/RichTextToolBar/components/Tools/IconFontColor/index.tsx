@@ -1,16 +1,16 @@
 
-import { ColorPicker } from '@extensions/components/Form/ColorPicker';
-import { IconFont } from 'realmail-editor';
-import React, { useMemo } from 'react';
+import { IconFont, isIFrameChildElement } from 'realmail-editor';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { ToolItem } from '../../ToolItem';
+import { ColorResult, SketchPicker } from 'react-color';
 
-export function IconFontColor({ selectionRange, execCommand, getPopoverMountNode }: { selectionRange: Range | null; execCommand: (cmd: string, val?: any) => void; getPopoverMountNode: () => HTMLElement; }) {
+export function IconFontColor({ selectionRange, execCommand, }: { selectionRange: Range | null; execCommand: (cmd: string, val?: any) => void; }) {
 
   const color = useMemo(() => {
     if (!selectionRange) return undefined;
-    if (selectionRange.commonAncestorContainer instanceof HTMLElement) {
+    if (isIFrameChildElement(selectionRange.commonAncestorContainer)) {
       return getComputedStyle(selectionRange.commonAncestorContainer).color;
-    } else if (selectionRange.commonAncestorContainer.parentNode instanceof HTMLElement) {
+    } else if (isIFrameChildElement(selectionRange.commonAncestorContainer.parentNode)) {
       return getComputedStyle(selectionRange.commonAncestorContainer.parentNode).color;
 
     }
@@ -18,27 +18,42 @@ export function IconFontColor({ selectionRange, execCommand, getPopoverMountNode
     return undefined;
   }, [selectionRange]);
 
+  const [curColor, seCurColor] = useState(color);
+
+  const onChangeComplete = useCallback(
+    (color: ColorResult) => {
+
+      const newColor = color.hex;
+      seCurColor(newColor);
+      execCommand('foreColor', newColor);
+    },
+    [execCommand]
+  );
+
   return (
-    <ColorPicker
-      label=''
-      position='tl'
-      onChange={(color) => execCommand('foreColor', color)}
-      getPopupContainer={getPopoverMountNode}
-      showInput={false}
-    >
-      <ToolItem
-        icon={(
-          <div style={{
-            position: 'relative'
-          }}
-          >
-            <IconFont size={12} iconName='icon-font-color' style={{ position: 'relative', top: '-1px' }} />
-            <div style={{ borderBottom: `2px solid ${color}`, position: 'absolute', width: '130%', left: '-15%', top: 16 }} />
-          </div>
-        )}
-        title='Text color'
-      />
-    </ColorPicker>
+
+    <ToolItem
+      action='click'
+      autoPosition
+      theme='light'
+      icon={(
+        <div style={{
+          position: 'relative'
+        }}
+        >
+          <IconFont size={12} iconName='icon-font-color' style={{ position: 'relative', top: '-1px' }} />
+          <div style={{ borderBottom: `2px solid ${color}`, position: 'absolute', width: '130%', left: '-15%', top: 16 }} />
+        </div>
+      )}
+      title={(
+        <SketchPicker
+          presetColors={[]}
+          color={curColor}
+          disableAlpha
+          onChangeComplete={onChangeComplete}
+        />
+      )}
+    />
 
   );
 }

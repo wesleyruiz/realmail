@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { RICH_TEXT_TOOL_BAR } from '@extensions/constants';
-import { getShadowRoot } from 'realmail-editor';
+import { getShadowRoot, useLazyState } from 'realmail-editor';
 import React, { useEffect, useMemo, useState } from 'react';
 
 export const SelectionRangeContext = React.createContext<{
@@ -13,13 +13,15 @@ export const SelectionRangeContext = React.createContext<{
 
 export const SelectionRangeProvider: React.FC<{}> = (props) => {
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
+  const iframeDoc = getShadowRoot();
 
   useEffect(() => {
+
     const onSelectionChange = () => {
       try {
-        const range = (getShadowRoot() as any).getSelection().getRangeAt(0);
+        const range = iframeDoc.getSelection()?.getRangeAt(0);
         if (range) {
-          const toolbar = getShadowRoot().getElementById(RICH_TEXT_TOOL_BAR);
+          const toolbar = iframeDoc.getElementById(RICH_TEXT_TOOL_BAR);
           if (toolbar && toolbar.contains(range.commonAncestorContainer))
             return;
           setSelectionRange(range);
@@ -27,12 +29,12 @@ export const SelectionRangeProvider: React.FC<{}> = (props) => {
       } catch (error) { }
     };
 
-    document.addEventListener('selectionchange', onSelectionChange);
+    iframeDoc.addEventListener('selectionchange', onSelectionChange);
 
     return () => {
-      document.removeEventListener('selectionchange', onSelectionChange);
+      iframeDoc.removeEventListener('selectionchange', onSelectionChange);
     };
-  }, []);
+  }, [iframeDoc]);
 
   const value = useMemo(() => {
     return {

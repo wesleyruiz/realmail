@@ -46,6 +46,7 @@ export interface PropsProviderProps {
       | PropsProviderProps['mergeTags']
   ) => string | Promise<string>;
   enabledLogic?: boolean;
+  socialIcons?: Array<{ content: string; image: string; }>;
 }
 
 const defaultMergeTagGenerate = (m: string) => `{{${m}}}`;

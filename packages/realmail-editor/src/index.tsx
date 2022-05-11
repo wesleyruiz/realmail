@@ -26,12 +26,14 @@ export { ActiveTabKeys } from './components/Provider/BlocksProvider';
 // UI
 export { IconFont } from './components/IconFont';
 export { TextStyle } from './components/UI/TextStyle';
+export { Tooltip } from './components/UI/Tooltip';
 export { Stack } from './components/UI/Stack';
 
 export * from './typings';
 export type { StackProps } from './components/UI/Stack';
 export type { PropsProviderProps } from './components/Provider/PropsProvider';
 export type { BlockAvatarWrapperProps } from './components/wrapper';
+export type { TooltipProps } from './components/UI/Tooltip';
 export type {
   BlockGroup,
   CollectedBlock,

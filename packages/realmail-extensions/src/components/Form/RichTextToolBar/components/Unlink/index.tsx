@@ -1,8 +1,6 @@
-import { Grid, PopoverProps, Space, Tooltip } from '@arco-design/web-react';
+import { Grid, PopoverProps } from '@arco-design/web-react';
 import React, { useCallback, useMemo } from 'react';
-import { Form } from 'react-final-form';
-import { IconFont, Stack, TextStyle } from 'realmail-editor';
-import { SearchField, SwitchField } from '@extensions/components/Form';
+import { IconFont, isIFrameChildElement } from 'realmail-editor';
 import { ToolItem } from '../ToolItem';
 import { EMAIL_BLOCK_CLASS_NAME } from 'realmail-core';
 
@@ -21,11 +19,11 @@ export interface LinkProps extends PopoverProps {
 function getAnchorElement(
   node: Node | null,
 ): HTMLAnchorElement | null {
-  if (!node) return null;
-  if (node instanceof HTMLAnchorElement) {
-    return node;
+  if (!isIFrameChildElement(node)) return null;
+  if (node.tagName.toLocaleLowerCase() === 'a') {
+    return node as HTMLAnchorElement;
   }
-  if (node instanceof Element && node.classList.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
+  if (node.classList.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
 
   return getAnchorElement(node.parentNode);
 }
@@ -54,12 +52,6 @@ export function Unlink(props: LinkProps) {
   }, [linkNode, onChange]);
 
   return (
-    <Tooltip
-      color='#fff'
-      position='tl'
-      content="Unlink"
-    >
-      <ToolItem title='Unlink' icon={<IconFont iconName='icon-unlink' />} onClick={onUnlink} />
-    </Tooltip>
+    <ToolItem title='Unlink' icon={<IconFont iconName='icon-unlink' />} onClick={onUnlink} />
   );
 }

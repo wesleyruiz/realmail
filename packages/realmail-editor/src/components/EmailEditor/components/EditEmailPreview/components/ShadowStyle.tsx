@@ -4,10 +4,12 @@ import styles from '@/styles/block-shadowDom-interactive.css?inline';
 import { useEditorProps } from '@/hooks/useEditorProps';
 
 export function ShadowStyle() {
+  const style = getComputedStyle(document.body);
+
   const {
     interactiveStyle: {
-      hoverColor = 'rgb(var(--primary-4, #1890ff))',
-      selectedColor = 'rgb(var(--primary-6, #1890ff))',
+      hoverColor = `rgb(${style.getPropertyValue('--primary-4') || '24,144,255'})`,
+      selectedColor = `rgb(${style.getPropertyValue('--primary-6') || '24,144,255'})`,
       errorColor = 'transparent',
     } = {},
   } = useEditorProps();

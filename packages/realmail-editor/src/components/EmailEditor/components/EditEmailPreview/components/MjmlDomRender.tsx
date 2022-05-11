@@ -19,12 +19,11 @@ export function MjmlDomRender() {
   const [isTextFocus, setIsTextFocus] = useState(false);
   const { errorBlocksMap } = useValidationContext();
 
-  const isTextFocusing =
-    document.activeElement === getEditorRoot() &&
-    getShadowRoot().activeElement?.getAttribute('contenteditable') === 'true';
+  const isTextFocusing = getShadowRoot().activeElement?.getAttribute('contenteditable') === 'true';
 
   useEffect(() => {
     if (!isTextFocus && !isEqual(content, pageData)) {
+
       setPageData(cloneDeep(content));
     }
   }, [content, pageData, setPageData, isTextFocus]);
@@ -35,11 +34,17 @@ export function MjmlDomRender() {
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      if (getEditorRoot()?.contains(e.target as Node)) {
+
+      if (getShadowRoot()?.contains(e.target as Node)) {
         return;
       }
+
       const fixedContainer = document.getElementById(FIXED_CONTAINER_ID);
       if (fixedContainer?.contains(e.target as Node)) {
+        return;
+      }
+      // element has unmount
+      if (!document.body.contains(e.target as Node)) {
         return;
       }
       setIsTextFocus(false);
