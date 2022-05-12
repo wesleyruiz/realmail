@@ -54,3 +54,5 @@ export const HIDE_DESKTOP_BLOCK_CLASS_NAME = 'hide-desktop-block';
 export const HIDE_MOBILE_BLOCK_CLASS_NAME = 'hide-mobile-block';
 export const HIDE_DESKTOP_INLINE_BLOCK_CLASS_NAME = 'hide-desktop-inline-block';
 export const HIDE_MOBILE_INLINE_BLOCK_CLASS_NAME = 'hide-mobile-inline-block';
+
+export const COLUMN_NO_STACK_CLASS_NAME = 'column-no-stack';

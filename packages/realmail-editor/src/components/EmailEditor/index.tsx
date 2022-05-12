@@ -44,50 +44,34 @@ export const EmailEditor = () => {
           justifyContent: 'center',
           minWidth: 640,
           height: containerHeight,
+          flexDirection: 'column'
         }}
       >
         <Tabs
           activeTab={activeTab}
           onBeforeChange={onBeforeChangeTab}
           onChange={onChangeTab}
-          style={{ height: '100%', width: '100%' }}
+          style={{ width: '100%' }}
           tabBarExtraContent={<ToolsPanel />}
         >
           <TabPane
-            style={{ height: 'calc(100% - 50px)' }}
             tab={(
               <Stack spacing='tight'>
                 <IconFont iconName='icon-editor' />
               </Stack>
             )}
             key={ActiveTabKeys.EDIT}
-          >
-            <EditEmailPreview />
-          </TabPane>
+          />
           <TabPane
-            style={{ height: 'calc(100% - 50px)' }}
             tab={(
               <Stack spacing='tight'>
                 <IconFont iconName='icon-desktop' />
               </Stack>
             )}
-            key={ActiveTabKeys.PC}
-          >
-            <DesktopEmailPreview />
-          </TabPane>
-          <TabPane
-            style={{ height: 'calc(100% - 50px)' }}
-            tab={(
-              <Stack spacing='tight'>
-                <IconFont iconName='icon-mobile' />
-              </Stack>
-            )}
             key={ActiveTabKeys.MOBILE}
-          >
-            <MobileEmailPreview />
-          </TabPane>
+          />
         </Tabs>
-
+        <EditEmailPreview />
         {fixedContainer}
       </div>
     ),

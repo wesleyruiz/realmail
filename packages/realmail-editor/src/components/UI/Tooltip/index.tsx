@@ -1,7 +1,9 @@
 import { EASY_EMAIL_EDITOR_ID } from '@/constants';
 import { getEditorRoot, getShadowRoot } from '@/utils';
 import { classnames } from '@/utils/classnames';
+import { debounce, throttle } from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import styleText from './index.scss?inline';
 
@@ -56,20 +58,27 @@ export const Tooltip = (props: TooltipProps) => {
     delaySetVisible(false, mouseLeaveDelay);
   }, [delaySetVisible, mouseLeaveDelay]);
 
-  const calculatePosition = useCallback((position: TooltipProps['position']) => {
-    if (!refEle) return;
+  const iframeLayout = useMemo((): { top: number; left: number; } => {
+    const iframe = document.getElementById(EASY_EMAIL_EDITOR_ID)?.querySelector('iframe');
+    if (iframe) {
+      return iframe?.getBoundingClientRect();
+    }
+    return {
+      left: 0,
+      top: 0
+    };
+  }, []);
 
+  const calculatePosition = useCallback((options?: { delay: number; }) => {
+    if (!refEle) return;
+    const { delay = mouseEnterDelay } = options || {};
     const { top, left, width, height, bottom, right } = refEle.getBoundingClientRect();
     let offsetX = 0;
     let offsetY = 0;
 
     if (inEditor) {
-      const iframe = document.getElementById(EASY_EMAIL_EDITOR_ID)?.querySelector('iframe');
-      if (iframe) {
-        const { top, left } = iframe?.getBoundingClientRect();
-        offsetY = top;
-        offsetX = left;
-      }
+      offsetY = iframeLayout.top;
+      offsetX = iframeLayout.left;
     }
 
     let formatPosition = position || 'top';
@@ -122,22 +131,22 @@ export const Tooltip = (props: TooltipProps) => {
       style = styles['top'];
     }
 
-    delaySetVisible(true, mouseEnterDelay, style);
-  }, [autoPosition, delaySetVisible, inEditor, minBottom, minTop, mouseEnterDelay, refEle]);
+    delaySetVisible(true, delay, style);
+  }, [autoPosition, delaySetVisible, iframeLayout.left, iframeLayout.top, inEditor, minBottom, minTop, mouseEnterDelay, position, refEle]);
 
   const onToggleVisible = useCallback(() => {
     if (!visible) {
-      calculatePosition(position);
+      calculatePosition();
       setVisible(true);
     } else {
       setVisible(false);
     }
-  }, [calculatePosition, position, visible]);
+  }, [calculatePosition, visible]);
 
   useEffect(() => {
     if (action === 'hover') {
       const onMouseEnter = (e: MouseEvent) => {
-        calculatePosition(position);
+        calculatePosition();
       };
 
       if (refEle) {
@@ -148,10 +157,12 @@ export const Tooltip = (props: TooltipProps) => {
           refEle.removeEventListener('mouseleave', onMouseLeave);
         };
       }
+
     }
   }, [action, calculatePosition, delaySetVisible, inEditor, mouseEnterDelay, onMouseLeave, position, refEle]);
 
   useEffect(() => {
+
     if (visible) {
       const onClick = (evt: MouseEvent) => {
 
@@ -159,12 +170,20 @@ export const Tooltip = (props: TooltipProps) => {
         setVisible(false);
       };
 
+      const onScroll = debounce(() => {
+        console.log('calculatePosition');
+
+        calculatePosition({ delay: 0 });
+      });
+
+      getShadowRoot().addEventListener('scroll', onScroll, true);
       getShadowRoot().addEventListener('click', onClick, true);
       return () => {
+        getShadowRoot().removeEventListener('scroll', onScroll, true);
         getShadowRoot().removeEventListener('click', onClick, true);
       };
     }
-  }, [onToggleVisible, visible]);
+  }, [calculatePosition, onToggleVisible, visible]);
 
   const popupContainer = props.getPopupContainer?.() || document.body;
 

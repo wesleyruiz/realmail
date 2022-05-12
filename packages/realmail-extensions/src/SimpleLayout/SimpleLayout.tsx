@@ -28,7 +28,7 @@ export const SimpleLayout: React.FC<
           display: 'flex',
           width: '100vw',
           overflow: 'hidden',
-          minWidth: 1400,
+          minWidth: 1180,
         }}
       >
         <Layout.Sider

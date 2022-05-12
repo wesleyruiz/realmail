@@ -1,6 +1,6 @@
 import React from 'react';
 import iconfontText from '@/assets/font/iconfont.css?inline';
-import styles from '@/styles/block-shadowDom-interactive.css?inline';
+import styles from '@/styles/block-shadowDom-interactive.scss?inline';
 import { useEditorProps } from '@/hooks/useEditorProps';
 
 export function ShadowStyle() {

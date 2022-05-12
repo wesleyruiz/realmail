@@ -45,7 +45,8 @@ export function RichTextToolBar(props: { onChange: (s: string) => void; }) {
               top: 0,
               zIndex: 100,
               width: pageWidth,
-              minWidth: 600
+              minWidth: 600,
+              maxWidth: '100vw',
             }}
           >
             <div
