@@ -32,10 +32,10 @@ export const TabHeader: React.FC<{ left: React.ReactNode; right: React.ReactNode
   return (
     <>
       <Grid.Row justify='space-between' align='center' style={{ height: 48 }}>
-        <Grid.Col span={6}>
+        <Grid.Col span={4}>
           {props.left}
         </Grid.Col>
-        <Grid.Col span={12} style={{ textAlign: 'center' }}>
+        <Grid.Col span={16} style={{ textAlign: 'center' }}>
           <Button.Group>
             <Button style={{ paddingLeft: 50, paddingRight: 50 }} type={!isMobileActive ? 'outline' : 'secondary'} onClick={() => onChangeTab(ActiveTabKeys.PC)}>
               <Space><IconFont iconName="icon-desktop" /> desktop</Space>
@@ -45,7 +45,7 @@ export const TabHeader: React.FC<{ left: React.ReactNode; right: React.ReactNode
             </Button>
           </Button.Group>
         </Grid.Col>
-        <Grid.Col span={6} style={{ textAlign: 'right' }}>
+        <Grid.Col span={4} style={{ textAlign: 'right' }}>
           {props.right}
         </Grid.Col>
       </Grid.Row>
