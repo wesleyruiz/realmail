@@ -6,26 +6,22 @@ import { ShadowStyle } from './components/ShadowStyle';
 import { useEditorContext } from '@/hooks/useEditorContext';
 import {
   DATA_ATTRIBUTE_DROP_CONTAINER,
+  RICH_TEXT_BAR_HEIGHT,
   SYNC_SCROLL_ELEMENT_CLASS_NAME,
 } from '@/constants';
 import { classnames } from '@/utils/classnames';
 import { useActiveTab } from '@/hooks/useActiveTab';
 import { SyncScrollIframeComponent } from '@/components/UI/SyncScrollIframeComponent';
-import './index.scss';
-import iphoneFrame from '@/assets/images/iphone.png';
-import { usePreviewEmail } from '@/hooks/usePreviewEmail';
-import { ActiveTabKeys } from '@/components/Provider/BlocksProvider';
-
-const MOBILE_WIDTH = 375;
-const MOBILE_Height = 640;
+import { useTransformScale } from '@/hooks/useTransformScale';
 
 export function EditEmailPreview() {
   useHotKeys();
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const { setRef } = useDropBlock();
   const { activeTab } = useActiveTab();
-
+  const { scale } = useTransformScale();
   const { setInitialized, pageData } = useEditorContext();
+  const pageWidth = parseInt(pageData.attributes.width) || 600;
 
   useEffect(() => {
     setRef(containerRef);
@@ -37,13 +33,11 @@ export function EditEmailPreview() {
     }
   }, [containerRef, setInitialized]);
 
-  const isMobile = activeTab === ActiveTabKeys.MOBILE;
-  console.log('isMobile', isMobile);
-
   const children = useMemo(() => {
     return (
       <SyncScrollIframeComponent
-        // isActive={activeTab === ActiveTabKeys.EDIT}
+        activeTab={activeTab}
+        pageWidth={pageWidth}
         id="VisualEditorEditMode"
         {...{
           [DATA_ATTRIBUTE_DROP_CONTAINER]: 'true',
@@ -74,42 +68,35 @@ export function EditEmailPreview() {
           )}
           style={{
             height: '100%',
-            overflowY: 'auto',
             zIndex: 10,
             paddingLeft: 10,
             paddingRight: 10,
-            paddingTop: 40,
+            paddingTop: RICH_TEXT_BAR_HEIGHT,
             paddingBottom: 40,
             boxSizing: 'border-box',
           }}
           ref={setContainerRef}
         >
-          <MjmlDomRender />
+          <div style={{ height: `${scale}%`, width: '100%', transform: `scale(${scale}%)`, transformOrigin: 'top center' }}>
+            <MjmlDomRender />
+          </div>
+
         </div>
         <ShadowStyle />
       </SyncScrollIframeComponent>
     );
-  }, [activeTab]);
+  }, [activeTab, pageWidth, scale]);
 
   return useMemo(() => {
     return (
       <div
         style={{
-          height: 'calc(100% - 40px)',
+          height: '100%',
           width: '100%',
           backgroundColor: pageData.attributes['background-color'],
         }}
       >
-        <div
-          style={{
-            height: '100%',
-            width: '100%',
-            margin: 'auto',
-
-          }}
-        >
-          {children}
-        </div>
+        {children}
       </div>
     );
   }, [children, pageData.attributes]);

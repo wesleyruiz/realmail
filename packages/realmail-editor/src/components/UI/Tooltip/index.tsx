@@ -59,7 +59,7 @@ export const Tooltip = (props: TooltipProps) => {
   }, [delaySetVisible, mouseLeaveDelay]);
 
   const iframeLayout = useMemo((): { top: number; left: number; } => {
-    const iframe = document.getElementById(EASY_EMAIL_EDITOR_ID)?.querySelector('iframe');
+    const iframe = getEditorRoot();
     if (iframe) {
       return iframe?.getBoundingClientRect();
     }

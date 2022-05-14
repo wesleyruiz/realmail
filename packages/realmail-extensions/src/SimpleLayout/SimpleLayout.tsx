@@ -10,6 +10,7 @@ import styles from './index.module.scss';
 import enUS from '@arco-design/web-react/es/locale/en-US';
 import { MergeTagBadgePrompt } from '@extensions/MergeTagBadgePrompt';
 import { IconLeft, IconRight } from '@arco-design/web-react/icon';
+import { EditorTabs } from '@extensions/EditorTabs';
 
 export const SimpleLayout: React.FC<
   {
@@ -73,7 +74,20 @@ export const SimpleLayout: React.FC<
           </Card>
         </Layout.Sider>
 
-        <Layout style={{ height: containerHeight }}>{props.children}</Layout>
+        <Layout style={{ height: containerHeight }}>
+          {/* TODO// */}
+          <Card
+            bodyStyle={{ padding: 0, height: '100%' }}
+            style={{
+              maxHeight: '100%',
+              height: '100%',
+            }}
+          >
+            <EditorTabs>
+              {props.children}
+            </EditorTabs>
+          </Card>
+        </Layout>
 
         <Layout.Sider
           style={{
@@ -91,6 +105,7 @@ export const SimpleLayout: React.FC<
               maxHeight: '100%',
               height: '100%',
               borderLeft: 'none',
+
             }}
             bodyStyle={{ padding: 0 }}
             className={styles.customScrollBarV2}

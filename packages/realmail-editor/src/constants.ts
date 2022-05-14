@@ -29,3 +29,5 @@ export enum ContentEditableType {
 }
 
 export const verticalBlocks: string[] = [BasicType.SECTION, BasicType.GROUP, AdvancedType.SECTION, AdvancedType.GROUP];
+
+export const RICH_TEXT_BAR_HEIGHT = 40;
