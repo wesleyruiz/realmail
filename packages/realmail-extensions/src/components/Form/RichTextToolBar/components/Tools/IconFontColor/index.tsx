@@ -34,6 +34,7 @@ export function IconFontColor({ selectionRange, execCommand, }: { selectionRange
 
     <ToolItem
       action='click'
+      minTop={230}
       autoPosition
       theme='light'
       icon={(

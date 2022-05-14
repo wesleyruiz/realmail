@@ -79,7 +79,7 @@ export function HoverTooltip() {
         >
           <TipNode
             type={isDragging ? 'drag' : 'hover'}
-            lineWidth={1}
+            lineWidth={2}
             title={block.name}
             direction={isTop && direction === 'top' ? 'noEnoughTop' : direction}
             isDragging={isDragging}
@@ -170,11 +170,14 @@ function TipNode(props: TipNodeProps) {
                 height: '22px',
                 lineHeight: '22px',
                 display: 'inline-flex',
-                padding: '1px 5px',
+                padding: '1px 10px',
                 boxSizing: 'border-box',
                 whiteSpace: 'nowrap',
                 fontFamily: 'sans-serif',
                 transform: 'translateY(-100%)',
+                // border-top-left-radius
+                borderTopLeftRadius: '4px',
+                borderTopRightRadius: '4px',
               }}
             >
               {title}

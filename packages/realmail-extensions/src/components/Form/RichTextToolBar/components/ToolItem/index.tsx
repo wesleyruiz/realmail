@@ -31,7 +31,7 @@ export const ToolItem: React.FC<{
       theme={props.theme}
       position={props.position}
       content={props.title}
-      minTop={230}
+      minTop={props.minTop}
       inEditor
       getPopupContainer={() => document.getElementById(FIXED_CONTAINER_ID)!}
     >

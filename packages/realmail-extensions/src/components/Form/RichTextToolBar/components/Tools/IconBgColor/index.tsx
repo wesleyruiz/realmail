@@ -36,6 +36,7 @@ export function IconBgColor({ selectionRange, execCommand }: { selectionRange: R
     <ToolItem
       action='click'
       autoPosition
+      minTop={230}
       theme='light'
       icon={(
         <div style={{

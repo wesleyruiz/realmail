@@ -3,12 +3,13 @@ import React from 'react';
 import { Template } from '@core/components';
 import MjmlBlock from '@core/components/MjmlBlock';
 
-import { AdvancedBlock, generateAdvancedBlock } from './generateAdvancedBlock';
+import { generateAdvancedBlock } from './generateAdvancedBlock';
 import { getPreviewClassName } from '@core/utils/getPreviewClassName';
 import { classnames } from '@core/utils/classnames';
 import { isSectionBlock } from '@core/utils/isSectionBlock';
+import { IBlockData } from '@core/typings';
 
-export function generateAdvancedLayoutBlock<T extends AdvancedBlock>(option: {
+export function generateAdvancedLayoutBlock<T extends IBlockData>(option: {
   type: string;
   baseType: BasicType;
   validParentType: string[];

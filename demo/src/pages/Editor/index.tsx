@@ -344,10 +344,10 @@ export default function Editor() {
         key={id}
         height={'calc(100vh - 65px)'}
         data={initialValues}
-        // interactiveStyle={{
-        //   hoverColor: '#78A349',
-        //   selectedColor: '#1890ff',
-        // }}
+        interactiveStyle={{
+          hoverColor: 'rgb(96, 106, 114)',
+          selectedColor: '#1890ff',
+        }}
         // onAddCollection={addCollection}
         // onRemoveCollection={({ id }) => removeCollection(id)}
         onUploadImage={onUploadImage}
@@ -362,6 +362,7 @@ export default function Editor() {
         mergeTagGenerate={(tag) => `{{${tag}}}`}
         onBeforePreview={onBeforePreview}
         socialIcons={socialIcons}
+
       >
         {({ values }, { submit }) => {
           return (
