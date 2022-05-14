@@ -28,27 +28,23 @@ export const TabHeader: React.FC<{ left: React.ReactNode; right: React.ReactNode
   );
 
   const isMobileActive = activeTab === ActiveTabKeys.MOBILE;
-
+  const grid = '2vw';
   return (
     <>
-      <Grid.Row justify='space-between' align='center' style={{ height: 48 }}>
-        <Grid.Col span={4}>
-          {props.left}
-        </Grid.Col>
-        <Grid.Col span={16} style={{ textAlign: 'center' }}>
+      <div style={{ height: 48, position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ position: 'absolute', left: 0 }}>{props.left}</div>
+        <div style={{ textAlign: 'center' }}>
           <Button.Group>
-            <Button style={{ paddingLeft: 50, paddingRight: 50 }} type={!isMobileActive ? 'outline' : 'secondary'} onClick={() => onChangeTab(ActiveTabKeys.PC)}>
+            <Button style={{ paddingLeft: grid, paddingRight: grid }} type={!isMobileActive ? 'outline' : 'secondary'} onClick={() => onChangeTab(ActiveTabKeys.PC)}>
               <Space><IconFont iconName="icon-desktop" /> desktop</Space>
             </Button>
-            <Button style={{ paddingLeft: 50, paddingRight: 50 }} type={isMobileActive ? 'outline' : 'secondary'} onClick={() => onChangeTab(ActiveTabKeys.MOBILE)}>
+            <Button style={{ paddingLeft: grid, paddingRight: grid }} type={isMobileActive ? 'outline' : 'secondary'} onClick={() => onChangeTab(ActiveTabKeys.MOBILE)}>
               <Space><IconFont iconName="icon-mobile" /> mobile</Space>
             </Button>
           </Button.Group>
-        </Grid.Col>
-        <Grid.Col span={4} style={{ textAlign: 'right' }}>
-          {props.right}
-        </Grid.Col>
-      </Grid.Row>
+        </div>
+        <div style={{ position: 'absolute', right: 0 }}>{props.right}</div>
+      </div>
 
     </>
   );

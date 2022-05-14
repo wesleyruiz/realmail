@@ -59,7 +59,7 @@ export function EditEmailPreview() {
         />
         <div
           {...{
-            part: 'email-bg',
+            // part: 'email-bg',
             'data-view': activeTab,
           }}
           className={classnames(
