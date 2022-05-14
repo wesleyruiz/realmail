@@ -1,3 +1,5 @@
+import { isIFrameChildElement } from './isIFrameChildElement';
+
 const transform = (text: string, id?: string) => {
   return text.replace(/{{([\s\S]+?)}}/g, (_, $1) => {
     const input = document.createElement('input');
@@ -14,7 +16,7 @@ const transform = (text: string, id?: string) => {
 export class MergeTagBadge {
   static transform(content: string, id?: string) {
     const loop = (node: ChildNode) => {
-      if (node instanceof HTMLElement) {
+      if (isIFrameChildElement(node)) {
         if (node.textContent === node.innerHTML) {
           node.innerHTML = transform(node.innerHTML, id);
         } else {

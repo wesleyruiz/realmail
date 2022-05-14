@@ -16,7 +16,7 @@ import { SelectionRangeProvider } from './components/provider/SelectionRangeProv
 export interface AttributePanelProps { }
 
 export function AttributePanel() {
-  const { values, focusBlock } = useBlock();
+  const { focusBlock } = useBlock();
   const { initialized } = useEditorContext();
 
   const { focusIdx } = useFocusIdx();
@@ -53,7 +53,7 @@ export function AttributePanel() {
               }
               `}
             </style>,
-            shadowRoot as any
+            shadowRoot.body
           )}
       </PresetColorsProvider>
     </SelectionRangeProvider>

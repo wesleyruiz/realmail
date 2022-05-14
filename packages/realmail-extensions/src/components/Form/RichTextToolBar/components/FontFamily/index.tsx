@@ -7,40 +7,34 @@ import { useFontFamily } from '@extensions/hooks/useFontFamily';
 import styleText from '../../styles/ToolsPopover.css?inline';
 export interface FontFamilyProps {
   execCommand: (cmd: string, value: any) => void;
-  getPopupContainer: () => HTMLElement;
 }
 
 export function FontFamily(props: FontFamilyProps) {
   const { fontList } = useFontFamily();
   const { execCommand } = props;
-  const [visible, setVisible] = React.useState(false);
 
   const onChange = useCallback((val: string) => {
     execCommand('fontName', val);
-    setVisible(false);
   }, [execCommand]);
 
-  const onVisibleChange = useCallback((v: boolean) => {
-    setVisible(v);
-  }, []);
-
   return (
-    <Popover
-      trigger='click'
-      color='#fff'
+
+    <ToolItem
+      action='click'
       position='left'
-      className='realmail-extensions-Tools-Popover'
-      popupVisible={visible}
-      onVisibleChange={onVisibleChange}
-      content={(
+      theme='light'
+      title={(
         <>
           <style>{styleText}</style>
           <div
+            className='realmail-popover-scroll'
             style={{
               maxWidth: 150,
-              maxHeight: 350,
+              maxHeight: 200,
+              minWidth: 120,
               overflowY: 'auto',
               overflowX: 'hidden',
+              padding: '4px 12px',
             }}
           >
             <Menu
@@ -59,14 +53,9 @@ export function FontFamily(props: FontFamilyProps) {
             </Menu>
           </div>
         </>
-
       )}
-      getPopupContainer={props.getPopupContainer}
-    >
-      <ToolItem
-        title='Font family'
-        icon={<IconFont iconName='icon-font-family' />}
-      />
-    </Popover>
+      icon={<IconFont iconName='icon-font-family' />}
+    />
+
   );
 }

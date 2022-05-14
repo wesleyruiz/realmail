@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
 import {
   EditGridTabField,
@@ -179,12 +179,23 @@ function SocialElement({
   index: number;
 }) {
   const { focusIdx } = useFocusIdx();
-  const { onUploadImage } = useEditorProps();
+  const { socialIcons } = useEditorProps();
+
+  const autoCompleteOptions = useMemo(() => {
+    if (!socialIcons) return undefined;
+    return socialIcons.map((icon) => {
+      return {
+        label: icon.content,
+        value: icon.image
+      };
+    });
+  }, [socialIcons]);
 
   return (
     <Space direction='vertical'>
       <ImageUrl
         name={`${focusIdx}.data.value.elements.[${index}].src`}
+        autoCompleteOptions={autoCompleteOptions}
       />
 
       <Grid.Row>

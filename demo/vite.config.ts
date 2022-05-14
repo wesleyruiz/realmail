@@ -12,6 +12,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@arco-design/web-react/dist/css/arco.css': path.resolve(
+        __dirname,
+        './node_modules/@arco-design/web-react/dist/css/arco.css'
+      ), // 没有用的，只是防止css 404报错
       'realmail-editor/lib/style.css': path.resolve(
         __dirname,
         'package.json'
@@ -78,27 +82,11 @@ export default defineConfig({
       },
     },
   },
+  esbuild: {
+    jsxInject: `import "@arco-design/web-react/dist/css/arco.css";`
+  },
   plugins: [
-    styleImport({
-      libs: [
-        // Dynamic import @arco-design styles
-        {
-          libraryName: '@arco-design/web-react',
-          libraryNameChangeCase: 'pascalCase',
-          esModule: true,
-          resolveStyle: (name) =>
-            `@arco-design/web-react/es/${name}/style/index`,
-        },
-        {
-          libraryName: '@arco-design/web-react/icon',
-          libraryNameChangeCase: 'pascalCase',
-          resolveStyle: (name) =>
-            `@arco-design/web-react/icon/react-icon/${name}`,
-          resolveComponent: (name) =>
-            `@arco-design/web-react/icon/react-icon/${name}`,
-        },
-      ],
-    }),
+
     reactRefresh(),
 
     injectHtml({

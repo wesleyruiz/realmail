@@ -77,6 +77,77 @@ const fontList = [
   '微软雅黑',
 ].map((item) => ({ value: item, label: item }));
 
+
+const socialIcons = [
+  {
+    content: 'facebook',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110001/cl0c4v9ay001209l96xv6rqga/u3sga1emfbqrmde0pcho.png'
+  },
+  {
+    content: 'linkedin',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110017/cl0c4v9ay001209l96xv6rqga/bmwiwycuquwrzegsuyzv.png'
+  },
+  {
+    content: 'instagram',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110029/cl0c4v9ay001209l96xv6rqga/o2e9ucbn4rqbeon8u0gb.png'
+  },
+  {
+    content: 'pinterest',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110044/cl0c4v9ay001209l96xv6rqga/mln3bna3qm6esija3hv8.png'
+  },
+  {
+    content: 'youtube',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110062/cl0c4v9ay001209l96xv6rqga/le6v1nwgg1tybcst6abn.png'
+  },
+  {
+    content: 'twitter',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110075/cl0c4v9ay001209l96xv6rqga/wypegrsuffpqcjkmk4uu.png'
+  },
+  {
+    content: 'tiktok',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110089/cl0c4v9ay001209l96xv6rqga/hytyegojs6uoylovjqte.png'
+  },
+  {
+    content: 'tumblr',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110103/cl0c4v9ay001209l96xv6rqga/rb74bg3dgndt0pqueuqa.png'
+  },
+
+  // colorful
+  {
+    content: 'facebook',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110116/cl0c4v9ay001209l96xv6rqga/hyupovmzcerxz3tzui5t.png'
+  },
+  {
+    content: 'linkedin',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110131/cl0c4v9ay001209l96xv6rqga/ejbt4slcxfu3wz96zyrv.png'
+  },
+  {
+    content: 'instagram',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110147/cl0c4v9ay001209l96xv6rqga/efgbbwp3bfmag0jcjhve.png'
+  },
+  {
+    content: 'pinterest',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110164/cl0c4v9ay001209l96xv6rqga/hitgnoi8o8grwxusnnq6.png'
+  },
+  {
+    content: 'youtube',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110179/cl0c4v9ay001209l96xv6rqga/hmeslby91cc53cp9o1gd.png'
+  },
+  {
+    content: 'twitter',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110196/cl0c4v9ay001209l96xv6rqga/bbxiertnkkyqaaqqajmn.png'
+  },
+  {
+    content: 'tiktok',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110223/cl0c4v9ay001209l96xv6rqga/cqcl5nphtj4jor6mit4d.png'
+  },
+  {
+    content: 'tumblr',
+    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110236/cl0c4v9ay001209l96xv6rqga/jmijhnklftvfxgmdlkwp.png'
+  },
+];
+
+
 export default function Editor() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [theme, setTheme] = useState<'blue' | 'green' | 'purple'>('blue');
@@ -273,10 +344,10 @@ export default function Editor() {
         key={id}
         height={'calc(100vh - 65px)'}
         data={initialValues}
-        // interactiveStyle={{
-        //   hoverColor: '#78A349',
-        //   selectedColor: '#1890ff',
-        // }}
+        interactiveStyle={{
+          hoverColor: 'rgb(96, 106, 114)',
+          selectedColor: '#1890ff',
+        }}
         // onAddCollection={addCollection}
         // onRemoveCollection={({ id }) => removeCollection(id)}
         onUploadImage={onUploadImage}
@@ -290,6 +361,8 @@ export default function Editor() {
         mergeTags={mergeTags}
         mergeTagGenerate={(tag) => `{{${tag}}}`}
         onBeforePreview={onBeforePreview}
+        socialIcons={socialIcons}
+
       >
         {({ values }, { submit }) => {
           return (

@@ -109,7 +109,6 @@ export function enhancer<P extends { onChange?: (...rest: any) => any; }>(
 
             const onFieldChange: P['onChange'] = useCallback(
               (e: any) => {
-                console.log();
 
                 const newVal = onChangeBefore
                   ? onChangeBefore(changeAdapter(e))

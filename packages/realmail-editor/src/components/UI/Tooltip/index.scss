@@ -1,0 +1,93 @@
+.email-editor-tooltip-theme-dark {
+  .email-editor-tooltip-container {
+    background-color: #1d2129;
+    color: rgb(255, 255, 255);
+  }
+  .email-editor-tooltip-arrow {
+    background-color: #1d2129;
+  }
+}
+
+.email-editor-tooltip-theme-light {
+  .email-editor-tooltip-container {
+    background-color: #fff;
+    color: #1d2129;
+    padding: 0;
+    border: 1px solid #ddd;
+  }
+  .email-editor-tooltip-arrow {
+    background-color: #fff;
+  }
+}
+
+.email-editor-tooltip-container {
+  animation: zoomIn 0.2s;
+  border-radius: 2px;
+  padding: 4px 12px;
+  font-size: 14px;
+}
+.email-editor-tooltip {
+  position: fixed;
+  z-index: 200;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.8, 0.8, 0.8);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.zoomIn {
+  animation-name: zoomIn;
+}
+
+.email-editor-tooltip-arrow {
+  border-bottom: none;
+  border-right: none;
+  border-top-left-radius: 2px;
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  display: block;
+  box-sizing: border-box;
+  transform: rotate(45deg);
+  transform-origin: 50% 50% 0;
+  z-index: -1;
+}
+
+.email-editor-tooltip-top {
+  .email-editor-tooltip-arrow {
+    margin-left: -4px;
+    bottom: -4px;
+    left: 50%;
+  }
+}
+
+.email-editor-tooltip-bottom {
+  .email-editor-tooltip-arrow {
+    margin-left: -4px;
+    top: -4px;
+    left: 50%;
+  }
+}
+
+.email-editor-tooltip-right {
+  .email-editor-tooltip-arrow {
+    margin-top: -4px;
+    top: 50%;
+    left: -4px;
+  }
+}
+
+.email-editor-tooltip-left {
+  .email-editor-tooltip-arrow {
+    margin-top: -4px;
+    top: 50%;
+    right: -4px;
+  }
+}

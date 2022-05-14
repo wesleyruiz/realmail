@@ -17,7 +17,7 @@ import { RecordContext } from '@/components/Provider/RecordProvider';
 import { useFocusIdx } from './useFocusIdx';
 import { IEmailTemplate } from '@/typings';
 import { useEditorProps } from './useEditorProps';
-import { EventManager, EventType, scrollBlockEleIntoView } from '@/utils';
+import { EventManager, EventType } from '@/utils';
 
 export function useBlock() {
   const {
@@ -104,7 +104,6 @@ export function useBlock() {
       console.timeLog();
       change(parentIdx, parent); // listeners not notified
       setFocusIdx(nextFocusIdx);
-      EventManager.exec(EventType.FOCUS_IDX_CHANGE_BY_LAYER, { nextIdx: nextFocusIdx });
       EventManager.exec(EventType.FOCUS_IDX_CHANGE_BY_EDITOR, { nextIdx: nextFocusIdx });
       console.timeEnd();
     },
@@ -164,9 +163,6 @@ export function useBlock() {
         setFocusIdx(nextFocusIdx);
       }, 50);
 
-      scrollBlockEleIntoView({
-        idx: nextFocusIdx,
-      });
     },
     [autoComplete, change, getState, setFocusIdx]
   );

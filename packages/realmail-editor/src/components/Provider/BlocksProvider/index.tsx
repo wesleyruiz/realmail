@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { useCallback } from 'react';
 
 export enum ActiveTabKeys {
-  EDIT = 'EDIT',
   MOBILE = 'MOBILE',
   PC = 'PC',
 }
@@ -22,6 +21,8 @@ export const BlocksContext = React.createContext<{
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
   activeTab: ActiveTabKeys;
   setActiveTab: React.Dispatch<React.SetStateAction<ActiveTabKeys>>;
+  scale: number;
+  setScale: React.Dispatch<React.SetStateAction<number>>;
 }>({
   initialized: false,
   setInitialized: () => { },
@@ -31,8 +32,10 @@ export const BlocksContext = React.createContext<{
   setDragEnabled: () => { },
   collapsed: false,
   setCollapsed: () => { },
-  activeTab: ActiveTabKeys.EDIT,
+  activeTab: ActiveTabKeys.PC,
   setActiveTab: () => { },
+  scale: 100,
+  setScale: () => { },
 });
 
 export const BlocksProvider: React.FC<{}> = (props) => {
@@ -40,7 +43,8 @@ export const BlocksProvider: React.FC<{}> = (props) => {
   const [dragEnabled, setDragEnabled] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
-  const [activeTab, setActiveTab] = useState(ActiveTabKeys.EDIT);
+  const [activeTab, setActiveTab] = useState(ActiveTabKeys.PC);
+  const [scale, setScale] = useState<number>(100);
 
   const onChangeTab: React.Dispatch<React.SetStateAction<ActiveTabKeys>> = useCallback((handler) => {
     if (isFunction(handler)) {
@@ -89,6 +93,8 @@ export const BlocksProvider: React.FC<{}> = (props) => {
         setCollapsed,
         activeTab,
         setActiveTab: onChangeTab,
+        scale,
+        setScale
       }}
     >
       {props.children}

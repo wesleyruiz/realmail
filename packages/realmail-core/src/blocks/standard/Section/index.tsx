@@ -21,7 +21,9 @@ export type ISection = IBlockData<
     'text-align'?: CSSProperties['textAlign'];
     'max-width'?: string;
   },
-  {}
+  {
+    noWrap: boolean;
+  }
 >;
 
 export const Section = createBlock<ISection>({

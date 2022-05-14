@@ -147,7 +147,7 @@ export interface AdvancedBlock<T extends IBlockData = IBlockData> extends IBlock
         itemName: string; // -> product
         limit: number;
         mockQuantity: number;
-      };
+      } & T['data']['value'];
     };
   };
 }

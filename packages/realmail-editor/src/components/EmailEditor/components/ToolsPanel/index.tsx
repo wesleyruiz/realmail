@@ -8,6 +8,7 @@ import { useEditorContext } from '@/hooks/useEditorContext';
 import { useFocusIdx } from '@/hooks/useFocusIdx';
 import { get } from 'lodash';
 import { BlockManager, getParentIdx, IBlockData } from 'realmail-core';
+import { Tooltip } from '@/components/UI/Tooltip';
 
 export function ToolsPanel() {
   const { redo, undo, redoable, undoable } = useBlock();
@@ -57,25 +58,35 @@ export function ToolsPanel() {
 
           </Stack>
         </div>
-        <Button title='undo' disabled={!undoable} onClick={undo}>
-          <IconFont
-            iconName='icon-undo'
-            style={{
-              cursor: 'inherit',
-              opacity: undoable ? 1 : 0.75,
-            }}
-          />
-        </Button>
+        <Tooltip
+          position='top'
+          content={'undo'}
+        >
+          <Button disabled={!undoable} onClick={undo}>
+            <IconFont
+              iconName='icon-undo'
+              style={{
+                cursor: 'inherit',
+                opacity: undoable ? 1 : 0.75,
+              }}
+            />
+          </Button>
+        </Tooltip>
+        <Tooltip
+          position='top'
+          content={'redo'}
+        >
+          <Button disabled={!redoable} onClick={redo}>
+            <IconFont
+              iconName='icon-redo'
+              style={{
+                cursor: 'inherit',
+                opacity: redoable ? 1 : 0.75,
+              }}
+            />
+          </Button>
+        </Tooltip>
 
-        <Button title='redo' disabled={!redoable} onClick={redo}>
-          <IconFont
-            iconName='icon-redo'
-            style={{
-              cursor: 'inherit',
-              opacity: redoable ? 1 : 0.75,
-            }}
-          />
-        </Button>
         <Stack.Item />
 
       </Stack>

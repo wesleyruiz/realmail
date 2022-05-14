@@ -1,0 +1,77 @@
+.mj-accordion-content {
+  display: block !important;
+}
+
+[data-dashed="true"] .email-block {
+  outline: 1px dashed rgba(170, 170, 170, 0.7);
+  outline-offset: -2px;
+}
+
+.node-type-page {
+  min-height: 100%;
+  padding-bottom: 100px;
+}
+.node-type-page * {
+  user-select: none;
+}
+
+:not(.email-block) {
+  -webkit-user-drag: none;
+  cursor: default;
+}
+
+.email-block:focus-visible {
+  outline: none;
+}
+
+[contenteditable="true"] {
+  outline: none;
+}
+
+.desktop-responsive-preview.hide-desktop-block {
+  display: block !important;
+  opacity: 0.5;
+}
+
+.desktop-responsive-preview.hide-desktop-inline-block {
+  display: inline-block !important;
+  opacity: 0.5;
+}
+
+// 模拟 mobile
+@media only screen and (min-width: 480px) {
+  [data-view="MOBILE"] {
+    .node-type-page {
+      width: 375px;
+      margin: auto;
+    }
+    .column-no-stack {
+      .node-type-advanced_column,
+      .node-type-column {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+
+    .hide-mobile-block {
+      max-height: 0px;
+      overflow: hidden;
+      display: none !important;
+    }
+
+    .hide-mobile-inline-block {
+      max-height: 0px;
+      overflow: hidden;
+      display: none !important;
+    }
+  }
+
+  [data-view="EDIT"] {
+    .hide-desktop-block {
+      display: none !important;
+    }
+    .hide-desktop-inline-block {
+      display: none !important;
+    }
+  }
+}

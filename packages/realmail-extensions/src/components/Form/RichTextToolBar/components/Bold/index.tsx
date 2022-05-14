@@ -1,9 +1,10 @@
-import { PopoverProps, Tooltip } from '@arco-design/web-react';
+import { PopoverProps } from '@arco-design/web-react';
 import React, { useCallback, useMemo } from 'react';
-import { IconFont } from 'realmail-editor';
+import { getEditorWindow, IconFont, isIFrameChildElement } from 'realmail-editor';
 import { ToolItem } from '../ToolItem';
 import { EMAIL_BLOCK_CLASS_NAME } from 'realmail-core';
 import { useSelectionRange } from '@extensions/AttributePanel/hooks/useSelectionRange';
+import { getSelectionRangeNodeStyle } from '@extensions/utils/getSelectionRangeNodeStyle';
 
 export interface LinkProps extends PopoverProps {
   currentRange: Range | null | undefined;
@@ -14,8 +15,8 @@ function getBoldNode(
   node: Node | null | undefined,
 ): Element | null {
   if (!node) return null;
-  if (node instanceof Element && node.classList.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
-  if (node instanceof Element && node.tagName.toLocaleLowerCase() === 'b') return node;
+  if (isIFrameChildElement(node) && node.classList.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
+  if (isIFrameChildElement(node) && node.tagName.toLocaleLowerCase() === 'b') return node;
   return getBoldNode(node.parentNode);
 }
 
@@ -28,19 +29,16 @@ export function Bold(props: LinkProps) {
   }, [props.currentRange]);
 
   const onClick = useCallback(() => {
-    if (node) {
-      setRangeByElement(node);
+    const rangeNode = node || props.currentRange?.commonAncestorContainer;
+    if (isIFrameChildElement(rangeNode)) {
+      setRangeByElement(rangeNode);
     }
     onChange();
-  }, [node, onChange, setRangeByElement]);
+  }, [node, onChange, props.currentRange?.commonAncestorContainer, setRangeByElement]);
+
+  const isActive = +getSelectionRangeNodeStyle(props.currentRange?.commonAncestorContainer, 'font-weight') > 500;
 
   return (
-    <Tooltip
-      color='#fff'
-      position='tl'
-      content="Bold"
-    >
-      <ToolItem title='Bold' isActive={Boolean(node)} icon={<IconFont iconName='icon-bold' />} onClick={onClick} />
-    </Tooltip>
+    <ToolItem title='Bold' isActive={isActive} icon={<IconFont iconName='icon-bold' />} onClick={onClick} />
   );
 }

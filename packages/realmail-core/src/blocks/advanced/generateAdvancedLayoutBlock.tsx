@@ -1,15 +1,15 @@
-import { AdvancedType, BasicType } from '@core/constants';
+import { BasicType, COLUMN_NO_STACK_CLASS_NAME } from '@core/constants';
 import React from 'react';
 import { Template } from '@core/components';
 import MjmlBlock from '@core/components/MjmlBlock';
 
-import { AdvancedBlock, generateAdvancedBlock } from './generateAdvancedBlock';
+import { generateAdvancedBlock } from './generateAdvancedBlock';
 import { getPreviewClassName } from '@core/utils/getPreviewClassName';
 import { classnames } from '@core/utils/classnames';
-import { getParentByIdx } from '@core/utils';
-import { isUndefined } from 'lodash';
+import { isSectionBlock } from '@core/utils/isSectionBlock';
+import { IBlockData } from '@core/typings';
 
-export function generateAdvancedLayoutBlock<T extends AdvancedBlock>(option: {
+export function generateAdvancedLayoutBlock<T extends IBlockData>(option: {
   type: string;
   baseType: BasicType;
   validParentType: string[];
@@ -17,17 +17,22 @@ export function generateAdvancedLayoutBlock<T extends AdvancedBlock>(option: {
   return generateAdvancedBlock<T>({
     ...option,
     getContent: (params) => {
-      const { data, idx, mode, context, dataSource, index } = params;
+      const { data, idx, mode, index } = params;
 
       const blockData = {
         ...data,
         type: option.baseType,
       };
-      const previewClassName =
-        mode === 'testing'
-          ? classnames(index === 0 && getPreviewClassName(idx, data.type))
-          : '';
+      let previewClassName = '';
 
+      if (mode === 'testing') {
+        previewClassName = classnames(index === 0 && getPreviewClassName(idx, data.type));
+        if (isSectionBlock(blockData)) {
+          if (!blockData.data.value.noWrap) {
+            previewClassName += ` ${COLUMN_NO_STACK_CLASS_NAME}`;
+          }
+        }
+      }
       return (
         <MjmlBlock
           type={blockData.type}
@@ -35,7 +40,8 @@ export function generateAdvancedLayoutBlock<T extends AdvancedBlock>(option: {
             ...blockData.attributes,
             'css-class': classnames(
               data.attributes['css-class'],
-              previewClassName
+              previewClassName,
+
             ),
           }}
           value={blockData.data.value}

@@ -1,5 +1,7 @@
-import { SYNC_SCROLL_ELEMENT_CLASS_NAME } from '@/constants';
+import { ActiveTabKeys } from '@/components/Provider/BlocksProvider';
+import { RICH_TEXT_BAR_HEIGHT, SYNC_SCROLL_ELEMENT_CLASS_NAME } from '@/constants';
 import { useDomScrollHeight } from '@/hooks/useDomScrollHeight';
+import { getEditorRoot, isIFrameChildElement } from '@/utils';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -12,24 +14,28 @@ interface Props
   children: React.ReactNode;
   title?: string;
   windowRef?: (e: Window) => void;
+  pageWidth: number;
+  activeTab: ActiveTabKeys;
 }
 
-export const SyncScrollIframeComponent = ({ children, title, windowRef, ...props }: Props) => {
+export const SyncScrollIframeComponent = ({ children, title, windowRef, pageWidth, activeTab, ...props }: Props) => {
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
   const [contentWindow, setContentWindow] = useState<Window | null>(null);
   const { viewElementRef } = useDomScrollHeight();
 
   const setFirstVisibleEle = useCallback(debounce((root: Document) => {
 
-    const { top: containerTop } = root.documentElement.getBoundingClientRect();
+    const { width } = getEditorRoot().getBoundingClientRect();
 
-    const ele = root.elementFromPoint(0, 10);
+    const ele = root.elementFromPoint((width - pageWidth) / 2, RICH_TEXT_BAR_HEIGHT);
+
+    if (!ele) return;
 
     const findSelectorNode = (ele: Element): Element | null => {
       if (ele.getAttribute('data-selector')) {
         return ele;
       }
-      if (ele.parentNode instanceof Element) {
+      if (isIFrameChildElement(ele.parentNode)) {
         return findSelectorNode(ele.parentNode);
       }
       return null;
@@ -41,18 +47,14 @@ export const SyncScrollIframeComponent = ({ children, title, windowRef, ...props
     if (selectorNode) {
       const { top: selectorEleTop } = selectorNode.getBoundingClientRect();
 
-      let selectorDiffTop = selectorEleTop - containerTop;
-
       const selector = selectorNode.getAttribute('data-selector');
 
       if (selector) {
         viewElementRef.current = {
           selector: selector || '',
-          top: selectorDiffTop
+          top: selectorEleTop
         };
-
       }
-
     }
   }, 200), [viewElementRef]);
 
@@ -67,31 +69,23 @@ export const SyncScrollIframeComponent = ({ children, title, windowRef, ...props
   };
 
   useEffect(() => {
+
     if (!mountNode) return;
     const viewElement = viewElementRef.current;
-
-    const scrollEle = mountNode.querySelector(`.${SYNC_SCROLL_ELEMENT_CLASS_NAME}`);
-
-    if (!scrollEle) return;
-
-    if (viewElement) {
+    const scrollEle = contentWindow?.document?.scrollingElement;
+    if (viewElement && scrollEle) {
       const viewElementNode = mountNode.querySelector(`[data-selector="${viewElement?.selector}"]`);
 
-      if (viewElementNode && scrollEle) {
-
+      if (viewElementNode) {
         viewElementNode.scrollIntoView();
-
-        scrollEle.scrollTo(0, scrollEle.scrollTop - viewElement.top);
+        contentWindow?.document?.scrollingElement?.scrollTo(0, scrollEle.scrollTop - viewElement.top);
       }
-    } else {
-
-      scrollEle.scrollTo(0, 0);
     }
-  }, [viewElementRef, mountNode]);
+  }, [viewElementRef, mountNode, activeTab, contentWindow?.document?.scrollingElement]);
 
   useEffect(() => {
     if (!contentWindow?.document.documentElement) return;
-    const onScroll = () => {
+    const onScroll = (e: Event) => {
       setFirstVisibleEle(contentWindow.document);
     };
     contentWindow.addEventListener('scroll', onScroll, true);

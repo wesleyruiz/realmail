@@ -1,3 +1,3 @@
-import { getEditorRoot } from './getEditorRoot';
+import { getEditorWindow } from './getEditorWindow';
 
-export const getShadowRoot = () => getEditorRoot()?.shadowRoot as ShadowRoot;
+export const getShadowRoot = () => getEditorWindow()?.document;

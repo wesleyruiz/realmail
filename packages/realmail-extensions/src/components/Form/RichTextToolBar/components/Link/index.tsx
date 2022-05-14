@@ -1,7 +1,7 @@
 import { Grid, PopoverProps, Space, Tooltip } from '@arco-design/web-react';
 import React, { useCallback, useMemo } from 'react';
 import { Form } from 'react-final-form';
-import { IconFont, Stack, TextStyle } from 'realmail-editor';
+import { IconFont, isIFrameChildElement, Stack, TextStyle } from 'realmail-editor';
 import { SearchField, SwitchField } from '@extensions/components/Form';
 import { ToolItem } from '../ToolItem';
 import { EMAIL_BLOCK_CLASS_NAME } from 'realmail-core';
@@ -17,15 +17,14 @@ export interface LinkProps extends PopoverProps {
   currentRange: Range | null | undefined;
   onChange: (val: LinkParams) => void;
 }
-
 function getAnchorElement(
   node: Node | null,
 ): HTMLAnchorElement | null {
   if (!node) return null;
-  if (node instanceof HTMLAnchorElement) {
-    return node;
+  if ((node as any)?.tagName?.toLocaleLowerCase() === 'a') {
+    return node as HTMLAnchorElement;
   }
-  if (node instanceof Element && node.classList.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
+  if ((node as any)?.classList?.contains(EMAIL_BLOCK_CLASS_NAME)) return null;
 
   return getAnchorElement(node.parentNode);
 }
@@ -75,13 +74,13 @@ export function Link(props: LinkProps) {
     >
       {({ handleSubmit }) => {
         return (
-          <Tooltip
-            {...props}
-            trigger='click'
-            color='#fff'
-            position='tl'
-            content={(
-              <div style={{ color: '#333' }}>
+
+          <ToolItem
+            isActive={Boolean(initialValues.link)}
+            action='click'
+            theme='light'
+            title={(
+              <div style={{ color: '#333', fontSize: 12, padding: 12 }}>
                 <Stack vertical spacing='none'>
                   <SearchField
                     size='small'
@@ -98,7 +97,6 @@ export function Link(props: LinkProps) {
                       <TextStyle size='smallest'>Target</TextStyle>
                       <SwitchField
                         size='small'
-                        label='Target'
                         name='blank'
                         checkedText='blank'
                         uncheckedText='self'
@@ -111,7 +109,6 @@ export function Link(props: LinkProps) {
                       <TextStyle size='smallest'>Underline</TextStyle>
                       <SwitchField
                         size='small'
-                        label='Underline'
                         name='underline'
                         checkedText='off'
                         uncheckedText='on'
@@ -122,11 +119,12 @@ export function Link(props: LinkProps) {
                 </Grid.Row>
               </div>
             )}
-          >
-            <ToolItem isActive={Boolean(initialValues.link)} title='Link' icon={<IconFont iconName='icon-link' />} />
-          </Tooltip>
+            icon={<IconFont iconName='icon-link' />}
+          />
+
         );
       }}
     </Form>
   );
 }
+

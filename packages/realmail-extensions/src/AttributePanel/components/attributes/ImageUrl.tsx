@@ -1,8 +1,9 @@
+import { ImageUploaderProps } from '@extensions/components/Form/ImageUploader';
 import React, { useMemo } from 'react';
 import { useEditorProps, useFocusIdx } from 'realmail-editor';
 import { ImageUploaderField } from '../../../components/Form';
 
-export function ImageUrl({ name, title = 'Image' }: { name?: string; title?: string; }) {
+export function ImageUrl({ name, title = 'Image', autoCompleteOptions }: { name?: string; title?: string; autoCompleteOptions?: ImageUploaderProps['autoCompleteOptions']; }) {
   const { focusIdx } = useFocusIdx();
   const { onUploadImage } = useEditorProps();
 
@@ -12,7 +13,8 @@ export function ImageUrl({ name, title = 'Image' }: { name?: string; title?: str
         label={title}
         name={name || `${focusIdx}.attributes.src`}
         uploadHandler={onUploadImage}
+        autoCompleteOptions={autoCompleteOptions}
       />
     );
-  }, [focusIdx, name, onUploadImage, title]);
+  }, [autoCompleteOptions, focusIdx, name, onUploadImage, title]);
 }

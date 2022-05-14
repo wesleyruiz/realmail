@@ -6,6 +6,7 @@ import {
   IconFont,
   useRefState,
   getEditorRoot,
+  isIFrameChildElement,
 } from 'realmail-editor';
 import { get } from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -78,11 +79,11 @@ export function MergeTagBadgePrompt() {
       removeAllActiveBadge();
       const target = e.target;
       if (
-        target instanceof HTMLInputElement &&
+        isIFrameChildElement(target) && target.tagName.toLocaleLowerCase() === 'input' &&
         target.classList.contains('realmail-merge-tag')
       ) {
         target.classList.add('realmail-merge-tag-focus');
-        const namePath = target.value;
+        const namePath = (target as HTMLInputElement).value;
         if (!onChangeMergeTag) {
           focusMergeTag(target);
           return;
@@ -108,8 +109,8 @@ export function MergeTagBadgePrompt() {
   }, []);
 
   const onSave = useCallback(() => {
-    if (!(target instanceof HTMLInputElement)) return;
-    onChangeMergeTag?.(target.value, text);
+    if (!(isIFrameChildElement(target) && target.tagName.toLowerCase() === 'input')) return;
+    onChangeMergeTag?.((target as HTMLInputElement).value, text);
     onClose();
   }, [onChangeMergeTag, onClose, target, text]);
 
@@ -135,7 +136,7 @@ export function MergeTagBadgePrompt() {
   return (
     <>
 
-      {root && createPortal(<style>{stylesText}</style>, root as any)}
+      {root && createPortal(<style>{stylesText}</style>, root.body)}
       {textContainer && createPortal(
         <div ref={popoverRef} onClick={onClick} className={classnames('realmail-merge-tag-popover')}>
           <div className='realmail-merge-tag-popover-container'>
