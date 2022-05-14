@@ -71,8 +71,6 @@ export function EditEmailPreview() {
             zIndex: 10,
             paddingLeft: 10,
             paddingRight: 10,
-            paddingTop: RICH_TEXT_BAR_HEIGHT,
-            paddingBottom: 40,
             boxSizing: 'border-box',
           }}
           ref={setContainerRef}
