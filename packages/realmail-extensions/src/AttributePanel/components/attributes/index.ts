@@ -30,3 +30,4 @@ export { ClassName } from './ClassName';
 export { ImageUrl } from './ImageUrl';
 export { CollapseWrapper } from './CollapseWrapper';
 export { ResponsiveTabs } from './ResponsiveTabs';
+export { ResponsiveDesign } from './ResponsiveDesign';
