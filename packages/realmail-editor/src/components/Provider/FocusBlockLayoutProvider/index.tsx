@@ -5,6 +5,8 @@ import { getBlockNodeByIdx, getShadowRoot } from '@/utils';
 import { DATA_RENDER_COUNT } from '@/constants';
 import { useEditorContext } from '@/hooks/useEditorContext';
 import { useRefState } from '@/hooks/useRefState';
+import { useActiveTab } from '@/hooks/useActiveTab';
+import { ActiveTabKeys } from '../BlocksProvider';
 
 export const FocusBlockLayoutContext = React.createContext<{
   focusBlockNode: HTMLElement | null;
@@ -19,6 +21,7 @@ export const FocusBlockLayoutProvider: React.FC = (props) => {
   const { initialized } = useEditorContext();
   const { focusIdx } = useFocusIdx();
   const focusIdxRef = useRefState(focusIdx);
+  const { activeTab } = useActiveTab();
 
   const root = useMemo(() => {
     return initialized ? getShadowRoot()?.querySelector(`[${DATA_RENDER_COUNT}]`) : null;
@@ -49,6 +52,15 @@ export const FocusBlockLayoutProvider: React.FC = (props) => {
     };
 
   }, [focusIdxRef, root]);
+
+  useEffect(() => {
+    if (activeTab === ActiveTabKeys.PC || activeTab === ActiveTabKeys.MOBILE) {
+      const ele = getBlockNodeByIdx(focusIdxRef.current);
+      if (ele) {
+        setFocusBlockNode(ele);
+      }
+    }
+  }, [activeTab, focusIdxRef]);
 
   useEffect(() => {
     if (!root) return;

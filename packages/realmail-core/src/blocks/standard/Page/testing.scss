@@ -1,0 +1,34 @@
+a {
+  color: inherit;
+}
+
+[data-view="PC"] {
+  .hide-desktop-block {
+    opacity: 0.5;
+  }
+  .hide-desktop-inline-block {
+    opacity: 0.5;
+  }
+
+  .mobile-responsive-preview {
+    display: none;
+  }
+}
+
+[data-view="MOBILE"] {
+  .node-type-page {
+    width: 375px;
+    margin: auto;
+  }
+
+  .hide-mobile-block {
+    opacity: 0.5;
+  }
+
+  .hide-mobile-inline-block {
+    opacity: 0.5;
+  }
+  .desktop-responsive-preview {
+    display: none;
+  }
+}

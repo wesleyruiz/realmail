@@ -30,6 +30,7 @@ export function ResponsiveBlock(props: ResponsiveBlockProps) {
   const hideMobileClassName = display === 'block' ? HIDE_MOBILE_BLOCK_CLASS_NAME : HIDE_MOBILE_INLINE_BLOCK_CLASS_NAME;
 
   if (mode === 'testing') {
+
     return (
       <Template>
         {/* only visible in desktop */}
@@ -37,7 +38,7 @@ export function ResponsiveBlock(props: ResponsiveBlockProps) {
           {props.desktop}
         </Template>
         {/* only visible in mobile */}
-        <Template className={hideDesktopClassName}>
+        <Template className={classnames(hideDesktopClassName, 'mobile-responsive-preview')}>
           <Raw>
             {`
                 <!-- htmlmin:ignore -->

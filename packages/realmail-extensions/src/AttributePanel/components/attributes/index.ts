@@ -28,3 +28,4 @@ export { FontWeight } from './FontWeight';
 export { Padding } from './Padding';
 export { ClassName } from './ClassName';
 export { ImageUrl } from './ImageUrl';
+export { ResponsiveTabs } from './ResponsiveTabs';

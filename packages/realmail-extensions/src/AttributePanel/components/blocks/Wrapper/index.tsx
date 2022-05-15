@@ -9,19 +9,13 @@ import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 import { Border } from '../../attributes';
+import { ResponsiveTabs } from '../../attributes/ResponsiveTabs';
 
 export function Wrapper() {
 
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
-          <AttributesContainer mode="desktop" />
-        </Tabs.TabPane>
-        <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
-          <AttributesContainer mode='mobile' />
-        </Tabs.TabPane>
-      </Tabs>
+      <ResponsiveTabs desktop={<AttributesContainer mode="desktop" />} mobile={<AttributesContainer mode='mobile' />} />
     </AttributesPanelWrapper>
   );
 }

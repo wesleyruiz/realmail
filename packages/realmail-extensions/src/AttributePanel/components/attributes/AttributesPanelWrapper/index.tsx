@@ -1,6 +1,6 @@
 import { IconEye, IconEyeInvisible } from '@arco-design/web-react/icon';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { EventManager, Stack, TextStyle, useBlock, EventType, useFocusIdx, useValidationContext } from 'realmail-editor';
+import { EventManager, Stack, TextStyle, useBlock, EventType, useFocusIdx, useValidationContext, useRefState } from 'realmail-editor';
 import { BasicType, BlockManager } from 'realmail-core';
 import { Message } from '@arco-design/web-react';
 
@@ -20,9 +20,11 @@ export const AttributesPanelWrapper: React.FC<AttributesPanelWrapper> = (
     return !!errorBlocksMap[focusIdx];
   }, [errorBlocksMap, focusIdx]);
 
+  const hasErrorRef = useRefState(hasError);
+
   useEffect(() => {
     const handler = (payload: { currentIdx: string; nextIdx: string; }) => {
-      if (hasError) {
+      if (hasErrorRef.current) {
         Message.warning('Please fix the error first');
         return false;
       }
@@ -33,7 +35,7 @@ export const AttributesPanelWrapper: React.FC<AttributesPanelWrapper> = (
       EventManager.off(EventType.FOCUS_IDX_CHANGE, handler);
 
     };
-  }, [hasError]);
+  }, [hasErrorRef]);
 
   if (!block) return null;
 

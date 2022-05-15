@@ -6,7 +6,6 @@ import { ShadowStyle } from './components/ShadowStyle';
 import { useEditorContext } from '@/hooks/useEditorContext';
 import {
   DATA_ATTRIBUTE_DROP_CONTAINER,
-  RICH_TEXT_BAR_HEIGHT,
   SYNC_SCROLL_ELEMENT_CLASS_NAME,
 } from '@/constants';
 import { classnames } from '@/utils/classnames';

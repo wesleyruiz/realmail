@@ -52,8 +52,7 @@ export const article = {
   ): Promise<IArticle> {
     return request.post<IArticle>('/article/user/update-article', {
       ...options,
-      article_id: id,
-      tags: [74],
+      article_id: id
     });
   },
   async deleteArticle(id: number): Promise<string> {

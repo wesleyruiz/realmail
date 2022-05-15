@@ -15,6 +15,13 @@ import { ICarousel, INavbar, ISocial, IPage, ITemplate } from '@core/blocks';
 import { getPreviewClassName } from './getPreviewClassName';
 import { getImg } from './getImg';
 
+// only use in testing mode
+import testingCss from '@core/blocks/standard/Page/testing.scss?inline';
+
+// only use in production mode
+import basicCss from '@core/blocks/standard/Page/basic.css?inline';
+import inlineBasicCss from '@core/blocks/standard/Page/inline-basic.css?inline';
+
 export interface JsonToMjmlOptionProduction {
   idx?: string | null; // current idx, default page idx
   data: IBlockData;
@@ -184,14 +191,25 @@ export function JsonToMjml(options: JsonToMjmlOption): string {
            <mj-style inline="inline">.mjml-body { width: ${data.attributes.width || '600px'
         }; margin: 0px auto; }</mj-style>`
         : '';
-      const styles =
-        value.headStyles
-          ?.map(
-            (style) =>
-              `<mj-style ${style.inline ? 'inline="inline"' : ''}>${style.content
-              }</mj-style>`
-          )
-          .join('\n') || '';
+      const styles = [...(value.headStyles || [])];
+
+      if (mode === 'testing') {
+        styles.unshift({ content: testingCss });
+      } else {
+        styles.unshift({
+          content: basicCss,
+        });
+        styles.unshift({
+          content: inlineBasicCss,
+          inline: 'inline',
+        });
+      }
+      const stylesText = styles.map(
+        (style) =>
+          `<mj-style ${style.inline ? 'inline="inline"' : ''}>${style.content
+          }</mj-style>`
+      )
+        .join('\n') || '';
 
       const userStyle = value['user-style']
         ? `<mj-style ${value['user-style'].inline ? 'inline="inline"' : ''}>${value['user-style'].content
@@ -205,7 +223,7 @@ export function JsonToMjml(options: JsonToMjmlOption): string {
           <mj-head>
               ${metaData}
               ${nonResponsive}
-              ${styles}
+              ${stylesText}
               ${userStyle}
               ${breakpoint}
               ${extraHeadContent}

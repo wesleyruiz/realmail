@@ -8,18 +8,12 @@ import { CollapseWrapper } from '../../attributes/CollapseWrapper';
 import { useFocusIdx, IconFont } from 'realmail-editor';
 import { ResponsiveDesign } from '../../attributes/ResponsiveDesign';
 import { Color } from '../../attributes';
+import { ResponsiveTabs } from '../../attributes/ResponsiveTabs';
 
 export function Group() {
   return (
     <AttributesPanelWrapper>
-      <Tabs type='card-gutter'>
-        <Tabs.TabPane title={<Space><IconFont iconName='icon-desktop' /><span>Desktop</span></Space>} key="1">
-          <AttributesContainer mode="desktop" />
-        </Tabs.TabPane>
-        <Tabs.TabPane title={<Space><IconFont iconName='icon-mobile' /><span>Mobile</span></Space>} key="2">
-          <AttributesContainer mode='mobile' />
-        </Tabs.TabPane>
-      </Tabs>
+      <ResponsiveTabs desktop={<AttributesContainer mode="desktop" />} mobile={<AttributesContainer mode='mobile' />} />
     </AttributesPanelWrapper>
   );
 }

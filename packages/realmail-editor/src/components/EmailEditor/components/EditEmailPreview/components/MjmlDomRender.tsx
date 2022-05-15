@@ -9,6 +9,8 @@ import { useEditorProps } from '@/hooks/useEditorProps';
 import { getEditorRoot, getShadowRoot } from '@/utils';
 import { DATA_RENDER_COUNT, FIXED_CONTAINER_ID } from '@/constants';
 import { useValidationContext } from '@/components/Provider/EmailEditorProvider';
+import { useActiveTab } from '@/hooks/useActiveTab';
+import { ActiveTabKeys } from '@/components/Provider/BlocksProvider';
 
 let count = 0;
 export function MjmlDomRender() {
@@ -18,6 +20,7 @@ export function MjmlDomRender() {
   const { dashed, mergeTags, enabledMergeTagsBadge } = useEditorProps();
   const [isTextFocus, setIsTextFocus] = useState(false);
   const { errorBlocksMap } = useValidationContext();
+  const { activeTab } = useActiveTab();
 
   const isTextFocusing = getShadowRoot().activeElement?.getAttribute('contenteditable') === 'true';
 
@@ -76,18 +79,21 @@ export function MjmlDomRender() {
 
   const html = useMemo(() => {
     if (!pageData) return '';
-
+    const cloneData = cloneDeep(pageData);
+    if (activeTab === ActiveTabKeys.MOBILE) {
+      cloneData.data.value.breakpoint = '2000px'; // 强行模拟移动端行为
+    }
     const renderHtml = mjml(
       JsonToMjml({
-        data: pageData,
+        data: cloneData,
         idx: getPageIdx(),
-        context: pageData,
+        context: cloneData,
         mode: 'testing',
         dataSource: cloneDeep(mergeTags),
       })
     ).html;
     return renderHtml;
-  }, [mergeTags, pageData]);
+  }, [mergeTags, pageData, activeTab]);
 
   return useMemo(() => {
     return (
