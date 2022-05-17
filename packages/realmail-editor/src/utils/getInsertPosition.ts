@@ -7,6 +7,9 @@ import {
   getSameParent,
   IPage,
   IBlockData,
+  getParentByIdx,
+  BasicType,
+  AdvancedType,
 } from 'realmail-core';
 import { DirectionPosition } from './getDirectionPosition';
 
@@ -20,9 +23,37 @@ interface Params {
 export function getInsertPosition(params: Params) {
   const { idx, dragType, directionPosition, context } = params;
 
-  const parentData = getSameParent(context, idx, dragType);
+  let parentData = getSameParent(context, idx, dragType);
 
   if (!parentData) return null;
+
+  // 切边则认为是选择 parent， 这样的话，即使 child 和 parent 一样 size 也可以选到 parent
+  if (directionPosition.horizontal.isEdge && directionPosition.vertical.isEdge) {
+    const directlyParent = getParentByIdx(context, idx);
+
+    const isTop = directionPosition.vertical.direction === 'top' && getIndexByIdx(idx) === 0;
+    const isBottom = directionPosition.vertical.direction === 'bottom' && getIndexByIdx(idx) === directlyParent!.children.length - 1;
+    // 只有第一个和最后一个才能插入
+    if (isTop || isBottom) {
+      const prevParent = getParentByIdx(context, parentData.parentIdx);
+      if (prevParent) {
+        parentData = {
+          parent: prevParent,
+          parentIdx: getParentIdx(parentData.parentIdx)!
+        };
+        //  这里做个特殊处理，如果是 column 的话，选择到 section，这样做有个好处，例如 button 就可以直接 插入 section 后面
+        if (([BasicType.COLUMN, AdvancedType.COLUMN] as string[]).includes(parentData.parent.type)) {
+          const sectionBlock = getParentByIdx(context, parentData.parentIdx);
+          if (sectionBlock) {
+            parentData = {
+              parent: sectionBlock,
+              parentIdx: getParentIdx(parentData.parentIdx)!
+            };
+          }
+        }
+      }
+    }
+  }
 
   const insertData = getInsetParentAndIndex(
     context,

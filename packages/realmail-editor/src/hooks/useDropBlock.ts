@@ -107,14 +107,6 @@ export function useDropBlock() {
       const onDragOver = (ev: DragEvent) => {
         if (!cacheDataTransfer.current) return;
 
-        if (ev.target === lastDragover.target) {
-          if (lastDragover.valid) {
-            ev.preventDefault();
-
-            return;
-          }
-        }
-
         lastDragover.target = ev.target;
         lastDragover.valid = false;
 
