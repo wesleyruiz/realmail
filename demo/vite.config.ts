@@ -25,6 +25,7 @@ export default defineConfig({
         'package.json'
       ), // 没有用的，只是防止css 404报错
       react: path.resolve('./node_modules/react'),
+      'mjml': path.resolve('./node_modules/mjml-browser'),
       'react-final-form': path.resolve(
         __dirname,
         './node_modules/react-final-form'

@@ -1,4 +1,4 @@
-declare module 'mjml-browser' {
+declare module 'mjml' {
   const transform: (
     vml: string,
     options?: {

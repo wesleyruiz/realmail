@@ -12,6 +12,7 @@ export default defineConfig({
         __dirname,
         './node_modules/react-final-form'
       ),
+      'mjml': path.resolve('./node_modules/mjml-browser'),
       'realmail-core': path.resolve('../packages/realmail-core'),
       'realmail-editor': path.resolve('../packages/realmail-editor'),
       'realmail-extensions': path.resolve(

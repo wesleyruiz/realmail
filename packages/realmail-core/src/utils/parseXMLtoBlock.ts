@@ -1,4 +1,4 @@
-import mjml from 'mjml-browser';
+import mjml from 'mjml';
 import { IBlockData } from '@core/typings';
 import { BlockType, BasicType } from './../constants';
 import { MjmlToJson } from './MjmlToJson';

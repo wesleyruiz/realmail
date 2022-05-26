@@ -37,6 +37,7 @@ export default defineConfig({
         'react',
         'react-dom',
         'react-dom/server',
+        'mjml',
         'mjml-browser',
         'react-final-form',
         'realmail-core',
