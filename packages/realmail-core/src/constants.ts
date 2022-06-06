@@ -46,6 +46,11 @@ export enum AdvancedType {
   HERO = 'advanced_hero',
 }
 
+export enum LogicType {
+  CONDITION = 'condition',
+  FOR_EACH = 'for_each',
+}
+
 export const MERGE_TAG_CLASS_NAME = 'realmail-merge-tag-container';
 export const EMAIL_BLOCK_CLASS_NAME = 'email-block';
 
