@@ -96,7 +96,7 @@ export function JsonToMjml(options: JsonToMjmlOption): string {
     .filter((key) => att[key] !== '') // filter att=""
     .map((key) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const val = isString(att[key]) ? att[key].replace(/"/gm, '') : att[key];
+      const val = isString(att[key]) ? att[key].replace(/"/gm, '').trim() : att[key];
       return `${key}="${val}"`;
     })
     .join(' ');

@@ -23,8 +23,10 @@ export function InlineText({ idx, onChange, children }: InlineTextProps) {
       e.preventDefault();
 
       const text = e.clipboardData?.getData('text/plain') || '';
-      document.execCommand('insertHTML', false, text);
+
+      getShadowRoot().execCommand('insertHTML', false, text);
       const contentEditableType = e.target.getAttribute(DATA_CONTENT_EDITABLE_TYPE);
+
       if (contentEditableType === ContentEditableType.RichText) {
         onChange(e.target.innerHTML || '');
       } else if (contentEditableType === ContentEditableType.Text) {

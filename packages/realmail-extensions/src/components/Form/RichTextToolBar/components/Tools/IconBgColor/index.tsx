@@ -1,32 +1,40 @@
 
 import { IconFont, isIFrameChildElement } from 'realmail-editor';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ToolItem } from '../../ToolItem';
 import { ColorResult, SketchPicker } from 'react-color';
-import { PresetColorsContext } from '@extensions/AttributePanel/components/provider/PresetColorsProvider';
+import { isString } from 'lodash';
 
 export function IconBgColor({ selectionRange, execCommand }: { selectionRange: Range | null; execCommand: (cmd: string, val?: any) => void; }) {
 
   const color = useMemo(() => {
     if (!selectionRange) return undefined;
+    let bgColor = '';
     if (isIFrameChildElement(selectionRange.commonAncestorContainer)) {
-      return getComputedStyle(selectionRange.commonAncestorContainer).backgroundColor;
+      bgColor = getComputedStyle(selectionRange.commonAncestorContainer).backgroundColor;
     } else if (isIFrameChildElement(selectionRange.commonAncestorContainer.parentNode)) {
-      return getComputedStyle(selectionRange.commonAncestorContainer.parentNode).backgroundColor;
+      bgColor = getComputedStyle(selectionRange.commonAncestorContainer.parentNode).backgroundColor;
 
     }
+    if (isString(bgColor) && (bgColor.toLocaleLowerCase() === 'transparent' || bgColor === 'rgba(0, 0, 0, 0)')) {
+      bgColor = '';
+    }
 
-    return undefined;
+    return bgColor;
   }, [selectionRange]);
 
   const [curColor, seCurColor] = useState(color);
 
   const onChangeComplete = useCallback(
-    (color: ColorResult) => {
+    (color: ColorResult, event: React.ChangeEvent<HTMLInputElement>) => {
+
+      // 输入的时候要求是6位数字
+      if (event.target.tagName.toLocaleLowerCase() === 'input' && event.target.value.replace('#', '').length !== 6) return;
 
       const newColor = color.hex;
       seCurColor(newColor);
-      execCommand('foreColor', newColor);
+      execCommand('backColor', newColor);
+
     },
     [execCommand]
   );

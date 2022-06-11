@@ -3,6 +3,7 @@ import { IconFont, isIFrameChildElement } from 'realmail-editor';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { ToolItem } from '../../ToolItem';
 import { ColorResult, SketchPicker } from 'react-color';
+import { debounce } from 'lodash';
 
 export function IconFontColor({ selectionRange, execCommand, }: { selectionRange: Range | null; execCommand: (cmd: string, val?: any) => void; }) {
 
@@ -21,11 +22,14 @@ export function IconFontColor({ selectionRange, execCommand, }: { selectionRange
   const [curColor, seCurColor] = useState(color);
 
   const onChangeComplete = useCallback(
-    (color: ColorResult) => {
+    (color: ColorResult, event: React.ChangeEvent<HTMLInputElement>) => {
+      // 输入的时候要求是6位数字
+      if (event.target.tagName.toLocaleLowerCase() === 'input' && event.target.value.replace('#', '').length !== 6) return;
 
       const newColor = color.hex;
       seCurColor(newColor);
       execCommand('foreColor', newColor);
+
     },
     [execCommand]
   );
@@ -52,6 +56,7 @@ export function IconFontColor({ selectionRange, execCommand, }: { selectionRange
           color={curColor}
           disableAlpha
           onChangeComplete={onChangeComplete}
+
         />
       )}
     />
