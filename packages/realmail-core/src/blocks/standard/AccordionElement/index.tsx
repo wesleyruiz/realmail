@@ -2,6 +2,8 @@ import { IBlockData } from '@core/typings';
 import { BasicType } from '@core/constants';
 import { createBlock } from '@core/utils/createBlock';
 import { merge } from 'lodash';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 export type IAccordionElement = IBlockData<
   {
     'icon-width': string;
@@ -24,7 +26,7 @@ export type IAccordionElement = IBlockData<
 export const AccordionElement = createBlock<IAccordionElement>({
   name: 'Accordion element',
   type: BasicType.ACCORDION_ELEMENT,
-  create: (payload) => {
+  create: payload => {
     const defaultData: IAccordionElement = {
       type: BasicType.ACCORDION_ELEMENT,
       data: {
@@ -43,4 +45,7 @@ export const AccordionElement = createBlock<IAccordionElement>({
     return merge(defaultData, payload);
   },
   validParentType: [BasicType.ACCORDION],
+  render(params) {
+    return <BasicBlock params={params} tag="mj-accordion-element" />;
+  },
 });

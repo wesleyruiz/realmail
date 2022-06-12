@@ -4,6 +4,8 @@ import { CSSProperties } from 'react';
 import { createBlock } from '@core/utils/createBlock';
 import { merge } from 'lodash';
 import { getImg } from '@core/utils/getImg';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 
 export type IImage = IBlockData<{
   alt?: string;
@@ -24,7 +26,7 @@ export type IImage = IBlockData<{
 export const Image: IBlock<IImage> = createBlock({
   name: 'Image',
   type: BasicType.IMAGE,
-  create: (payload) => {
+  create: payload => {
     const defaultData: IImage = {
       type: BasicType.IMAGE,
       data: {
@@ -41,4 +43,7 @@ export const Image: IBlock<IImage> = createBlock({
     return merge(defaultData, payload);
   },
   validParentType: [BasicType.COLUMN, BasicType.HERO],
+  render(params) {
+    return <BasicBlock params={params} tag="mj-image" />;
+  },
 });

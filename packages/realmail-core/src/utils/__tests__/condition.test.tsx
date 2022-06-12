@@ -11,16 +11,14 @@ import { AdvancedBlock, OperatorSymbol, Operator } from '@core/blocks';
 
 const engine = new Liquid();
 describe('Test condition.test', () => {
-
   const mergeTags = {
     user: {
       name: 'Ryan',
       age: 26,
-      job: "backend",
-      email: "realmail@gmail.com"
-    }
+      job: 'backend',
+      email: 'realmail@gmail.com',
+    },
   };
-
 
   it('should be visible when condition is not enabled', () => {
     const content = Page.create({
@@ -34,22 +32,22 @@ describe('Test condition.test', () => {
                   {
                     groups: [
                       {
-                        path: 'user.name',
+                        left: 'user.name',
                         operator: Operator.EQUAL,
-                        value: mergeTags.user.name
+                        right: mergeTags.user.name,
                       },
                       {
-                        path: 'user.job',
+                        left: 'user.job',
                         operator: Operator.EQUAL,
-                        value: 'mergeTags.user.job'
+                        right: 'mergeTags.user.job',
                       },
                     ],
-                    symbol: OperatorSymbol.AND
+                    symbol: OperatorSymbol.AND,
                   },
                 ],
-                symbol: OperatorSymbol.AND
-              }
-            }
+                symbol: OperatorSymbol.AND,
+              },
+            },
           },
           children: [
             Column.create({
@@ -57,28 +55,28 @@ describe('Test condition.test', () => {
                 Text.create({
                   data: {
                     value: {
-                      content: 'this will be visible'
-                    }
-                  }
-                })
-              ]
-            })
-
-          ]
-        })
-      ]
+                      content: 'this will be visible',
+                    },
+                  },
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
     });
 
-    const tpl = engine.parse(JsonToMjml({
-      data: content,
-      mode: 'production',
-      context: content,
-      dataSource: {},
-    }));
+    const tpl = engine.parse(
+      JsonToMjml({
+        data: content,
+        mode: 'production',
+        context: content,
+        dataSource: {},
+      }),
+    );
     const html = engine.renderSync(tpl, mergeTags);
     expect(html).toContain('this will be visible');
   });
-
 
   it('should be hide when result is false', () => {
     const content = Page.create({
@@ -92,22 +90,22 @@ describe('Test condition.test', () => {
                   {
                     groups: [
                       {
-                        path: 'user.name',
+                        left: 'user.name',
                         operator: Operator.EQUAL,
-                        value: mergeTags.user.name
+                        right: mergeTags.user.name,
                       },
                       {
-                        path: 'user.job',
+                        left: 'user.job',
                         operator: Operator.EQUAL,
-                        value: 'mergeTags.user.job'
+                        right: 'mergeTags.user.job',
                       },
                     ],
-                    symbol: OperatorSymbol.AND
+                    symbol: OperatorSymbol.AND,
                   },
                 ],
-                symbol: OperatorSymbol.AND
-              }
-            }
+                symbol: OperatorSymbol.AND,
+              },
+            },
           },
           children: [
             Column.create({
@@ -115,24 +113,25 @@ describe('Test condition.test', () => {
                 Text.create({
                   data: {
                     value: {
-                      content: 'this will be hide'
-                    }
-                  }
-                })
-              ]
-            })
-
-          ]
-        })
-      ]
+                      content: 'this will be hide',
+                    },
+                  },
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
     });
 
-    const tpl = engine.parse(JsonToMjml({
-      data: content,
-      mode: 'production',
-      context: content,
-      dataSource: {},
-    }));
+    const tpl = engine.parse(
+      JsonToMjml({
+        data: content,
+        mode: 'production',
+        context: content,
+        dataSource: {},
+      }),
+    );
     const html = engine.renderSync(tpl, mergeTags);
     expect(html).not.toContain('this will be hide');
   });
@@ -149,22 +148,22 @@ describe('Test condition.test', () => {
                   {
                     groups: [
                       {
-                        path: 'user.name',
+                        left: 'user.name',
                         operator: Operator.EQUAL,
-                        value: mergeTags.user.name
+                        right: mergeTags.user.name,
                       },
                       {
-                        path: 'user.job',
+                        left: 'user.job',
                         operator: Operator.EQUAL,
-                        value: mergeTags.user.job
+                        right: mergeTags.user.job,
                       },
                     ],
-                    symbol: OperatorSymbol.AND
+                    symbol: OperatorSymbol.AND,
                   },
                 ],
-                symbol: OperatorSymbol.AND
-              }
-            }
+                symbol: OperatorSymbol.AND,
+              },
+            },
           },
           children: [
             Column.create({
@@ -172,27 +171,26 @@ describe('Test condition.test', () => {
                 Text.create({
                   data: {
                     value: {
-                      content: 'this will be visible'
-                    }
-                  }
-                })
-              ]
-            })
-
-          ]
-        })
-      ]
+                      content: 'this will be visible',
+                    },
+                  },
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
     });
 
-    const tpl = engine.parse(JsonToMjml({
-      data: content,
-      mode: 'production',
-      context: content,
-      dataSource: {},
-    }));
+    const tpl = engine.parse(
+      JsonToMjml({
+        data: content,
+        mode: 'production',
+        context: content,
+        dataSource: {},
+      }),
+    );
     const html = engine.renderSync(tpl, mergeTags);
     expect(html).toContain('this will be visible');
   });
-
-
 });

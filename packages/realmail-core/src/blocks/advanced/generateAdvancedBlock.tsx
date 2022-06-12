@@ -1,13 +1,18 @@
-import { Template, ResponsiveBlock } from '@core/components';
+import { ResponsiveBlock } from '@core/components';
 import { AdvancedType, BasicType } from '@core/constants';
 import { IBlock, IBlockData } from '@core/typings';
-import { createCustomBlock } from '@core/utils/createCustomBlock';
 import { getParentByIdx, TemplateEngineManager } from '@core/utils';
 import { isString, isUndefined, merge, pickBy } from 'lodash';
 import React from 'react';
 import { IPage, standardBlocks } from '../standard';
+import { createBlock } from '@core/utils/createBlock';
 
-const inlineBlockTypes = ([AdvancedType.GROUP, AdvancedType.COLUMN] as string[]);
+const inlineBlockTypes = [
+  AdvancedType.GROUP,
+  AdvancedType.COLUMN,
+  BasicType.GROUP,
+  BasicType.COLUMN,
+] as string[];
 
 export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
   type: string;
@@ -15,39 +20,43 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
   getContent: (params: {
     index: number;
     data: T;
-    idx: string | null;
+    idx: string | null | undefined;
     mode: 'testing' | 'production';
     context?: IPage;
-    dataSource?: { [key: string]: any; };
-  }) => ReturnType<NonNullable<IBlock['render']>>;
+    dataSource?: { [key: string]: any };
+  }) => React.ReactNode;
   validParentType: string[];
 }) {
   const baseBlock = Object.values(standardBlocks).find(
-    (b) => b.type === (option.baseType as any as keyof typeof standardBlocks)
+    b => b.type === (option.baseType as any as keyof typeof standardBlocks),
   );
   if (!baseBlock) {
     throw new Error(`Can not find ${option.baseType}`);
   }
 
-  return createCustomBlock<T>({
+  return createBlock<T>({
     name: baseBlock.name,
     type: option.type,
     validParentType: option.validParentType,
-    create: (payload) => {
+    create: payload => {
       const defaultData = {
         ...baseBlock.create(),
         type: option.type,
       } as any;
       return merge(defaultData, payload);
     },
-    render: (data, idx, mode, context, dataSource) => {
+    render: ({ data, idx, mode, context, dataSource }) => {
       const { iteration, condition } = data.data.value;
 
       const parentBlockData = getParentByIdx({ content: context! }, idx!);
 
-      const getDesktopBaseContent = (bIdx: string | null, index: number) => {
+      const getDesktopBaseContent = (bIdx: string | null | undefined, index: number) => {
         let width = data.attributes.width;
-        if (inlineBlockTypes.includes(data.type) && isUndefined(width) && parentBlockData) {
+        if (
+          inlineBlockTypes.includes(data.type) &&
+          isUndefined(width) &&
+          parentBlockData
+        ) {
           width = (100 / parentBlockData.children.length).toFixed(2) + '%';
         }
         return option.getContent({
@@ -56,19 +65,23 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
             ...data,
             attributes: {
               ...data.attributes,
-              width
-            }
+              width,
+            },
           },
           idx: bIdx,
           mode,
           context,
           dataSource,
-        }) as any;
+        });
       };
 
-      const getMobileBaseContent = (bIdx: string | null, index: number) => {
+      const getMobileBaseContent = (bIdx: string | null | undefined, index: number) => {
         let width = data.mobileAttributes?.width || data.attributes.width;
-        if (inlineBlockTypes.includes(data.type) && isUndefined(width) && parentBlockData) {
+        if (
+          inlineBlockTypes.includes(data.type) &&
+          isUndefined(width) &&
+          parentBlockData
+        ) {
           width = '100%';
         }
         return option.getContent({
@@ -77,53 +90,73 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
             ...data,
             attributes: {
               ...data.attributes,
-              ...pickBy(data.mobileAttributes, (v) => !Boolean(isUndefined(v) || (isString(v) && v.trim() === ''))),
+              ...pickBy(
+                data.mobileAttributes,
+                v => !Boolean(isUndefined(v) || (isString(v) && v.trim() === '')),
+              ),
               'css-class': data.mobileAttributes?.['css-class'] || '',
-              width
-            }
+              width,
+            },
           },
           idx: bIdx,
           mode,
           context,
           dataSource,
-        }) as any;
+        });
       };
 
-      const getBaseContent = (bIdx: string | null, index: number) => {
-        if (!data.mobileAttributes || Object.keys(data.mobileAttributes).length === 0) return getDesktopBaseContent(bIdx, index);
-        return <ResponsiveBlock mode={mode} desktop={getDesktopBaseContent(bIdx, index)} mobile={getMobileBaseContent(bIdx, index)} blockData={data} />;
+      const getBaseContent = (bIdx: string | null | undefined, index: number) => {
+        let hasMobileView = false;
+        if (data.mobileAttributes) {
+          if (
+            Object.keys(data.mobileAttributes).some(
+              key => data.mobileAttributes[key] !== data.attributes[key],
+            )
+          ) {
+            hasMobileView = true;
+          }
+        }
+
+        if (!hasMobileView) return getDesktopBaseContent(bIdx, index);
+
+        return (
+          <ResponsiveBlock
+            mode={mode}
+            desktop={() => getDesktopBaseContent(bIdx, index)}
+            mobile={() => getMobileBaseContent(bIdx, index)}
+            context={context}
+            dataSource={dataSource}
+          />
+        );
       };
 
       let children = getBaseContent(idx, 0);
 
       if (mode === 'testing') {
         return (
-          <Template>
-            {children}
-            <Template>
-              {new Array((iteration?.mockQuantity || 1) - 1)
-                .fill(true)
-                .map((_, index) => (
-                  <Template key={index}>
-                    <Template>{getBaseContent(idx, index + 1)}</Template>
-                  </Template>
-                ))}
-            </Template>
-          </Template>
+          <>
+            <React.Fragment key="children">{children}</React.Fragment>
+
+            {new Array((iteration?.mockQuantity || 1) - 1).fill(true).map((_, index) => (
+              <React.Fragment key={index}>
+                {getBaseContent(idx, index + 1)}
+              </React.Fragment>
+            ))}
+          </>
         );
       }
 
       if (condition && condition.enabled) {
         children = TemplateEngineManager.generateTagTemplate('condition')(
           condition,
-          children
+          children,
         );
       }
 
       if (iteration && iteration.enabled) {
         children = TemplateEngineManager.generateTagTemplate('iteration')(
           iteration,
-          <Template>{children}</Template>
+          children,
         );
       }
 

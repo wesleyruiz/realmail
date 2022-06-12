@@ -11,7 +11,11 @@
     "lint": "lerna exec -- yarn format"
   },
   "dependencies": {
+    "js-beautify": "^1.14.3",
     "lerna": "^4.0.0",
     "liquidjs": "^9.34.1"
+  },
+  "devDependencies": {
+    "@types/js-beautify": "^1.13.3"
   }
 }

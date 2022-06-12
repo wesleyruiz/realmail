@@ -1,16 +1,29 @@
 import {
-  IBlockData,
   BasicType,
   components,
-  createCustomBlock,
+  createBlock,
+  getPreviewClassName,
+  IBlockData,
+  variableGenerate,
 } from 'realmail-core';
-
-import { CustomBlocksType } from '../constants';
-import React from 'react';
 import { merge } from 'lodash';
-import { getContentEditableClassName } from 'realmail-editor';
+import React from 'react';
+import { CustomBlocksType } from '../constants';
+import { ProductItem } from './productsFormatter';
 
-const { Column, Section, Wrapper, Text, Button, Image, Group } = components;
+const {
+  Column,
+  Section,
+  Wrapper,
+  Text,
+  Button,
+  Image,
+  Group,
+  ForEach,
+  Raw,
+  When,
+  ResponsiveBlock,
+} = components;
 
 export type IProductRecommendation = IBlockData<
   {
@@ -19,6 +32,7 @@ export type IProductRecommendation = IBlockData<
     'button-text-color': string;
     'product-name-color': string;
     'product-price-color': string;
+    'product-compare-price-color': string;
     'title-color': string;
   },
   {
@@ -28,19 +42,13 @@ export type IProductRecommendation = IBlockData<
   }
 >;
 
-const productPlaceholder = {
-  image:
-    'https://assets.maocanhua.cn/8e0e07e2-3f84-4426-84c1-2add355c558b-image.png',
-  title: 'Red Flock Buckle Winter Boots',
-  price: '$59.99 HKD',
-  url: 'https://realmail.vercel.app',
-};
-
-export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
+const PRODUCT_SOURCE_NAME = 'products';
+const PRODUCT_ITEM_NAME = 'product';
+export const ProductRecommendation = createBlock<IProductRecommendation>({
   name: 'Product recommendation',
   type: CustomBlocksType.PRODUCT_RECOMMENDATION,
   validParentType: [BasicType.PAGE],
-  create: (payload) => {
+  create: payload => {
     const defaultData: IProductRecommendation = {
       type: CustomBlocksType.PRODUCT_RECOMMENDATION,
       data: {
@@ -56,111 +64,193 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
         'button-color': '#414141',
         'product-name-color': '#414141',
         'product-price-color': '#414141',
+        'product-compare-price-color': '#cccccc',
         'title-color': '#222222',
       },
-      children: [
-        {
-          type: BasicType.TEXT,
-          children: [],
-          data: {
-            value: {
-              content: 'custom block title',
-            },
-          },
-          attributes: {},
-        },
-      ],
+      children: [],
     };
     return merge(defaultData, payload);
   },
-  render: (data, idx, mode, context, dataSource) => {
+  render: params => {
+    const { data, idx, mode, context } = params;
     const { title, buttonText, quantity } = data.data.value;
     const attributes = data.attributes;
+    const getVariable = variableGenerate<ProductItem, typeof PRODUCT_ITEM_NAME>();
 
-    const productList =
-      mode === 'testing'
-        ? new Array(quantity).fill(productPlaceholder)
-        : (dataSource?.product_list || []).slice(0, quantity);
-
-    const perWidth = quantity <= 3 ? '' : '33.33%';
+    const generateRenderList = (chunkNum: number) => {
+      return (
+        <>
+          <Raw>{`{% assign chunkProducts = ${PRODUCT_SOURCE_NAME} | chunk:${chunkNum} %}`}</Raw>
+          <ForEach source={'chunkProducts'} item={'chunkProductsItem'}>
+            <Section padding="0px">
+              <Group vertical-align="top" direction="ltr">
+                <ForEach
+                  mockQuantity={chunkNum}
+                  source={'chunkProductsItem'}
+                  item={PRODUCT_ITEM_NAME}
+                >
+                  <Column
+                    width={`${(100 / chunkNum).toFixed(1)}%`}
+                    padding="0px"
+                    border="none"
+                    vertical-align="top"
+                  >
+                    <Image
+                      align="center"
+                      height="auto"
+                      padding="10px"
+                      width="150px"
+                      src={getVariable('product.image_url')}
+                    />
+                  </Column>
+                </ForEach>
+              </Group>
+            </Section>
+            <Section padding="0px">
+              <Group vertical-align="top" direction="ltr">
+                <ForEach
+                  mockQuantity={chunkNum}
+                  source={'chunkProductsItem'}
+                  item={PRODUCT_ITEM_NAME}
+                >
+                  <Column
+                    width={`${(100 / chunkNum).toFixed(1)}%`}
+                    padding="0px"
+                    border="none"
+                    vertical-align="top"
+                  >
+                    <Text
+                      font-size="12px"
+                      padding="10px 0px 10px 0px "
+                      line-height="1"
+                      align="center"
+                      color={attributes['product-name-color']}
+                    >
+                      {getVariable('product.title')}
+                    </Text>
+                  </Column>
+                </ForEach>
+              </Group>
+            </Section>
+            <Section padding="0px">
+              <Group vertical-align="top" direction="ltr">
+                <ForEach
+                  mockQuantity={chunkNum}
+                  source={'chunkProductsItem'}
+                  item={PRODUCT_ITEM_NAME}
+                >
+                  <Column
+                    width={`${(100 / chunkNum).toFixed(1)}%`}
+                    padding="0px"
+                    border="none"
+                    vertical-align="top"
+                  >
+                    <Text
+                      font-size="12px"
+                      padding="0px"
+                      line-height="1"
+                      align="center"
+                      text-decoration="line-through"
+                      color={attributes['product-compare-price-color']}
+                    >
+                      {getVariable('product.first_variant.compare_at_price.amount')}
+                    </Text>
+                  </Column>
+                </ForEach>
+              </Group>
+            </Section>
+            <Section padding="0px">
+              <Group vertical-align="top" direction="ltr">
+                <ForEach
+                  mockQuantity={chunkNum}
+                  source={'chunkProductsItem'}
+                  item={PRODUCT_ITEM_NAME}
+                >
+                  <Column
+                    width={`${(100 / chunkNum).toFixed(1)}%`}
+                    padding="0px"
+                    border="none"
+                    vertical-align="top"
+                  >
+                    <Text
+                      font-size="12px"
+                      padding="0px"
+                      line-height="1"
+                      align="center"
+                      color={attributes['product-price-color']}
+                    >
+                      {getVariable('product.first_variant.price.amount')}
+                    </Text>
+                  </Column>
+                </ForEach>
+              </Group>
+            </Section>
+            <Section padding="0px">
+              <Group vertical-align="top" direction="ltr">
+                <ForEach
+                  mockQuantity={chunkNum}
+                  source={'chunkProductsItem'}
+                  item={PRODUCT_ITEM_NAME}
+                >
+                  <Column
+                    width={`${(100 / chunkNum).toFixed(1)}%`}
+                    padding="0px"
+                    border="none"
+                    vertical-align="top"
+                  >
+                    <Button
+                      align="center"
+                      padding="15px 0px"
+                      background-color={attributes['button-color']}
+                      color={attributes['button-text-color']}
+                      target="_blank"
+                      vertical-align="middle"
+                      border="none"
+                      text-align="center"
+                      href={getVariable('product.product_url')}
+                    >
+                      {buttonText}
+                    </Button>
+                  </Column>
+                </ForEach>
+              </Group>
+            </Section>
+          </ForEach>
+        </>
+      );
+    };
 
     return (
-      <Wrapper
-        padding='20px 0px 20px 0px'
-        border='none'
-        direction='ltr'
-        text-align='center'
-        background-color={attributes['background-color']}
-      >
-        <Section padding='0px'>
-          <Column padding='0px' border='none' vertical-align='top'>
-            <Text
-              font-size='20px'
-              padding='10px 25px 10px 25px'
-              line-height='1'
-              align='center'
-              font-weight='bold'
-              color={attributes['title-color']}
-              css-class={getContentEditableClassName(BasicType.TEXT, `${idx}.data.value.title`).join(' ')}
-            >
-              {title}
-            </Text>
-          </Column>
-        </Section>
-
-        <Section padding='0px'>
-          <Group vertical-align='top' direction='ltr'>
-            {productList.map((item, index) => (
-              <Column
-                key={index}
-                width={perWidth}
-                padding='0px'
-                border='none'
-                vertical-align='top'
+      <When expression="products.size > 0">
+        <Wrapper
+          padding="20px 0px 20px 0px"
+          border="none"
+          direction="ltr"
+          text-align="center"
+          background-color={attributes['background-color']}
+          css-class={getPreviewClassName(idx, data.type)}
+        >
+          <Section padding="0px">
+            <Column padding="0px" border="none" vertical-align="top">
+              <Text
+                font-size="20px"
+                padding="10px 25px 10px 25px"
+                line-height="1"
+                align="center"
+                font-weight="bold"
+                color={attributes['title-color']}
               >
-                <Image
-                  align='center'
-                  height='auto'
-                  padding='10px'
-                  width='150px'
-                  src={item.image}
-                />
-                <Text
-                  font-size='12px'
-                  padding='10px 0px 10px 0px '
-                  line-height='1'
-                  align='center'
-                  color={attributes['product-name-color']}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  font-size='12px'
-                  padding='0px'
-                  line-height='1'
-                  align='center'
-                  color={attributes['product-price-color']}
-                >
-                  {item.price}
-                </Text>
-                <Button
-                  align='center'
-                  padding='15px 0px'
-                  background-color={attributes['button-color']}
-                  color={attributes['button-text-color']}
-                  target='_blank'
-                  vertical-align='middle'
-                  border='none'
-                  text-align='center'
-                  href={item.url}
-                >
-                  {buttonText}
-                </Button>
-              </Column>
-            ))}
-          </Group>
-        </Section>
-      </Wrapper>
+                {title}
+              </Text>
+            </Column>
+          </Section>
+          <ResponsiveBlock
+            {...params}
+            desktop={() => generateRenderList(3)}
+            mobile={() => generateRenderList(2)}
+          ></ResponsiveBlock>
+        </Wrapper>
+      </When>
     );
   },
 });

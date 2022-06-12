@@ -6,6 +6,8 @@ import { AccordionTitle } from '../AccordionTitle';
 import { AccordionText } from '../AccordionText';
 import { getImg } from '@core/utils/getImg';
 import { mergeBlock } from '@core/utils/mergeBlock';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 
 export type IAccordion = IBlockData<
   {
@@ -30,7 +32,7 @@ export const Accordion = createBlock<IAccordion>({
   name: 'Accordion',
   type: BasicType.ACCORDION,
   validParentType: [BasicType.COLUMN],
-  create: (payload) => {
+  create: payload => {
     const defaultData: IAccordion = {
       type: BasicType.ACCORDION,
       data: {
@@ -88,5 +90,8 @@ export const Accordion = createBlock<IAccordion>({
       ],
     };
     return mergeBlock(defaultData, payload);
+  },
+  render(params) {
+    return <BasicBlock params={params} tag="mj-accordion" />;
   },
 });

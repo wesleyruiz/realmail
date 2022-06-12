@@ -3,6 +3,8 @@ import { BasicType } from '@core/constants';
 import { CSSProperties } from 'react';
 import { createBlock } from '@core/utils/createBlock';
 import { merge } from 'lodash';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 
 export type IColumn = IBlockData<
   {
@@ -22,7 +24,7 @@ export type IColumn = IBlockData<
 export const Column = createBlock<IColumn>({
   name: 'Column',
   type: BasicType.COLUMN,
-  create: (payload) => {
+  create: payload => {
     const defaultData: IColumn = {
       type: BasicType.COLUMN,
       data: {
@@ -38,4 +40,7 @@ export const Column = createBlock<IColumn>({
     return merge(defaultData, payload);
   },
   validParentType: [BasicType.SECTION, BasicType.GROUP],
+  render(params) {
+    return <BasicBlock params={params} tag="mj-column" />;
+  },
 });

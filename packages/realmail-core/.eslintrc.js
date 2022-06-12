@@ -16,6 +16,7 @@ module.exports = {
   extends: ['plugin:@typescript-eslint/recommended-requiring-type-checking'],
   plugins: ['react', 'react-hooks', '@typescript-eslint'],
   rules: {
+    '@typescript-eslint/no-unsafe-call': 0,
     '@typescript-eslint/no-unsafe-assignment': 0,
     '@typescript-eslint/no-unsafe-member-access': 0,
     '@typescript-eslint/restrict-template-expressions': 0,
@@ -36,7 +37,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'object-curly-spacing': [2, 'always'],
-    quotes: ['error', 'single'],
     'no-unused-vars': 0,
     camelcase: 0,
     'guard-for-in': 0,
@@ -55,10 +55,7 @@ module.exports = {
 
     'react/jsx-curly-spacing': ['error', 'never', { allowMultiline: true }],
     'react/jsx-key': 'warn',
-    'react/jsx-max-props-per-line': [
-      'error',
-      { maximum: 2, when: 'multiline' },
-    ],
+    'react/jsx-max-props-per-line': ['error', { maximum: 2, when: 'multiline' }],
     'react/jsx-wrap-multilines': [
       'error',
       {

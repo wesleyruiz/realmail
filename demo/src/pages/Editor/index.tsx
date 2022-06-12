@@ -14,12 +14,7 @@ import mjml from 'mjml-browser';
 import { copy } from '@demo/utils/clipboard';
 import { useEmailModal } from './components/useEmailModal';
 import services from '@demo/services';
-import {
-  IconGithub,
-  IconMoonFill,
-  IconSunFill,
-} from '@arco-design/web-react/icon';
-import { Liquid } from 'liquidjs';
+import { IconGithub, IconMoonFill, IconSunFill } from '@arco-design/web-react/icon';
 import {
   EmailEditor,
   EmailEditorProvider,
@@ -39,6 +34,7 @@ import {
   getPageIdx,
   IBlockData,
   JsonToMjml,
+  renderWithData,
 } from 'realmail-core';
 import { BlockMarketManager, SimpleLayout } from 'realmail-extensions';
 import { AutoSaveAndRestoreEmail } from '@demo/components/AutoSaveAndRestoreEmail';
@@ -75,78 +71,92 @@ const fontList = [
   '华文楷体',
   '宋体',
   '微软雅黑',
-].map((item) => ({ value: item, label: item }));
-
+].map(item => ({ value: item, label: item }));
 
 const socialIcons = [
   {
     content: 'facebook',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110001/cl0c4v9ay001209l96xv6rqga/u3sga1emfbqrmde0pcho.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110001/cl0c4v9ay001209l96xv6rqga/u3sga1emfbqrmde0pcho.png',
   },
   {
     content: 'linkedin',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110017/cl0c4v9ay001209l96xv6rqga/bmwiwycuquwrzegsuyzv.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110017/cl0c4v9ay001209l96xv6rqga/bmwiwycuquwrzegsuyzv.png',
   },
   {
     content: 'instagram',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110029/cl0c4v9ay001209l96xv6rqga/o2e9ucbn4rqbeon8u0gb.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110029/cl0c4v9ay001209l96xv6rqga/o2e9ucbn4rqbeon8u0gb.png',
   },
   {
     content: 'pinterest',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110044/cl0c4v9ay001209l96xv6rqga/mln3bna3qm6esija3hv8.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110044/cl0c4v9ay001209l96xv6rqga/mln3bna3qm6esija3hv8.png',
   },
   {
     content: 'youtube',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110062/cl0c4v9ay001209l96xv6rqga/le6v1nwgg1tybcst6abn.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110062/cl0c4v9ay001209l96xv6rqga/le6v1nwgg1tybcst6abn.png',
   },
   {
     content: 'twitter',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110075/cl0c4v9ay001209l96xv6rqga/wypegrsuffpqcjkmk4uu.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110075/cl0c4v9ay001209l96xv6rqga/wypegrsuffpqcjkmk4uu.png',
   },
   {
     content: 'tiktok',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110089/cl0c4v9ay001209l96xv6rqga/hytyegojs6uoylovjqte.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110089/cl0c4v9ay001209l96xv6rqga/hytyegojs6uoylovjqte.png',
   },
   {
     content: 'tumblr',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110103/cl0c4v9ay001209l96xv6rqga/rb74bg3dgndt0pqueuqa.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110103/cl0c4v9ay001209l96xv6rqga/rb74bg3dgndt0pqueuqa.png',
   },
 
   // colorful
   {
     content: 'facebook',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110116/cl0c4v9ay001209l96xv6rqga/hyupovmzcerxz3tzui5t.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110116/cl0c4v9ay001209l96xv6rqga/hyupovmzcerxz3tzui5t.png',
   },
   {
     content: 'linkedin',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110131/cl0c4v9ay001209l96xv6rqga/ejbt4slcxfu3wz96zyrv.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110131/cl0c4v9ay001209l96xv6rqga/ejbt4slcxfu3wz96zyrv.png',
   },
   {
     content: 'instagram',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110147/cl0c4v9ay001209l96xv6rqga/efgbbwp3bfmag0jcjhve.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110147/cl0c4v9ay001209l96xv6rqga/efgbbwp3bfmag0jcjhve.png',
   },
   {
     content: 'pinterest',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110164/cl0c4v9ay001209l96xv6rqga/hitgnoi8o8grwxusnnq6.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110164/cl0c4v9ay001209l96xv6rqga/hitgnoi8o8grwxusnnq6.png',
   },
   {
     content: 'youtube',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110179/cl0c4v9ay001209l96xv6rqga/hmeslby91cc53cp9o1gd.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110179/cl0c4v9ay001209l96xv6rqga/hmeslby91cc53cp9o1gd.png',
   },
   {
     content: 'twitter',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110196/cl0c4v9ay001209l96xv6rqga/bbxiertnkkyqaaqqajmn.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110196/cl0c4v9ay001209l96xv6rqga/bbxiertnkkyqaaqqajmn.png',
   },
   {
     content: 'tiktok',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110223/cl0c4v9ay001209l96xv6rqga/cqcl5nphtj4jor6mit4d.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110223/cl0c4v9ay001209l96xv6rqga/cqcl5nphtj4jor6mit4d.png',
   },
   {
     content: 'tumblr',
-    image: 'https://res.cloudinary.com/flashmail/image/upload/v1652110236/cl0c4v9ay001209l96xv6rqga/jmijhnklftvfxgmdlkwp.png'
+    image:
+      'https://res.cloudinary.com/flashmail/image/upload/v1652110236/cl0c4v9ay001209l96xv6rqga/jmijhnklftvfxgmdlkwp.png',
   },
 ];
-
 
 export default function Editor() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -155,12 +165,16 @@ export default function Editor() {
   const history = useHistory();
   const templateData = useAppSelector('template');
   const tagListData = useAppSelector('tagList');
-  const { addCollection, removeCollection, collectionCategory } =
-    useCollection();
+  const { addCollection, removeCollection, collectionCategory } = useCollection();
   const { openModal, modal } = useEmailModal();
   const { id, userId } = useQuery();
   const loading = useLoading(template.loadings.fetchById);
-  const { modal: mergeTagsModal, openModal: openMergeTagsModal, mergeTags, setMergeTags } = useMergeTagsModal(testMergeTags);
+  const {
+    modal: mergeTagsModal,
+    openModal: openMergeTagsModal,
+    mergeTags,
+    setMergeTags,
+  } = useMergeTagsModal(testMergeTags);
 
   const isSubmitting = useLoading([
     template.loadings.create,
@@ -183,10 +197,8 @@ export default function Editor() {
   useEffect(() => {
     if (id) {
       if (!userId) {
-        UserStorage.getAccount().then((account) => {
-          dispatch(
-            template.actions.fetchById({ id: +id, userId: account!.user_id })
-          );
+        UserStorage.getAccount().then(account => {
+          dispatch(template.actions.fetchById({ id: +id, userId: account!.user_id }));
         });
       } else {
         dispatch(template.actions.fetchById({ id: +id, userId: +userId }));
@@ -217,18 +229,17 @@ export default function Editor() {
     return services.common.uploadByQiniu(compressionFile);
   };
 
-  const onChangeTheme = useCallback((t) => {
+  const onChangeTheme = useCallback(t => {
     setTheme(t);
   }, []);
 
   const onChangeMergeTag = useCallback((path: string, val: any) => {
-    setMergeTags((old) => {
+    setMergeTags(old => {
       const newObj = cloneDeep(old);
       set(newObj, path, val);
       return newObj;
     });
   }, []);
-
 
   const onExportHtml = (values: IEmailTemplate) => {
     pushEvent({ name: 'ExportHtml' });
@@ -242,7 +253,7 @@ export default function Editor() {
       {
         beautify: true,
         validationLevel: 'soft',
-      }
+      },
     ).html;
 
     copy(html);
@@ -264,22 +275,27 @@ export default function Editor() {
 
   const initialValues: IEmailTemplate | null = useMemo(() => {
     if (!templateData) return null;
-    const sourceData = replaceStandardBlockToAdvancedBlock(cloneDeep(templateData.content)) as IBlockData;
+    const sourceData = replaceStandardBlockToAdvancedBlock(
+      cloneDeep(templateData.content),
+    ) as IBlockData;
     return {
       ...templateData,
       content: sourceData, // replace standard block
     };
   }, [templateData]);
 
-
   const onSubmit = useCallback(
     async (
       values: IEmailTemplate,
-      form: FormApi<IEmailTemplate, Partial<IEmailTemplate>>
+      form: FormApi<IEmailTemplate, Partial<IEmailTemplate>>,
     ) => {
       pushEvent({ name: 'Save' });
       if (id) {
-        const isChanged = !(isEqual(initialValues?.content, values.content) && isEqual(initialValues?.subTitle, values?.subTitle) && isEqual(initialValues?.subject, values?.subject));
+        const isChanged = !(
+          isEqual(initialValues?.content, values.content) &&
+          isEqual(initialValues?.subTitle, values?.subTitle) &&
+          isEqual(initialValues?.subject, values?.subject)
+        );
 
         if (!isChanged) {
           Message.success('Updated success!');
@@ -294,7 +310,7 @@ export default function Editor() {
               Message.success('Updated success!');
               form.restart(values);
             },
-          })
+          }),
         );
       } else {
         const tag = tagListData[0];
@@ -307,19 +323,19 @@ export default function Editor() {
               form.restart(newTemplate);
               history.replace(`/editor?id=${id}`);
             },
-          })
+          }),
         );
       }
     },
-    [dispatch, history, id, initialValues, tagListData]
+    [dispatch, history, id, initialValues, tagListData],
   );
 
-  const onBeforePreview: EmailEditorProviderProps['onBeforePreview'] =
-    useCallback((html: string, mergeTags) => {
-      const engine = new Liquid();
-      const tpl = engine.parse(html);
-      return engine.renderSync(tpl, mergeTags);
-    }, []);
+  const onBeforePreview: EmailEditorProviderProps['onBeforePreview'] = useCallback(
+    (html: string, mergeTags) => {
+      return renderWithData(html, mergeTags);
+    },
+    [],
+  );
 
   const themeStyleText = useMemo(() => {
     if (theme === 'green') return greenTheme;
@@ -359,10 +375,9 @@ export default function Editor() {
         // enabledMergeTagsBadge
         dashed={false}
         mergeTags={mergeTags}
-        mergeTagGenerate={(tag) => `{{${tag}}}`}
+        mergeTagGenerate={tag => `{{${tag}}}`}
         onBeforePreview={onBeforePreview}
         socialIcons={socialIcons}
-
       >
         {({ values }, { submit }) => {
           return (
@@ -370,49 +385,42 @@ export default function Editor() {
               <PageHeader
                 style={{ background: 'var(--color-bg-2)' }}
                 backIcon
-                title='Edit'
+                title="Edit"
                 onBack={() => history.push('/')}
                 extra={
-                  <Stack alignment='center'>
+                  <Stack alignment="center">
                     <Button
-                      onClick={() => setIsDarkMode((v) => !v)}
-                      shape='circle'
-                      type='text'
+                      onClick={() => setIsDarkMode(v => !v)}
+                      shape="circle"
+                      type="text"
                       icon={isDarkMode ? <IconMoonFill /> : <IconSunFill />}
                     ></Button>
 
                     <Select onChange={onChangeTheme} value={theme}>
-                      <Select.Option value='blue'>Blue</Select.Option>
-                      <Select.Option value='green'>Green</Select.Option>
-                      <Select.Option value='purple'>Purple</Select.Option>
+                      <Select.Option value="blue">Blue</Select.Option>
+                      <Select.Option value="green">Green</Select.Option>
+                      <Select.Option value="purple">Purple</Select.Option>
                     </Select>
 
+                    <Button onClick={openMergeTagsModal}>Update mergeTags</Button>
 
-                    <Button onClick={openMergeTagsModal}>
-                      Update mergeTags
-                    </Button>
+                    <Button onClick={() => onExportMJML(values)}>Export MJML</Button>
 
-                    <Button onClick={() => onExportMJML(values)}>
-                      Export MJML
-                    </Button>
-
-                    <Button onClick={() => onExportHtml(values)}>
-                      Export html
-                    </Button>
+                    <Button onClick={() => onExportHtml(values)}>Export html</Button>
 
                     <Button onClick={() => openModal(values, mergeTags)}>
                       Send test email
                     </Button>
                     <Button
                       loading={isSubmitting}
-                      type='primary'
+                      type="primary"
                       onClick={() => submit()}
                     >
                       Save
                     </Button>
                     <a
-                      target='_blank'
-                      href='https://github.com/m-Ryan/realmail'
+                      target="_blank"
+                      href="https://github.com/m-Ryan/realmail"
                       style={{
                         color: '#000',
                         fontSize: 28,

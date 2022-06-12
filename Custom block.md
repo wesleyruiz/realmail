@@ -20,7 +20,7 @@ But we can also encapsulate it and call it Custom Section block.
     <Column>
       <Text>hello</Text>
     </Column>
-  </Section>
+  </Section>,
 );
 ```
 
@@ -60,19 +60,19 @@ A custom block should have the following structure
 `create` is a method of instance generation, Let’s say `Text`, when dragging and dropped into the edit panel and , we will call `addBlock`. In fact, it just calls the corresponding `create` and generate blockData.
 
 ```ts
-const create: CreateInstance<IText> = (payload) => {
+const create: CreateInstance<IText> = payload => {
   const defaultData: IText = {
     type: BasicType.TEXT,
     data: {
       value: {
-        content: "Make it easy for everyone to compose emails!",
+        content: 'Make it easy for everyone to compose emails!',
       },
     },
     attributes: {
-      "font-size": "13px",
-      padding: "10px 25px 10px 25px",
-      "line-height": 1,
-      align: "left",
+      'font-size': '13px',
+      padding: '10px 25px 10px 25px',
+      'line-height': 1,
+      align: 'left',
     },
     children: [],
   };
@@ -86,20 +86,14 @@ You can construct your custom block through basic blocks. For example,
 a custom button, only the background color and text can be modified
 
 ```tsx
-import { Button } from "realmail-editor";
+import { Button } from 'realmail-editor';
 
-const render = (
-  data: ICustomButton,
-  idx: string,
-  context: IPage
-): IBlockData => {
+const render = (data: ICustomButton, idx: string, context: IPage): IBlockData => {
   const attributes = data.attributes;
   const { buttonText } = data.data.value;
 
   const instance = (
-    <Button background-color={attributes["background-color"]}>
-      {buttonText}
-    </Button>
+    <Button background-color={attributes['background-color']}>{buttonText}</Button>
   );
 
   return instance;
@@ -109,20 +103,20 @@ const render = (
 Another way is that you can write [MJML](https://documentation.mjml.io/).
 
 ```ts
-import { MjmlToJson } from "realmail-editor";
+import { MjmlToJson } from 'realmail-editor';
 
 const render = (
   data: ICustomButton,
   idx: string,
-  mode: "testing" | "production",
+  mode: 'testing' | 'production',
   context?: IPage,
-  dataSource?: { [key: string]: any }
+  dataSource?: { [key: string]: any },
 ) => {
   const attributes = data.attributes;
   const { buttonText } = data.data.value;
 
   const instance = MjmlToJson(
-    `<mj-button background-color=${attributes["background-color"]}>${buttonText}</mj-button>`
+    `<mj-button background-color=${attributes['background-color']}>${buttonText}</mj-button>`,
   );
 
   return instance;
@@ -134,9 +128,9 @@ const render = (
 Only after registering this block, mjml-parser can convert it into basic blocks
 
 ```ts
-import { BlocksMap } from "realmail-editor";
+import { BlocksMap } from 'realmail-editor';
 
-BlocksMap.registerBlocks({ "block-name": YourCustomBlock });
+BlocksMap.registerBlocks({ 'block-name': YourCustomBlock });
 ```
 
 ### View demo
@@ -149,27 +143,22 @@ BlocksMap.registerBlocks({ "block-name": YourCustomBlock });
 ## Dynamic rendering
 
 ```tsx
-import {
-  IBlockData,
-  BasicType,
-  components,
-  createCustomBlock,
-} from "realmail-core";
+import { IBlockData, BasicType, components, createBlock } from 'realmail-core';
 
-import { CustomBlocksType } from "../constants";
-import React from "react";
-import { merge } from "lodash";
+import { CustomBlocksType } from '../constants';
+import React from 'react';
+import { merge } from 'lodash';
 
 const { Column, Section, Wrapper, Text, Button, Image, Group } = components;
 
 export type IProductRecommendation = IBlockData<
   {
-    "background-color": string;
-    "button-color": string;
-    "button-text-color": string;
-    "product-name-color": string;
-    "product-price-color": string;
-    "title-color": string;
+    'background-color': string;
+    'button-color': string;
+    'button-text-color': string;
+    'product-name-color': string;
+    'product-price-color': string;
+    'title-color': string;
   },
   {
     title: string;
@@ -179,34 +168,33 @@ export type IProductRecommendation = IBlockData<
 >;
 
 const productPlaceholder = {
-  image:
-    "https://assets.maocanhua.cn/8e0e07e2-3f84-4426-84c1-2add355c558b-image.png",
-  title: "Red Flock Buckle Winter Boots",
-  price: "$59.99 HKD",
-  url: "https://realmail.vercel.app",
+  image: 'https://assets.maocanhua.cn/8e0e07e2-3f84-4426-84c1-2add355c558b-image.png',
+  title: 'Red Flock Buckle Winter Boots',
+  price: '$59.99 HKD',
+  url: 'https://realmail.vercel.app',
 };
 
-export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
-  name: "Product recommendation",
+export const ProductRecommendation = createBlock<IProductRecommendation>({
+  name: 'Product recommendation',
   type: CustomBlocksType.PRODUCT_RECOMMENDATION,
   validParentType: [BasicType.PAGE],
-  create: (payload) => {
+  create: payload => {
     const defaultData: IProductRecommendation = {
       type: CustomBlocksType.PRODUCT_RECOMMENDATION,
       data: {
         value: {
-          title: "You might also like",
-          buttonText: "Buy now",
+          title: 'You might also like',
+          buttonText: 'Buy now',
           quantity: 3,
         },
       },
       attributes: {
-        "background-color": "#ffffff",
-        "button-text-color": "#ffffff",
-        "button-color": "#414141",
-        "product-name-color": "#414141",
-        "product-price-color": "#414141",
-        "title-color": "#222222",
+        'background-color': '#ffffff',
+        'button-text-color': '#ffffff',
+        'button-color': '#414141',
+        'product-name-color': '#414141',
+        'product-price-color': '#414141',
+        'title-color': '#222222',
       },
       children: [
         {
@@ -214,7 +202,7 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
           children: [],
           data: {
             value: {
-              content: "custom block title",
+              content: 'custom block title',
             },
           },
           attributes: {},
@@ -228,11 +216,11 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
     const attributes = data.attributes;
 
     const productList =
-      mode === "testing"
+      mode === 'testing'
         ? new Array(quantity).fill(productPlaceholder)
         : (dataSource?.product_list || []).slice(0, quantity);
 
-    const perWidth = quantity <= 3 ? "" : "33.33%";
+    const perWidth = quantity <= 3 ? '' : '33.33%';
 
     return (
       <Wrapper
@@ -240,7 +228,7 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
         border="none"
         direction="ltr"
         text-align="center"
-        background-color={attributes["background-color"]}
+        background-color={attributes['background-color']}
       >
         <Section padding="0px">
           <Column padding="0px" border="none" vertical-align="top">
@@ -250,7 +238,7 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
               line-height="1"
               align="center"
               font-weight="bold"
-              color={attributes["title-color"]}
+              color={attributes['title-color']}
             >
               {title}
             </Text>
@@ -279,7 +267,7 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
                   padding="10px 0px 10px 0px "
                   line-height="1"
                   align="center"
-                  color={attributes["product-name-color"]}
+                  color={attributes['product-name-color']}
                 >
                   {item.title}
                 </Text>
@@ -288,15 +276,15 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
                   padding="0px"
                   line-height="1"
                   align="center"
-                  color={attributes["product-price-color"]}
+                  color={attributes['product-price-color']}
                 >
                   {item.price}
                 </Text>
                 <Button
                   align="center"
                   padding="15px 0px"
-                  background-color={attributes["button-color"]}
-                  color={attributes["button-text-color"]}
+                  background-color={attributes['button-color']}
+                  color={attributes['button-text-color']}
                   target="_blank"
                   vertical-align="middle"
                   border="none"
@@ -314,5 +302,5 @@ export const ProductRecommendation = createCustomBlock<IProductRecommendation>({
   },
 });
 
-export { Panel } from "./Panel";
+export { Panel } from './Panel';
 ```

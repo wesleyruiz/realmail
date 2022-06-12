@@ -1,99 +1,37 @@
 import React from 'react';
-import { Template } from './Template';
 import { Raw } from './Raw';
-import { IBlockData } from '@core/typings';
-import { AdvancedType, HIDE_DESKTOP_BLOCK_CLASS_NAME, HIDE_DESKTOP_INLINE_BLOCK_CLASS_NAME, HIDE_MOBILE_BLOCK_CLASS_NAME, HIDE_MOBILE_INLINE_BLOCK_CLASS_NAME } from '@core/constants';
-import { AdvancedBlock } from '@core/blocks/advanced/generateAdvancedBlock';
-import { classnames } from '@core/utils/classnames';
+
+import { EmailRenderProvider } from '@core/utils/JsonToMjml';
+import { IPage } from '@core/blocks';
 
 export interface ResponsiveBlockProps {
-  desktop: React.ReactElement
-  | Array<React.ReactElement | IBlockData>
-  | IBlockData;
-  mobile: React.ReactElement
-  | Array<React.ReactElement | IBlockData>
-  | IBlockData;
-  blockData: AdvancedBlock;
+  desktop: React.FC;
+  mobile: React.FC;
   mode: 'testing' | 'production';
+  dataSource?: { [key: string]: any };
+  context?: IPage;
 }
 
-const inlineBlockTypes = ([AdvancedType.GROUP, AdvancedType.COLUMN] as string[]);
-
 export function ResponsiveBlock(props: ResponsiveBlockProps) {
-  const { blockData, mode } = props;
-  const display = inlineBlockTypes.includes(blockData.type) ? 'inline-block' : 'block';
-  const desktopClassName: string = blockData.attributes['css-class'] || '';
-  const mobileClassName: string = blockData.mobileAttributes['css-class'] || '';
-
-  const hideDesktopClassName = display === 'block' ? HIDE_DESKTOP_BLOCK_CLASS_NAME : HIDE_DESKTOP_INLINE_BLOCK_CLASS_NAME;
-
-  const hideMobileClassName = display === 'block' ? HIDE_MOBILE_BLOCK_CLASS_NAME : HIDE_MOBILE_INLINE_BLOCK_CLASS_NAME;
-
-  if (mode === 'testing') {
-
-    return (
-      <Template>
-        {/* only visible in desktop */}
-        <Template className={classnames(hideMobileClassName, 'desktop-responsive-preview')}>
-          {props.desktop}
-        </Template>
-        {/* only visible in mobile */}
-        <Template className={classnames(hideDesktopClassName, 'mobile-responsive-preview')}>
-          <Raw>
-            {`
-                <!-- htmlmin:ignore -->
-                  <!--[if !mso]><!-->
-                <!-- htmlmin:ignore -->
-                `}
-          </Raw>
-          {props.mobile as any}
-          <Raw>
-            {`
-                <!-- htmlmin:ignore -->
-               	  <!--<![endif]-->
-                <!-- htmlmin:ignore -->
-                `}
-          </Raw>
-        </Template>
-      </Template>
-    );
-  }
+  const { desktop: Desktop, mobile: Mobile } = props;
 
   return (
-    <Template>
+    <>
       {/* only visible in desktop */}
-      {
-        desktopClassName.includes(hideDesktopClassName)
-          ? null
-          : (
-            <Template className={hideMobileClassName}>
-              {props.desktop}
-            </Template>
-          )}
+      <EmailRenderProvider {...props} displayMode={'only-desktop'}>
+        <>
+          <Desktop />
+        </>
+      </EmailRenderProvider>
 
       {/* only visible in mobile */}
-      {mobileClassName.includes(hideMobileClassName)
-        ? null
-        : (
-          <Template className={hideDesktopClassName}>
-            <Raw>
-              {`
-                <!-- htmlmin:ignore -->
-                  <!--[if !mso]><!-->
-                <!-- htmlmin:ignore -->
-                `}
-            </Raw>
-            {props.mobile as any}
-            <Raw>
-              {`
-                <!-- htmlmin:ignore -->
-               	  <!--<![endif]-->
-                <!-- htmlmin:ignore -->
-                `}
-            </Raw>
-          </Template>
-        )}
-
-    </Template>
+      <Raw>{`<!-- htmlmin:ignore --><!--[if !mso]><!--><!-- htmlmin:ignore -->`}</Raw>
+      <EmailRenderProvider {...props} displayMode={'only-mobile'}>
+        <>
+          <Mobile />
+        </>
+      </EmailRenderProvider>
+      <Raw>{`<!-- htmlmin:ignore --><!--<![endif]--><!-- htmlmin:ignore -->`}</Raw>
+    </>
   );
 }

@@ -2,12 +2,12 @@ import mjml from 'mjml';
 import { IBlockData } from '@core/typings';
 import { BlockType, BasicType } from './../constants';
 import { MjmlToJson } from './MjmlToJson';
-import { BlockManager } from '@core/utils';
 
 const domParser = new DOMParser();
 export function parseXMLtoBlock(text: string) {
-  const dom = domParser.parseFromString(text, 'text/xml');
-  const root = dom.firstChild as Element;
+  const dom = domParser.parseFromString(text, 'text/html');
+  const root = dom.body.firstChild as Element;
+
   if (!(dom.firstChild instanceof Element)) {
     throw new Error('Invalid content');
   }
@@ -27,34 +27,30 @@ export function parseXMLtoBlock(text: string) {
     node.getAttributeNames().forEach((name) => {
       attributes[name] = node.getAttribute(name);
     });
-    const type = node.tagName.replace('mj-', '');
-
-    if (!BlockManager.getBlockByType(type)) {
-      if (!node.parentElement || node.parentElement.tagName !== 'mj-text')
-        throw new Error('Invalid content');
-    }
+    const type = node.tagName.toLowerCase().replace('mj-', '');
 
     const block: IBlockData = {
       type: type as BlockType,
       attributes: attributes,
       data: {
         value: {
-          content: node.textContent?.trim(),
+          content: node.innerHTML?.trim(),
         },
       },
-      children: [...node.children]
-        .filter((item) => item instanceof Element)
-        .map(transform as any),
+      children: [],
     };
-
-    switch (type) {
-      case BasicType.TEXT:
-        block.data.value.content = node.innerHTML;
-        block.children = [];
+    if (([BasicType.TEXT, BasicType.BUTTON] as string[]).includes(type)) {
+      block.data.value.content = node.innerHTML;
+      block.children = [];
+    } else {
+      block.children = [...node.children]
+        .filter((item) => item instanceof Element)
+        .map(transform as any);
     }
-
     return block;
   };
 
   return transform(root);
+
 }
+

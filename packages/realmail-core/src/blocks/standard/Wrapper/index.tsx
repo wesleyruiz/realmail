@@ -3,6 +3,8 @@ import { BasicType } from '@core/constants';
 import { CSSProperties } from 'react';
 import { createBlock } from '@core/utils/createBlock';
 import { merge } from 'lodash';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 export type IWrapper = IBlockData<
   {
     'background-color'?: string;
@@ -19,7 +21,7 @@ export type IWrapper = IBlockData<
 export const Wrapper = createBlock<IWrapper>({
   name: 'Wrapper',
   type: BasicType.WRAPPER,
-  create: (payload) => {
+  create: payload => {
     const defaultData: IWrapper = {
       type: BasicType.WRAPPER,
       data: {
@@ -36,4 +38,7 @@ export const Wrapper = createBlock<IWrapper>({
     return merge(defaultData, payload);
   },
   validParentType: [BasicType.PAGE],
+  render(params) {
+    return <BasicBlock params={params} tag="mj-wrapper" />;
+  },
 });

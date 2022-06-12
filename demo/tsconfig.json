@@ -22,14 +22,10 @@
     "paths": {
       "@demo": ["src"],
       "@demo/*": ["src/*"],
-      "realmail-editor": ["../packages/realmail-editor/src/index.tsx"],
-      "realmail-core": ["../packages/realmail-core/src/index.tsx"],
-      "realmail-extensions": [
-        "../packages/realmail-extensions/src/index.tsx"
-      ],
-      "realmail-config-panel": [
-        "../packages/realmail-config-panel/src/index.tsx"
-      ]
+      "realmail-editor": ["../packages/realmail-editor"],
+      "realmail-core": ["../packages/realmail-core"],
+      "realmail-extensions": ["../packages/realmail-extensions"],
+      "realmail-config-panel": ["../packages/realmail-config-panel"]
     }
   },
   "include": ["./src", "./example", "./typings"],

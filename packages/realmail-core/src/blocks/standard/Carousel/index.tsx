@@ -3,6 +3,8 @@ import { BasicType } from '@core/constants';
 import { createBlock } from '@core/utils/createBlock';
 import { getImg } from '@core/utils/getImg';
 import { mergeBlock } from '@core/utils/mergeBlock';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 export type ICarousel = IBlockData<
   {
     align?: string;
@@ -34,7 +36,7 @@ export type ICarousel = IBlockData<
 export const Carousel = createBlock<ICarousel>({
   name: 'Carousel',
   type: BasicType.CAROUSEL,
-  create: (payload) => {
+  create: payload => {
     const defaultData: ICarousel = {
       type: BasicType.CAROUSEL,
       data: {
@@ -67,4 +69,23 @@ export const Carousel = createBlock<ICarousel>({
     return mergeBlock(defaultData, payload);
   },
   validParentType: [BasicType.COLUMN],
+  render(params) {
+    const { data } = params;
+    const carouselImages = data.data.value.images
+      .map(image => {
+        const imageAttributeStr = Object.keys(image)
+          .filter(key => key !== 'content' && image[key as keyof typeof image] !== '') // filter att=""
+          .map(key => `${key}="${image[key as keyof typeof image]}"`)
+          .join(' ');
+        return `
+      <mj-carousel-image ${imageAttributeStr} />
+      `;
+      })
+      .join('\n');
+    return (
+      <BasicBlock params={params} tag="mj-carousel">
+        {carouselImages}
+      </BasicBlock>
+    );
+  },
 });

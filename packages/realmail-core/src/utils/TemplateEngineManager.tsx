@@ -1,37 +1,33 @@
-import {
-  AdvancedBlock,
-  Operator,
-} from '@core/blocks/advanced/generateAdvancedBlock';
-import { Template, Raw } from '@core/components';
+import { AdvancedBlock, Operator } from '@core/blocks/advanced/generateAdvancedBlock';
+import { Raw } from '@core/components';
 import { isNumber } from 'lodash';
 import React from 'react';
 import { nanoid } from 'nanoid';
 
 function generateIterationTemplate(
   option: NonNullable<AdvancedBlock['data']['value']['iteration']>,
-  content: React.ReactElement
+  content: React.ReactNode,
 ) {
   return (
-    <Template>
+    <>
       <Raw>
         {`
         <!-- htmlmin:ignore -->
-        {% for ${option.itemName} in ${option.dataSource} ${option.limit ? `limit:${option.limit}` : ''
-          } %}
+        {% for ${option.itemName} in ${option.dataSource} ${
+          option.limit ? `limit:${option.limit}` : ''
+        } %}
         <!-- htmlmin:ignore -->
         `}
       </Raw>
       {content}
-      <Raw>
-        {' <!-- htmlmin:ignore -->{% endfor %}  <!-- htmlmin:ignore -->'}
-      </Raw>
-    </Template>
+      <Raw>{' <!-- htmlmin:ignore -->{% endfor %}  <!-- htmlmin:ignore -->'}</Raw>
+    </>
   );
 }
 
 function generateConditionTemplate(
   option: NonNullable<AdvancedBlock['data']['value']['condition']>,
-  content: React.ReactElement
+  content: React.ReactNode,
 ) {
   const { symbol, groups } = option;
 
@@ -67,7 +63,7 @@ function generateConditionTemplate(
   const conditionExpression = variables.join(` ${symbol} `);
 
   return (
-    <Template>
+    <>
       <Raw>
         {`
         <!-- htmlmin:ignore -->
@@ -84,7 +80,7 @@ function generateConditionTemplate(
         <!-- htmlmin:ignore -->
         `}
       </Raw>
-    </Template>
+    </>
   );
 }
 
@@ -108,9 +104,9 @@ export class TemplateEngineManager {
     this.tags[option.name] = option.templateGenerateFn as any;
   }
 
-  public static generateTagTemplate<
-    T extends keyof typeof TemplateEngineManager['tags']
-  >(name: T): typeof TemplateEngineManager['tags'][T] {
+  public static generateTagTemplate<T extends keyof typeof TemplateEngineManager['tags']>(
+    name: T,
+  ): typeof TemplateEngineManager['tags'][T] {
     return this.tags[name];
   }
 }

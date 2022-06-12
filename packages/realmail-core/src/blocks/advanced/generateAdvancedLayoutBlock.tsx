@@ -1,13 +1,13 @@
 import { BasicType, COLUMN_NO_STACK_CLASS_NAME } from '@core/constants';
 import React from 'react';
-import { Template } from '@core/components';
-import MjmlBlock from '@core/components/MjmlBlock';
+import { BlockRenderer } from '@core/components';
 
 import { generateAdvancedBlock } from './generateAdvancedBlock';
 import { getPreviewClassName } from '@core/utils/getPreviewClassName';
 import { classnames } from '@core/utils/classnames';
 import { isSectionBlock } from '@core/utils/isSectionBlock';
 import { IBlockData } from '@core/typings';
+import { getChildIdx } from '@core/utils';
 
 export function generateAdvancedLayoutBlock<T extends IBlockData>(option: {
   type: string;
@@ -16,7 +16,7 @@ export function generateAdvancedLayoutBlock<T extends IBlockData>(option: {
 }) {
   return generateAdvancedBlock<T>({
     ...option,
-    getContent: (params) => {
+    getContent: params => {
       const { data, idx, mode, index } = params;
 
       const blockData = {
@@ -33,21 +33,29 @@ export function generateAdvancedLayoutBlock<T extends IBlockData>(option: {
           }
         }
       }
-      return (
-        <MjmlBlock
-          type={blockData.type}
-          attributes={{
-            ...blockData.attributes,
-            'css-class': classnames(
-              data.attributes['css-class'],
-              previewClassName,
 
-            ),
+      return (
+        <BlockRenderer
+          idx={idx}
+          data={{
+            ...blockData,
+            attributes: {
+              ...blockData.attributes,
+              'css-class': classnames(data.attributes['css-class'], previewClassName),
+            },
           }}
-          value={blockData.data.value}
         >
-          <Template idx={index === 0 ? idx : null}>{data.children}</Template>
-        </MjmlBlock>
+          {blockData.children.map((child, index) => {
+            return (
+              <BlockRenderer
+                key={index}
+                {...params}
+                data={child}
+                idx={idx ? getChildIdx(idx, index) : null}
+              />
+            );
+          })}
+        </BlockRenderer>
       );
     },
   });

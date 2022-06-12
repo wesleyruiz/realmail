@@ -3,6 +3,8 @@ import { BasicType } from '@core/constants';
 import { CSSProperties } from 'react';
 import { createBlock } from '@core/utils/createBlock';
 import { merge } from 'lodash';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 
 export type ISection = IBlockData<
   {
@@ -29,7 +31,7 @@ export type ISection = IBlockData<
 export const Section = createBlock<ISection>({
   name: 'Section',
   type: BasicType.SECTION,
-  create: (payload) => {
+  create: payload => {
     const defaultData: ISection = {
       type: BasicType.SECTION,
       data: {
@@ -51,4 +53,7 @@ export const Section = createBlock<ISection>({
     return merge(defaultData, payload);
   },
   validParentType: [BasicType.PAGE, BasicType.WRAPPER],
+  render(params) {
+    return <BasicBlock params={params} tag="mj-section" />;
+  },
 });

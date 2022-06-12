@@ -6,14 +6,9 @@ import {
   getParentByIdx,
   IBlockData,
   JsonToMjml,
-  MjmlToJson,
+  parseXMLtoBlock,
 } from 'realmail-core';
-import {
-  useBlock,
-  useFocusIdx,
-  useEditorContext,
-  useEditorProps,
-} from 'realmail-editor';
+import { useBlock, useFocusIdx, useEditorContext, useEditorProps } from 'realmail-editor';
 import { cloneDeep } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -34,7 +29,7 @@ export function SourceCodePanel() {
     (event: React.FocusEvent<HTMLTextAreaElement>) => {
       try {
         const parseValue = JSON.parse(
-          JSON.stringify(eval('(' + event.target.value + ')'))
+          JSON.stringify(eval('(' + event.target.value + ')')),
         ) as IBlockData;
 
         const block = BlockManager.getBlockByType(parseValue.type);
@@ -54,13 +49,15 @@ export function SourceCodePanel() {
         Message.error(error?.message || error);
       }
     },
-    [focusIdx, setValueByIdx]
+    [focusIdx, setValueByIdx],
   );
 
   const onMjmlChange = useCallback(
     (event: React.FocusEvent<HTMLTextAreaElement>) => {
       try {
-        const parseValue = MjmlToJson(event.target.value);
+        if (event.target.value === mjmlText) return;
+        const parseValue = parseXMLtoBlock(event.target.value);
+
         if (parseValue.type !== BasicType.PAGE) {
           const parentBlock = getParentByIdx(values, focusIdx)!;
           const parseBlock = BlockManager.getBlockByType(parseValue.type);
@@ -77,7 +74,7 @@ export function SourceCodePanel() {
         Message.error('Invalid content');
       }
     },
-    [focusIdx, setValueByIdx, values]
+    [focusIdx, mjmlText, setValueByIdx, values],
   );
 
   const onChangeMjmlText = useCallback((value: string) => {
@@ -93,7 +90,7 @@ export function SourceCodePanel() {
           context: pageData,
           mode: 'production',
           dataSource: cloneDeep(mergeTags),
-        })
+        }),
       );
   }, [focusBlock, focusIdx, pageData, mergeTags]);
 
@@ -102,8 +99,8 @@ export function SourceCodePanel() {
   return (
     <Collapse>
       <Collapse.Item
-        name='json'
-        header='Json source'
+        name="json"
+        header="Json source"
         contentStyle={{ padding: '8px 13px' }}
       >
         <Input.TextArea
@@ -114,8 +111,8 @@ export function SourceCodePanel() {
         />
       </Collapse.Item>
       <Collapse.Item
-        name='mjml'
-        header='MJML source'
+        name="mjml"
+        header="MJML source"
         contentStyle={{ padding: '8px 13px' }}
       >
         <Input.TextArea

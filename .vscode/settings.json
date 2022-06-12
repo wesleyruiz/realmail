@@ -42,13 +42,8 @@
     ".css.text": "css",
     ".css.text?raw": "css"
   },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "cSpell.words": [
-    "Mjml",
-    "Realmail"
-  ],
+  "editor.codeActionsOnSave": {},
+  "cSpell.words": ["Mjml", "Realmail"],
   "eslint.workingDirectories": [
     "packages/realmail-core",
     "packages/realmail-editor",

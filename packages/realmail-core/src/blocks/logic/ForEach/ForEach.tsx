@@ -1,8 +1,10 @@
 import React from 'react';
 
 import { merge } from 'lodash';
-import { components, createCustomBlock, IBlockData, LogicType } from '@core';
-const { Template, Raw } = components;
+import { LogicType } from '@core/constants';
+import { Template, Raw, BlockRenderer } from '@core/components';
+import { IBlockData } from '@core/typings';
+import { createBlock } from '@core/utils/createBlock';
 
 export type IForEach = IBlockData<
   {},
@@ -11,10 +13,11 @@ export type IForEach = IBlockData<
     item: string;
     limit?: number;
     extra?: string;
+    mockQuantity?: number;
   }
 >;
 
-export const ForEach = createCustomBlock<IForEach>({
+export const ForEach = createBlock<IForEach>({
   name: 'ForEach',
   type: LogicType.FOR_EACH,
   validParentType: [],
@@ -25,6 +28,7 @@ export const ForEach = createCustomBlock<IForEach>({
         value: {
           source: '',
           item: '',
+          mockQuantity: 1,
         },
       },
       attributes: {},
@@ -32,23 +36,44 @@ export const ForEach = createCustomBlock<IForEach>({
     };
     return merge(defaultData, payload);
   },
-  render(data, idx) {
-    const { source, item, limit, extra } = data.data.value;
+  render(params) {
+    const { data, children, mode } = params;
+    const { source, item, limit, extra, mockQuantity = 1 } = data.data.value;
+
+    if (mode === 'testing') {
+      return (
+        <>
+          {new Array(mockQuantity).fill(true).map((_, index) => {
+            return (
+              <React.Fragment key={index}>
+                {children ||
+                  data.children.map((child, index) => (
+                    <BlockRenderer key={index} {...params} data={child} />
+                  ))}
+              </React.Fragment>
+            );
+          })}
+        </>
+      );
+    }
+
     return (
-      <Template>
+      <>
         <Raw>
           {`
-        <!-- htmlmin:ignore -->
-        {% for ${item} in ${source} ${limit ? `limit:${limit}` : ''}  ${extra ? extra : ''
-            } %}
-        <!-- htmlmin:ignore -->
-        `}
+          <!-- htmlmin:ignore -->
+          {% for ${item} in ${source} ${limit ? `limit:${limit}` : ''}  ${
+            extra ? extra : ''
+          } %}
+          <!-- htmlmin:ignore -->
+          `}
         </Raw>
-        <Template idx={idx}>{data.children}</Template>
-        <Raw>
-          {' <!-- htmlmin:ignore -->{% endfor %}  <!-- htmlmin:ignore -->'}
-        </Raw>
-      </Template>
+        {children ||
+          data.children.map((child, index) => (
+            <BlockRenderer key={index} {...params} data={child} />
+          ))}
+        <Raw>{' <!-- htmlmin:ignore -->{% endfor %}  <!-- htmlmin:ignore -->'}</Raw>
+      </>
     );
   },
 });

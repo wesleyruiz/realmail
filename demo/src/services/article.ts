@@ -1,5 +1,5 @@
 import { request } from './axios.config';
-import { USER } from '@demo/constants';
+import { omit } from 'lodash';
 
 export const article = {
   async getArticle(id: number | string, userId: number): Promise<IArticle> {
@@ -35,7 +35,7 @@ export const article = {
     summary: string;
   }): Promise<IArticle> {
     return request.post<IArticle>('/article/user/create-article', {
-      ...data,
+      ...omit(data, 'tag'),
       category_id: 1,
       tags: [data.tag],
       secret: 1,

@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test parseXml nested blocks render as expect 1`] = `"<mj-column css-class=\\"hide-mobile-block\\" ><mj-text font-size=\\"24px\\" >111</mj-text></mj-column><mj-raw ><!-- htmlmin:ignore --><!--[if !mso]><!--><!-- htmlmin:ignore --></mj-raw><mj-column css-class=\\"hide-mobile-block\\" ><mj-text font-size=\\"12\\" >111</mj-text></mj-column><mj-raw ><!-- htmlmin:ignore --><!--<![endif]--><!-- htmlmin:ignore --></mj-raw>"`;
+
+exports[`Test parseXml render as expect 1`] = `"<mj-text font-size=\\"24px\\" css-class=\\"hide-mobile-block\\" >111</mj-text><mj-raw ><!-- htmlmin:ignore --><!--[if !mso]><!--><!-- htmlmin:ignore --></mj-raw><mj-text font-size=\\"12px\\" css-class=\\"hide-mobile-block\\" >111</mj-text><mj-raw ><!-- htmlmin:ignore --><!--<![endif]--><!-- htmlmin:ignore --></mj-raw>"`;

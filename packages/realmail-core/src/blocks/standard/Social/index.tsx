@@ -4,6 +4,8 @@ import { CSSProperties } from 'react';
 import { createBlock } from '@core/utils/createBlock';
 import { getImg } from '@core/utils/getImg';
 import { mergeBlock } from '@core/utils/mergeBlock';
+import React from 'react';
+import { BasicBlock } from '@core/components/BasicBlock';
 
 export type ISocial = IBlockData<
   {
@@ -57,7 +59,7 @@ export type ISocial = IBlockData<
 export const Social: IBlock<ISocial> = createBlock({
   name: 'Social',
   type: BasicType.SOCIAL,
-  create: (payload) => {
+  create: payload => {
     const defaultData: ISocial = {
       type: BasicType.SOCIAL,
       data: {
@@ -103,4 +105,23 @@ export const Social: IBlock<ISocial> = createBlock({
     return mergeBlock(defaultData, payload);
   },
   validParentType: [BasicType.COLUMN],
+  render(params) {
+    const { data } = params;
+    const elements = data.data.value.elements
+      .map(element => {
+        const elementAttributeStr = Object.keys(element)
+          .filter(key => key !== 'content' && element[key as keyof typeof element] !== '') // filter att=""
+          .map(key => `${key}="${element[key as keyof typeof element]}"`)
+          .join(' ');
+        return `
+          <mj-social-element ${elementAttributeStr}>${element.content}</mj-social-element>
+          `;
+      })
+      .join('\n');
+    return (
+      <BasicBlock params={params} tag="mj-social">
+        {elements}
+      </BasicBlock>
+    );
+  },
 });

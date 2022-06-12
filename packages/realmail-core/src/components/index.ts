@@ -18,10 +18,11 @@ export { Hero } from './Hero';
 export { Navbar } from './Navbar';
 export { Social } from './Social';
 export { Table } from './Table';
-export { Template } from './Template';
 
 export { ForEach } from './ForEach';
 export { Condition } from './Condition';
+export { When } from './When';
+export { BlockRenderer } from './BlockRenderer';
 
 export { ResponsiveBlock } from './ResponsiveBlock';
 export { default as MjmlBlock } from './MjmlBlock';

@@ -2,33 +2,36 @@ a {
   color: inherit;
 }
 
-[data-view="PC"] {
+[data-view='PC'] {
   .hide-desktop-block {
-    opacity: 0.5;
+    display: none !important;
   }
   .hide-desktop-inline-block {
-    opacity: 0.5;
+    display: none !important;
   }
 
   .mobile-responsive-preview {
-    display: none;
+    display: none !important;
   }
 }
 
-[data-view="MOBILE"] {
+[data-view='MOBILE'] {
   .node-type-page {
     width: 375px;
     margin: auto;
   }
+  .email-block {
+    max-width: 375px;
+  }
 
   .hide-mobile-block {
-    opacity: 0.5;
+    display: none !important;
   }
 
   .hide-mobile-inline-block {
-    opacity: 0.5;
+    display: none !important;
   }
   .desktop-responsive-preview {
-    display: none;
+    display: none !important;
   }
 }

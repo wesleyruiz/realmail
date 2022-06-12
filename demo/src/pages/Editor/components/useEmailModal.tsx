@@ -1,4 +1,4 @@
-import { JsonToMjml, IBlockData } from 'realmail-core';
+import { JsonToMjml, renderWithData } from 'realmail-core';
 import { IEmailTemplate } from 'realmail-editor';
 import { Message, Modal } from '@arco-design/web-react';
 import React, { useMemo, useState } from 'react';
@@ -10,9 +10,6 @@ import { Form } from 'react-final-form';
 import { useLoading } from '@demo/hooks/useLoading';
 import { useCallback } from 'react';
 import { pushEvent } from '@demo/utils/pushEvent';
-import mustache from 'mustache';
-import { CustomBlocksType } from './CustomBlocks/constants';
-import { cloneDeep, merge } from 'lodash';
 import { TextAreaField, TextField } from 'realmail-extensions';
 
 const schema = Yup.object().shape({
@@ -27,7 +24,7 @@ export function useEmailModal() {
   const emailSendLoading = useLoading(email.loadings.send);
 
   const onSendEmail = useCallback(
-    async (values: { toEmail: string; mergeTags: string; }) => {
+    async (values: { toEmail: string; mergeTags: string }) => {
       if (!emailData) return null;
       pushEvent({ action: 'SendTestEmail', name: values.toEmail });
       let mergeTagsPayload = {};
@@ -45,10 +42,14 @@ export function useEmailModal() {
         dataSource: mergeTagsPayload,
       });
 
-      const html = mjml(mustache.render(mjmlContent, mergeTagsPayload), {
+      const html = mjml(mjmlContent, {
         beautify: true,
         validationLevel: 'soft',
       }).html;
+
+      const finalHtml = renderWithData(html, mergeTagsPayload);
+
+      console.log(finalHtml);
 
       dispatch(
         email.actions.send({
@@ -56,16 +57,16 @@ export function useEmailModal() {
             toEmail: values.toEmail,
             subject: emailData.subject,
             text: emailData.subTitle || emailData.subject,
-            html: html,
+            html: finalHtml,
           },
           success: () => {
             closeModal();
             Message.success('Email send!');
           },
-        })
+        }),
       );
     },
-    [dispatch, emailData]
+    [dispatch, emailData],
   );
 
   const openModal = (value: IEmailTemplate, mergeTags: any) => {
@@ -92,20 +93,15 @@ export function useEmailModal() {
         {({ handleSubmit }) => (
           <Modal
             style={{ zIndex: 9999 }}
-            title='Send test email'
-            okText='Send'
+            title="Send test email"
+            okText="Send"
             visible={visible}
             confirmLoading={emailSendLoading}
             onOk={() => handleSubmit()}
             onCancel={closeModal}
           >
-            <TextField autoFocus name='toEmail' label='To email' />
-            <TextAreaField
-              rows={15}
-              autoFocus
-              name='mergeTags'
-              label='Dynamic data'
-            />
+            <TextField autoFocus name="toEmail" label="To email" />
+            <TextAreaField rows={15} autoFocus name="mergeTags" label="Dynamic data" />
           </Modal>
         )}
       </Form>
