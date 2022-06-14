@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { BlockManager } from '@core/utils';
 import { IBlockData, RecursivePartial } from '@core/typings';
-import { set } from 'lodash';
+import { isString, set } from 'lodash';
 import { useEmailRenderContext } from '@core/utils/JsonToMjml';
 import { BlockRenderer } from './BlockRenderer';
 
@@ -24,7 +24,6 @@ export default function MjmlBlock<T extends IBlockData>({
   const block = BlockManager.getBlockByType(type);
 
   if (!mode) {
-    debugger;
     throw new Error('mode is required!');
   }
 
@@ -33,15 +32,14 @@ export default function MjmlBlock<T extends IBlockData>({
   }
 
   const mergeValue = useMemo((): undefined | {} => {
+    if (!value) {
+      value = {} as Record<string, any>;
+    }
+
     if (typeof children === 'string') {
-      if (!value) {
-        return {
-          content: children,
-        };
-      } else {
-        set(value, 'content', children);
-        return value;
-      }
+      set(value, 'content', children);
+    } else if (Array.isArray(children) && children.every(isString)) {
+      set(value, 'content', children.join(''));
     }
 
     return value;
