@@ -13,5 +13,5 @@ export { createBlock } from './createBlock';
 export { getPreviewClassName } from './getPreviewClassName';
 export { renderWithData } from './renderWithData';
 export { parseXMLtoBlock } from './parseXMLtoBlock';
-export { mergeTagGenerate, variableGenerate } from './mergeTagGenerate';
+export * from './mergeTagGenerate';
 export * from './block';

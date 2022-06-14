@@ -8,19 +8,35 @@ type Primitive = string | number | bigint | boolean | undefined | symbol;
 export type PropertyStringPath<
   T,
   Prefix = '',
-  CountArr extends any[] = []
-  > = CountArr extends Num2Array<20>
+  CountArr extends any[] = [],
+> = CountArr extends Num2Array<20>
   ? never
   : T extends Record<string, any>
   ? {
-    [K in keyof T]: T[K] extends Primitive | Array<any>
-    ? `${string & Prefix}${string & K}`
-    : PropertyStringPath<
-      T[K],
-      `${string & Prefix}${string & K}.`,
-      [...CountArr, any]
-    >;
-  }[keyof T]
+      [K in keyof T]: T[K] extends Primitive | Array<any>
+        ? `${string & Prefix}${string & K}`
+        : PropertyStringPath<
+            T[K],
+            `${string & Prefix}${string & K}.`,
+            [...CountArr, any]
+          >;
+    }[keyof T]
+  : never;
+
+export type PropertyPath<
+  T,
+  Prefix = '',
+  CountArr extends any[] = [],
+> = CountArr extends Num2Array<20>
+  ? never
+  : T extends Record<string, any>
+  ? {
+      [K in keyof T]: T[K] extends Primitive | Array<any>
+        ? `${string & Prefix}${string & K}`
+        :
+            | `${string & Prefix}${string & K}`
+            | PropertyPath<T[K], `${string & Prefix}${string & K}.`, [...CountArr, any]>;
+    }[keyof T]
   : never;
 
 export const mergeTagGenerate = (tag: string) => {
@@ -29,9 +45,15 @@ export const mergeTagGenerate = (tag: string) => {
 
 export const variableGenerate = <
   T extends Record<string, any>,
-  P extends string = ''
+  P extends string = '',
 >() => {
   return (tag: PropertyStringPath<T, P extends '' ? '' : `${P}.`>) => {
     return `{{ ${tag} }}`;
+  };
+};
+
+export const keyGenerate = <T extends Record<string, any>, P extends string = ''>() => {
+  return (tag: PropertyPath<T, P extends '' ? '' : `${P}.`>) => {
+    return tag;
   };
 };
