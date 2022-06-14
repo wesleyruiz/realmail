@@ -2,7 +2,7 @@ import React from 'react';
 
 import { merge } from 'lodash';
 import { LogicType } from '@core/constants';
-import { Template, Raw, BlockRenderer } from '@core/components';
+import { Raw, BlockRenderer } from '@core/components';
 import { IBlockData } from '@core/typings';
 import { createBlock } from '@core/utils/createBlock';
 

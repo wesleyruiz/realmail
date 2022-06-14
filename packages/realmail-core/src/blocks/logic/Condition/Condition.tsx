@@ -3,7 +3,7 @@ import React from 'react';
 import { LogicType } from '@core/constants';
 
 import { merge } from 'lodash';
-import { Template, Raw } from '@core/components';
+import { Raw } from '@core/components';
 import { IBlockData } from '@core/typings';
 import { createBlock } from '@core/utils/createBlock';
 

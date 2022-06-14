@@ -6,11 +6,12 @@ import { useEditorContext } from '@/hooks/useEditorContext';
 import { HtmlStringToReactNodes } from '@/utils/HtmlStringToReactNodes';
 import { createPortal } from 'react-dom';
 import { useEditorProps } from '@/hooks/useEditorProps';
-import { getEditorRoot, getShadowRoot } from '@/utils';
+import { getShadowRoot } from '@/utils';
 import { DATA_RENDER_COUNT, FIXED_CONTAINER_ID } from '@/constants';
 import { useValidationContext } from '@/components/Provider/EmailEditorProvider';
 import { useActiveTab } from '@/hooks/useActiveTab';
 import { ActiveTabKeys } from '@/components/Provider/BlocksProvider';
+import { useRefState } from '@/hooks/useRefState';
 
 let count = 0;
 export function MjmlDomRender() {
@@ -21,6 +22,9 @@ export function MjmlDomRender() {
   const [isTextFocus, setIsTextFocus] = useState(false);
   const { errorBlocksMap } = useValidationContext();
   const { activeTab } = useActiveTab();
+  const activeTabRef = useRefState(activeTab);
+  const [cacheDesktopNodes, setCacheDesktopNodes] = useState<React.ReactNode>(null);
+  const [cacheMobileNodes, setCacheMobileNodes] = useState<React.ReactNode>(null);
 
   const isTextFocusing =
     getShadowRoot().activeElement?.getAttribute('contenteditable') === 'true';
@@ -75,23 +79,52 @@ export function MjmlDomRender() {
     };
   }, []);
 
-  const html = useMemo(() => {
-    if (!pageData) return '';
-    const cloneData = cloneDeep(pageData);
-    if (activeTab === ActiveTabKeys.MOBILE) {
-      cloneData.data.value.breakpoint = '2000px'; // 强行模拟移动端行为
+  const html = useEffect(() => {
+    if (!pageData) return;
+
+    const desktopData = pageData;
+    const mobileData = {
+      ...pageData,
+      data: {
+        ...pageData.data,
+        value: {
+          ...pageData.data.value,
+          breakpoint: '2000px',
+        },
+      },
+    };
+
+    const renderHtml = (d: IPage) => {
+      const html = mjml(
+        JsonToMjml({
+          data: d,
+          idx: getPageIdx(),
+          context: d,
+          mode: 'testing',
+          dataSource: cloneDeep(mergeTags),
+        }),
+      ).html;
+      return HtmlStringToReactNodes(html, {
+        enabledMergeTagsBadge: Boolean(enabledMergeTagsBadge),
+      });
+    };
+
+    if (activeTabRef.current === ActiveTabKeys.MOBILE) {
+      setCacheMobileNodes(renderHtml(mobileData));
+      setTimeout(() => {
+        setCacheMobileNodes(renderHtml(desktopData));
+      }, 10);
+    } else {
+      setCacheDesktopNodes(renderHtml(desktopData));
+      setTimeout(() => {
+        setCacheMobileNodes(renderHtml(mobileData));
+      }, 10);
     }
-    const renderHtml = mjml(
-      JsonToMjml({
-        data: cloneData,
-        idx: getPageIdx(),
-        context: cloneData,
-        mode: 'testing',
-        dataSource: cloneDeep(mergeTags),
-      }),
-    ).html;
-    return renderHtml;
-  }, [mergeTags, pageData, activeTab]);
+  }, [activeTabRef, enabledMergeTagsBadge, mergeTags, pageData]);
+
+  const displayNodes = useMemo(() => {
+    return activeTab === ActiveTabKeys.MOBILE ? cacheMobileNodes : cacheDesktopNodes;
+  }, [activeTab, cacheDesktopNodes, cacheMobileNodes]);
 
   return useMemo(() => {
     return (
@@ -108,13 +141,7 @@ export function MjmlDomRender() {
         role="tabpanel"
         tabIndex={0}
       >
-        {ref &&
-          createPortal(
-            HtmlStringToReactNodes(html, {
-              enabledMergeTagsBadge: Boolean(enabledMergeTagsBadge),
-            }),
-            ref,
-          )}
+        {ref && createPortal(displayNodes, ref)}
         <style>
           {Object.keys(errorBlocksMap)
             .map(idx => {
@@ -128,5 +155,5 @@ export function MjmlDomRender() {
         </style>
       </div>
     );
-  }, [dashed, ref, html, enabledMergeTagsBadge, errorBlocksMap]);
+  }, [dashed, ref, displayNodes, errorBlocksMap]);
 }

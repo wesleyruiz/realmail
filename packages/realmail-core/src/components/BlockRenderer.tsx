@@ -30,6 +30,10 @@ export const BlockRenderer = (props: BlockDataItem) => {
   const { mode, context, dataSource, displayMode } = useEmailRenderContext();
   const block = BlockManager.getBlockByType(data.type);
   if (!block) return null;
+  const cloneData = {
+    ...data,
+    attributes: { ...data.attributes },
+  };
   const hideDesktopClassName = inlineBlockTypes.includes(block.type)
     ? HIDE_DESKTOP_INLINE_BLOCK_CLASS_NAME
     : HIDE_DESKTOP_BLOCK_CLASS_NAME;
@@ -38,16 +42,24 @@ export const BlockRenderer = (props: BlockDataItem) => {
     ? HIDE_MOBILE_INLINE_BLOCK_CLASS_NAME
     : HIDE_MOBILE_BLOCK_CLASS_NAME;
 
-  const cssClass: string = get(data, 'attributes.css-class') || '';
+  const cssClass: string = get(cloneData, 'attributes.css-class') || '';
 
   if (displayMode === 'only-desktop') {
-    if (cssClass.includes(hideDesktopClassName)) return null;
-    set(data, 'attributes.css-class', classnames(cssClass, hideMobileClassName));
+    if (cssClass.includes(hideDesktopClassName)) {
+      return null;
+    }
+    if (!cssClass.includes(hideMobileClassName)) {
+      set(cloneData, 'attributes.css-class', classnames(cssClass, hideMobileClassName));
+    }
   } else if (displayMode === 'only-mobile') {
-    if (cssClass.includes(hideMobileClassName)) return null;
-    set(data, 'attributes.css-class', classnames(cssClass, hideDesktopClassName));
+    if (cssClass.includes(hideMobileClassName)) {
+      return null;
+    }
+    if (!cssClass.includes(hideDesktopClassName)) {
+      set(cloneData, 'attributes.css-class', classnames(cssClass, hideDesktopClassName));
+    }
   }
-  return <>{block.render({ ...props, data, mode, context, dataSource })}</>;
+  return <>{block.render({ ...props, data: cloneData, mode, context, dataSource })}</>;
 };
 
 // const BlockEditRenderer = (props: BlockDataItem) => {

@@ -1,6 +1,6 @@
 import { ResponsiveBlock } from '@core/components';
 import { AdvancedType, BasicType } from '@core/constants';
-import { IBlock, IBlockData } from '@core/typings';
+import { IBlockData } from '@core/typings';
 import { getParentByIdx, TemplateEngineManager } from '@core/utils';
 import { isString, isUndefined, merge, pickBy } from 'lodash';
 import React from 'react';
@@ -24,7 +24,7 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
     mode: 'testing' | 'production';
     context?: IPage;
     dataSource?: { [key: string]: any };
-  }) => React.ReactNode;
+  }) => React.ReactElement;
   validParentType: string[];
 }) {
   const baseBlock = Object.values(standardBlocks).find(
@@ -117,13 +117,15 @@ export function generateAdvancedBlock<T extends AdvancedBlock>(option: {
           }
         }
 
-        if (!hasMobileView) return getDesktopBaseContent(bIdx, index);
-
         return (
           <ResponsiveBlock
             mode={mode}
             desktop={() => getDesktopBaseContent(bIdx, index)}
-            mobile={() => getMobileBaseContent(bIdx, index)}
+            mobile={() =>
+              hasMobileView
+                ? getMobileBaseContent(bIdx, index)
+                : getDesktopBaseContent(bIdx, index)
+            }
             context={context}
             dataSource={dataSource}
           />

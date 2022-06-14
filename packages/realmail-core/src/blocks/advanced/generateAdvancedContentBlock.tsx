@@ -1,4 +1,4 @@
-import { BlockRenderer, Column, Section, Template } from '@core/components';
+import { BlockRenderer, Column, Section } from '@core/components';
 import { BasicType, AdvancedType } from '@core/constants';
 import { getParentByIdx } from '@core/utils';
 import { classnames } from '@core/utils/classnames';
@@ -44,7 +44,7 @@ export function generateAdvancedContentBlock<T extends IBlockData>(option: {
       };
       const parentBlockData = getParentByIdx({ content: context! }, idx!);
       if (!parentBlockData) {
-        return blockData;
+        return <BlockRenderer data={blockData} idx={idx} />;
       }
 
       if (

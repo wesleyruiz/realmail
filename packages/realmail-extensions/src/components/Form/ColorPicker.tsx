@@ -14,8 +14,7 @@ export interface ColorPickerProps extends PopoverProps {
 }
 
 export function ColorPicker(props: ColorPickerProps) {
-  const { colors: presetColors, addCurrentColor } =
-    useContext(PresetColorsContext);
+  const { colors: presetColors, addCurrentColor } = useContext(PresetColorsContext);
   const [color, setColor] = useState('');
   const { value = '', onChange, children, showInput = true } = props;
 
@@ -24,9 +23,12 @@ export function ColorPicker(props: ColorPickerProps) {
   }, [value]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const callbackChange = useCallback(debounce((newColor: string) => {
-    onChange?.(newColor);
-  }, 500), [onChange]);
+  const callbackChange = useCallback(
+    debounce((newColor: string) => {
+      onChange?.(newColor);
+    }),
+    [onChange],
+  );
 
   const onChangeComplete = useCallback(
     (color: ColorResult, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +37,7 @@ export function ColorPicker(props: ColorPickerProps) {
       addCurrentColor(newColor);
       callbackChange(newColor);
     },
-    [addCurrentColor, callbackChange]
+    [addCurrentColor, callbackChange],
   );
 
   const onInputChange = useCallback(
@@ -44,15 +46,15 @@ export function ColorPicker(props: ColorPickerProps) {
       onChange?.(value);
       addCurrentColor(value);
     },
-    [addCurrentColor, onChange]
+    [addCurrentColor, onChange],
   );
   return (
     <div style={{ flex: 1, display: 'flex' }}>
       <Popover
         title={props.label}
-        trigger='click'
+        trigger="click"
         {...props}
-        content={(
+        content={
           <div className={styles.colorPicker}>
             <SketchPicker
               presetColors={presetColors}
@@ -61,7 +63,7 @@ export function ColorPicker(props: ColorPickerProps) {
               onChangeComplete={onChangeComplete}
             />
           </div>
-        )}
+        }
       >
         {children || (
           <div
@@ -84,8 +86,7 @@ export function ColorPicker(props: ColorPickerProps) {
                 style={{
                   position: 'relative',
                   display: 'block',
-                  border:
-                    '1px solid var(--color-neutral-3, rgb(229, 230, 235))',
+                  border: '1px solid var(--color-neutral-3, rgb(229, 230, 235))',
 
                   borderRadius: 2,
                   width: '100%',
@@ -99,8 +100,7 @@ export function ColorPicker(props: ColorPickerProps) {
                 style={{
                   maxWidth: '100%',
                   maxHeight: '100%',
-                  filter:
-                    'invert(  0.78  )  drop-shadow(0 0px 0 rgb(0 0 0 / 45%))',
+                  filter: 'invert(  0.78  )  drop-shadow(0 0px 0 rgb(0 0 0 / 45%))',
                 }}
                 src={getImg('AttributePanel_02')}
               />
