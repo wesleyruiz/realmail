@@ -41,7 +41,6 @@ export function useBlock() {
       payload?: any;
       canReplace?: boolean;
     }) => {
-      const start = console.time();
 
       let { type, parentIdx, positionIndex, payload } = params;
       let nextFocusIdx: string;
@@ -101,11 +100,9 @@ export function useBlock() {
       }
 
       parent.children.splice(positionIndex, 0, child);
-      console.timeLog();
       change(parentIdx, parent); // listeners not notified
       setFocusIdx(nextFocusIdx);
       EventManager.exec(EventType.FOCUS_IDX_CHANGE_BY_EDITOR, { nextIdx: nextFocusIdx });
-      console.timeEnd();
     },
     [autoComplete, change, getState, setFocusIdx]
   );

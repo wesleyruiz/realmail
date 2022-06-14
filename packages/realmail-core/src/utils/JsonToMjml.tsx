@@ -24,7 +24,6 @@ export const EmailRenderProvider: React.FC<EmailRenderProps> = props => {
 };
 
 export function JsonToMjml(options: JsonToMjmlOption): string {
-  console.time('JsonToMjml');
   const { data, beautify } = options;
   const block = BlockManager.getBlockByType(data.type);
   if (!block) {
@@ -45,7 +44,6 @@ export function JsonToMjml(options: JsonToMjmlOption): string {
   if (beautify) {
     return html(mjmlString, { indent_size: 2 });
   }
-  console.timeEnd('JsonToMjml');
   return mjmlString;
 }
 
